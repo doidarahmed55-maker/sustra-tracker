@@ -578,7 +578,7 @@ var realtimeSub = null;
 function initSupabase(url, key){
   var h = {'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json'};
   var _sess = null;
-  try{var s=localStorage.getItem('sb_session');if(s){_sess=JSON.parse(s);h['Authorization']='Bearer '+_sess.access_token;}}catch(e){}
+  try{var s=localStorage.getItem('sb_session')||localStorage.getItem('sb-'+url.split('//')[1].split('.')[0]+'-auth-token');if(s){_sess=JSON.parse(s);if(_sess&&_sess.access_token){h['Authorization']='Bearer '+_sess.access_token;}}}catch(e){}
 
   function setH(tok){ h['Authorization']='Bearer '+(tok||key); }
   function saveS(s){ _sess=s; try{if(s)localStorage.setItem('sb_session',JSON.stringify(s));else localStorage.removeItem('sb_session');}catch(e){} }
@@ -1642,11 +1642,22 @@ async function readXls(file){
       }
       if(!toImport.length){impMsg.style.color='#C0392B';impMsg.textContent='لم يتم العثور على بيانات صالحة';return;}
       // Clear existing and insert new
-      var {error:delErr}=await supabase.from('drawings').delete().neq('id','00000000-0000-0000-0000-000000000000');
+      // Delete all existing drawings one by one
+      var {data:existing} = await supabase.from('drawings').select('id');
+      if(existing && existing.length){
+        for(var di=0;di<existing.length;di++){
+          await supabase.from('drawings').delete().eq('id',existing[di].id);
+        }
+      }
+      var delErr = null;
       if(delErr) throw delErr;
-      var {data:inserted,error:insErr}=await supabase.from('drawings').insert(toImport).select();
-      if(insErr) throw insErr;
-      drws=inserted||[];
+      var inserted = [];
+      for(var ii=0;ii<toImport.length;ii++){
+        var {data:iData,error:iErr} = await supabase.from('drawings').insert(toImport[ii]).select().single();
+        if(iErr){ console.error('Insert error:', iErr); continue; }
+        if(iData) inserted.push(iData);
+      }
+      drws = inserted;
       impMsg.style.color='#1E8449';
       impMsg.textContent='✓ تم استيراد '+toImport.length+' لوحة بنجاح!';
       setTimeout(function(){goList();},1000);
