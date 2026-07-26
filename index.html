@@ -1043,15 +1043,16 @@ async function saveDrw(){
 
   try{
     var error;
-    // If num conflicts with existing drawing (different id), shift conflicting ones up
+    // If num conflicts with existing drawing (different id), shift ALL drawings >= new num up by 1
     if(rec.num){
       var conflicts = drws.filter(function(d){
-        return d.num===rec.num && d.id!==editId;
-      });
+        return d.num >= rec.num && d.id !== editId;
+      }).sort(function(a,b){ return b.num - a.num; }); // sort descending to avoid chain collisions
       for(var ci=0;ci<conflicts.length;ci++){
-        await supabase.from('drawings').update({num: conflicts[ci].num+1}).eq('id',conflicts[ci].id);
-        var cidx=drws.findIndex(function(d){return d.id===conflicts[ci].id;});
-        if(cidx>=0) drws[cidx].num = conflicts[ci].num+1;
+        var newN = conflicts[ci].num + 1;
+        await supabase.from('drawings').update({num: newN}).eq('id', conflicts[ci].id);
+        var cidx = drws.findIndex(function(d){ return d.id === conflicts[ci].id; });
+        if(cidx>=0) drws[cidx].num = newN;
       }
     }
     if(editId){
