@@ -1596,21 +1596,13 @@ window.addEventListener('load', function(){
   function waitForSB(){
     if(window.supabase && window.supabase.createClient){
       appInit();
-    } else if(attempts < 200){
+    } else if(attempts < 80){
       attempts++;
-      setTimeout(waitForSB, 150);
+      setTimeout(waitForSB, 100);
     } else {
-      // Last resort: reload the page once
-      var reloaded = sessionStorage.getItem('sb_reloaded');
-      if(!reloaded){
-        sessionStorage.setItem('sb_reloaded','1');
-        window.location.reload();
-      } else {
-        sessionStorage.removeItem('sb_reloaded');
-        document.getElementById('loadOverlay').classList.add('hidden');
-        document.getElementById('configBanner').style.display='flex';
-        document.getElementById('configBanner').innerHTML='❌ تعذّر تحميل Supabase — تأكد من الإنترنت وأعد تحميل الصفحة';
-      }
+      document.getElementById('loadOverlay').classList.add('hidden');
+      document.getElementById('configBanner').style.display='flex';
+      document.getElementById('configBanner').innerHTML='❌ تعذّر تحميل Supabase — أعد تحميل الصفحة مرة أخرى';
     }
   }
   waitForSB();
