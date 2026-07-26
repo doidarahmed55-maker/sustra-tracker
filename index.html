@@ -6,7 +6,139 @@
 <title>SUSTRA Drawing Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- Supabase JS -->
-<script src="./supabase.js"></script>
+<script>
+// Minimal Supabase Client - Inline
+window.supabase = (function(){
+  function createClient(url, key){
+    var headers = {'apikey': key, 'Authorization': 'Bearer '+key, 'Content-Type': 'application/json', 'Prefer': 'return=representation'};
+    var wsUrl = url.replace('https://','wss://').replace('http://','ws://');
+    var channels = [];
+    
+    function rest(path){ return url+'/rest/v1'+path; }
+    function auth(path){ return url+'/auth/v1'+path; }
+    
+    function req(method, endpoint, body){
+      return fetch(endpoint, {method:method, headers:Object.assign({},headers,body?{}:{}), body:body?JSON.stringify(body):undefined})
+        .then(function(r){ return r.json().then(function(d){ return {data:d, error:r.ok?null:{message:d.message||d.error_description||JSON.stringify(d)}}; }); });
+    }
+    
+    // Auth
+    var _session = null;
+    try{ _session = JSON.parse(localStorage.getItem('sb-session')); }catch(e){}
+    
+    function setSession(s){
+      _session = s;
+      if(s){ localStorage.setItem('sb-session', JSON.stringify(s)); headers['Authorization']='Bearer '+s.access_token; }
+      else{ localStorage.removeItem('sb-session'); headers['Authorization']='Bearer '+key; }
+    }
+    
+    var authObj = {
+      getSession: function(){ return Promise.resolve({data:{session:_session}}); },
+      signInWithPassword: function(creds){
+        return fetch(auth('/token?grant_type=password'), {method:'POST', headers:{'apikey':key,'Content-Type':'application/json'}, body:JSON.stringify(creds)})
+          .then(function(r){ return r.json().then(function(d){
+            if(d.access_token){ setSession(d); return {data:{user:d.user, session:d}, error:null}; }
+            return {data:null, error:{message:d.error_description||d.msg||'Invalid login credentials'}};
+          }); });
+      },
+      signOut: function(){
+        return fetch(auth('/logout'), {method:'POST', headers:headers}).then(function(){ setSession(null); return {error:null}; });
+      }
+    };
+    if(_session){ headers['Authorization']='Bearer '+_session.access_token; }
+    
+    // Query builder
+    function Table(name){
+      var _filters=[], _order=null, _limit=null, _single=false, _select='*';
+      function build(){
+        var q = rest('/'+name+'?select='+_select;
+        _filters.forEach(function(f){ q+='&'+f; });
+        if(_order) q+='&order='+_order;
+        if(_limit) q+='&limit='+_limit;
+        return q;
+      }
+      var obj = {
+        select: function(s){ _select=s||'*'; return obj; },
+        order: function(col,opts){ _order=col+(opts&&opts.ascending===false?'.desc':'.asc')+(opts&&opts.nullsFirst?'.nullsfirst':''); return obj; },
+        limit: function(n){ _limit=n; return obj; },
+        single: function(){ _single=true; return obj; },
+        eq: function(col,val){ _filters.push(col+'=eq.'+encodeURIComponent(val)); return obj; },
+        neq: function(col,val){ _filters.push(col+'=neq.'+encodeURIComponent(val)); return obj; },
+        then: function(resolve, reject){
+          return fetch(build(), {headers:Object.assign({},headers,{Prefer:''})})
+            .then(function(r){ return r.json().then(function(d){
+              if(!r.ok) return {data:null, error:{message:JSON.stringify(d)}};
+              return {data:_single?(Array.isArray(d)?d[0]:d):d, error:null};
+            }); }).then(resolve, reject);
+        },
+        insert: function(data){
+          return {
+            select: function(){ return {single: function(){
+              return fetch(rest('/'+name), {method:'POST', headers:Object.assign({},headers,{Prefer:'return=representation'}), body:JSON.stringify(data)})
+                .then(function(r){ return r.json().then(function(d){ return r.ok?{data:Array.isArray(d)?d[0]:d,error:null}:{data:null,error:{message:JSON.stringify(d)}}; }); });
+            }}};
+          };
+        },
+        update: function(data){
+          return { eq: function(col,val){
+            return fetch(rest('/'+name+'?'+col+'=eq.'+encodeURIComponent(val)), {method:'PATCH', headers:Object.assign({},headers,{Prefer:'return=representation'}), body:JSON.stringify(data)})
+              .then(function(r){ return r.json().then(function(d){ return r.ok?{data:d,error:null}:{data:null,error:{message:JSON.stringify(d)}}; }); });
+          }};
+        },
+        delete: function(){
+          return { eq: function(col,val){
+            return fetch(rest('/'+name+'?'+col+'=eq.'+encodeURIComponent(val)), {method:'DELETE', headers:headers})
+              .then(function(r){ return {data:null, error:r.ok?null:{message:'Delete failed'}}; });
+          }, neq: function(col,val){
+            return fetch(rest('/'+name+'?'+col+'=neq.'+encodeURIComponent(val)), {method:'DELETE', headers:headers})
+              .then(function(r){ return {data:null, error:r.ok?null:{message:'Delete failed'}}; });
+          }};
+        }
+      };
+      return obj;
+    }
+    
+    // Realtime
+    var ws = null;
+    function channel(name){
+      var _handlers = [];
+      var ch = {
+        on: function(event, filter, cb){ _handlers.push({filter:filter, cb:cb}); return ch; },
+        subscribe: function(cb){
+          try{
+            ws = new WebSocket(wsUrl+'/realtime/v1/websocket?apikey='+key+'&vsn=1.0.0');
+            ws.onopen = function(){
+              ws.send(JSON.stringify({topic:'realtime:'+filter.table, event:'phx_join', payload:{config:{broadcast:{self:true},presence:{key:''},postgres_changes:[{event:'*',schema:filter.schema||'public',table:filter.table}]}}, ref:'1'}));
+              if(cb) cb('SUBSCRIBED');
+            };
+            ws.onmessage = function(e){
+              var msg = JSON.parse(e.data);
+              if(msg.payload && msg.payload.type){
+                _handlers.forEach(function(h){ h.cb({eventType:msg.payload.type, new:msg.payload.record, old:msg.payload.old_record}); });
+              }
+            };
+            ws.onerror = function(){ if(cb) cb('CHANNEL_ERROR'); };
+            ws.onclose = function(){ if(cb) cb('CLOSED'); };
+          }catch(e2){ if(cb) cb('CHANNEL_ERROR'); }
+          return ch;
+        }
+      };
+      var filter = {};
+      return ch;
+    }
+    
+    function removeChannel(ch){ if(ws) ws.close(); }
+    
+    return {
+      auth: authObj,
+      from: function(name){ return new Table(name); },
+      channel: channel,
+      removeChannel: removeChannel
+    };
+  }
+  return { createClient: createClient };
+})();
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#F0F4F3;color:#1C2526}
