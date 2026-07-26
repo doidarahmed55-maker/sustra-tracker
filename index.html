@@ -658,6 +658,8 @@ function showLoginScreen(){
 //  AUTH
 // ══════════════════════════════════════════
 async function doLogin(){
+  // Make sure supabase is initialized
+  if(!supabase && SUPABASE_URL && SUPABASE_KEY) initSupabase(SUPABASE_URL, SUPABASE_KEY);
   var email = document.getElementById('lEmail').value.trim();
   var pass  = document.getElementById('lPass').value;
   var btn   = document.getElementById('lBtn');
