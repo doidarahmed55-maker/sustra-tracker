@@ -341,6 +341,7 @@ User 2:
     <button class="btn bo" onclick="doXlsData()" title="تصدير Excel">&#8659; Excel Data</button>
     <button class="btn bo" style="border-color:#B7950B;color:#B7950B" onclick="doXlsReport()" title="Excel Report">&#8659; Excel Report</button>
     <button class="btn bt" onclick="goAdd()">+ Add Drawing</button>
+    <button class="btn" style="background:#6C3483;color:#fff;font-size:10px" onclick="renumAll()" title="إعادة ترقيم كل اللوحات">🔢 Re-Number</button>
     <!-- User Badge -->
     <div class="user-badge">
       <div class="user-av" id="userAv">?</div>
@@ -828,6 +829,24 @@ function ovSt(d){
 }
 function sorted(){
   return drws.slice().sort(function(a,b){ return (a.num||9999)-(b.num||9999); });
+}
+
+// إعادة ترقيم شاملة لكل اللوحات
+async function renumAll(){
+  if(!confirm('هيعيد ترقيم كل اللوحات من 1 لـ '+drws.length+' بالترتيب الحالي — متأكد؟')) return;
+  showToast('جاري إعادة الترقيم...');
+  var s = sorted();
+  var updates = [];
+  for(var i=0;i<s.length;i++){
+    updates.push({id: s[i].id, num: i+1});
+    var idx = drws.findIndex(function(d){return d.id===s[i].id;});
+    if(idx>=0) drws[idx].num = i+1;
+  }
+  await Promise.all(updates.map(function(u){
+    return supabase.from('drawings').update({num: u.num}).eq('id', u.id);
+  }));
+  render();
+  showToast('✅ تم إعادة الترقيم — '+updates.length+' لوحة');
 }
 
 // إعادة ترقيم تلقائية بعد أي تغيير
