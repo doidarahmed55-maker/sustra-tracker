@@ -576,7 +576,9 @@ var currentUser = null;
 var realtimeSub = null;
 
 function initSupabase(url, key){
-  supabase = window.supabase.createClient(url, key);
+  if(window.supabase && window.supabase.createClient){
+    supabase = window.supabase.createClient(url, key);
+  }
 }
 
 // ══════════════════════════════════════════
@@ -658,8 +660,15 @@ function showLoginScreen(){
 //  AUTH
 // ══════════════════════════════════════════
 async function doLogin(){
-  // Make sure supabase is initialized
-  if(!supabase && SUPABASE_URL && SUPABASE_KEY) initSupabase(SUPABASE_URL, SUPABASE_KEY);
+  // Wait for supabase if not ready
+  if(!supabase){
+    var waited = 0;
+    while(!window.supabase || !window.supabase.createClient){
+      await new Promise(function(r){setTimeout(r,100);});
+      if(++waited > 30) break;
+    }
+    if(SUPABASE_URL && SUPABASE_KEY) initSupabase(SUPABASE_URL, SUPABASE_KEY);
+  }
   var email = document.getElementById('lEmail').value.trim();
   var pass  = document.getElementById('lPass').value;
   var btn   = document.getElementById('lBtn');
