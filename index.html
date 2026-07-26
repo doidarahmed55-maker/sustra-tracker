@@ -6,21 +6,12 @@
 <title>SUSTRA Drawing Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-// Load Supabase dynamically and wait for it
-(function(){
-  var s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js';
-  s.onload = function(){ window._sbLoaded = true; };
-  s.onerror = function(){
-    // fallback CDN
-    var s2 = document.createElement('script');
-    s2.src = 'https://unpkg.com/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js';
-    s2.onload = function(){ window._sbLoaded = true; };
-    document.head.appendChild(s2);
-  };
-  document.head.appendChild(s);
-})();
+// Fallback if jsdelivr fails
+if(typeof window.supabase === 'undefined'){
+  document.write('<scr'+'ipt src="https://esm.sh/@supabase/supabase-js@2/dist/umd/supabase.min.js"><\/scr'+'ipt>');
+}
 </script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1582,18 +1573,25 @@ function genDrwListPdf(){
 //  START
 // ══════════════════════════════════════════
 window.addEventListener('load', function(){
-  // Wait for Supabase library to be ready
   var attempts = 0;
   function waitForSB(){
     if(window.supabase && window.supabase.createClient){
       appInit();
-    } else if(attempts < 50){
+    } else if(attempts < 200){
       attempts++;
-      setTimeout(waitForSB, 100);
+      setTimeout(waitForSB, 150);
     } else {
-      document.getElementById('loadOverlay').classList.add('hidden');
-      document.getElementById('configBanner').style.display='flex';
-      document.getElementById('configBanner').innerHTML='❌ تعذّر تحميل Supabase library — تأكد من اتصال الإنترنت وأعد تحميل الصفحة';
+      // Last resort: reload the page once
+      var reloaded = sessionStorage.getItem('sb_reloaded');
+      if(!reloaded){
+        sessionStorage.setItem('sb_reloaded','1');
+        window.location.reload();
+      } else {
+        sessionStorage.removeItem('sb_reloaded');
+        document.getElementById('loadOverlay').classList.add('hidden');
+        document.getElementById('configBanner').style.display='flex';
+        document.getElementById('configBanner').innerHTML='❌ تعذّر تحميل Supabase — تأكد من الإنترنت وأعد تحميل الصفحة';
+      }
     }
   }
   waitForSB();
