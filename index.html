@@ -864,9 +864,11 @@ function goUpd(){  show('vUpd'); document.getElementById('impMsg').textContent='
 function normalize(s){ return (s||'').replace(/\s+/g,' ').trim(); }
 
 function nextNum(){
-  var nums=drws.map(function(d){return d.num||0;}).filter(function(n){return n>0;});
+  var nums=drws.map(function(d){return parseInt(d.num)||0;}).filter(function(n){return n>0;});
   if(!nums.length) return 1;
-  return Math.max.apply(null,nums)+1;
+  // find max num in DB (not table row index)
+  var mx = Math.max.apply(null,nums);
+  return mx+1;
 }
 
 function goAdd(){
@@ -944,7 +946,7 @@ function render(){
     var tt=d.type?'<span class="tt">'+d.type+'</span>':'-';
     var dc=d.ns?'<span class="bdg bns">Not Sent</span>':fd(d.del);
     h+='<tr>';
-    h+='<td style="text-align:center;font-weight:700;color:#0D5C52">'+(i+1)+'</td>';
+    h+='<td style="text-align:center;font-weight:700;color:#0D5C52">'+(d.num||i+1)+'</td>';
     h+='<td style="font-weight:600">'+(d.plot||'-')+'</td>';
     h+='<td>'+(d.zone||'-')+'</td><td>'+(d.level||'-')+'</td><td>'+tt+'</td>';
     var nameCell=d.link?'<a class="name-link" href="'+escHtml(d.link)+'" target="_blank" rel="noopener">'+escHtml(d.name)+'</a>':escHtml(d.name);
@@ -1043,16 +1045,19 @@ async function saveDrw(){
 
   try{
     var error;
-    // If num conflicts with existing drawing (different id), shift ALL drawings >= new num up by 1
+    // Shift all drawings with num >= new num (excluding current edit) up by 1
+    // Sort descending to avoid collision (update 10 before 9 before 8...)
     if(rec.num){
-      var conflicts = drws.filter(function(d){
-        return d.num >= rec.num && d.id !== editId;
-      }).sort(function(a,b){ return b.num - a.num; }); // sort descending to avoid chain collisions
-      for(var ci=0;ci<conflicts.length;ci++){
-        var newN = conflicts[ci].num + 1;
-        await supabase.from('drawings').update({num: newN}).eq('id', conflicts[ci].id);
-        var cidx = drws.findIndex(function(d){ return d.id === conflicts[ci].id; });
-        if(cidx>=0) drws[cidx].num = newN;
+      var toShift = drws
+        .filter(function(d){ return (d.num||0) >= rec.num && d.id !== editId; })
+        .sort(function(a,b){ return b.num - a.num; });
+      for(var ci=0;ci<toShift.length;ci++){
+        var shiftedNum = toShift[ci].num + 1;
+        var {error:shiftErr} = await supabase.from('drawings').update({num: shiftedNum}).eq('id', toShift[ci].id);
+        if(!shiftErr){
+          var cidx = drws.findIndex(function(d){ return d.id === toShift[ci].id; });
+          if(cidx>=0) drws[cidx] = Object.assign({}, drws[cidx], {num: shiftedNum});
+        }
       }
     }
     if(editId){
