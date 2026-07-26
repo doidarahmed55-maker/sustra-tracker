@@ -732,6 +732,8 @@ async function appInit(){
     currentUser = session.user;
     await loadApp();
   } else {
+    // Clear any stale session
+    try{ localStorage.removeItem('sb_session'); }catch(e){}
     document.getElementById('loadOverlay').classList.add('hidden');
     showLoginScreen();
   }
@@ -1368,7 +1370,7 @@ function pdfShell(sL,oL,ds,title,body){
     '.hm .ldr{font-size:7px;color:#9AA5B4}.hr{text-align:right;font-size:7px;color:#aaa}' +
     '.tbar{height:3px;background:#1A7A6E}' +
     '@media print{@page{size:auto;margin:8mm}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}' +
-    'table{page-break-inside:auto}tr{page-break-inside:avoid}.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);opacity:0.07;width:280px;pointer-events:none;}.stamp{position:fixed;bottom:12mm;right:10mm;width:120px;opacity:0.85;z-index:999;}' +
+    'table{page-break-inside:auto}tr{page-break-inside:avoid}.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);opacity:0.07;width:280px;pointer-events:none;}.stamp{position:fixed;bottom:12mm;right:10mm;width:120px;opacity:0.85;z-index:999;mix-blend-mode:multiply;}' +
     'table{width:100%;border-collapse:collapse}' +
     'th,td{border:1px solid #C8D8D0;padding:4px 6px;font-size:8px;vertical-align:middle}' +
     'th{color:#fff}.gp{background:#2D3748}.gs{background:#0D5C52}.g1{background:#7D6608}.g2{background:#6C3483}.g3{background:#1A3A5C}.gm{background:#1A5276}' +
