@@ -860,8 +860,18 @@ function show(id){
 function goList(){ show('vList'); editId=null; render(); }
 function goUpd(){  show('vUpd'); document.getElementById('impMsg').textContent=''; }
 
+// normalize: trim + collapse spaces
+function normalize(s){ return (s||'').replace(/\s+/g,' ').trim(); }
+
+function nextNum(){
+  var nums=drws.map(function(d){return d.num||0;}).filter(function(n){return n>0;});
+  if(!nums.length) return 1;
+  return Math.max.apply(null,nums)+1;
+}
+
 function goAdd(){
   editId=null; clearF(); applyLastVals();
+  document.getElementById('fNum').value = nextNum();
   document.getElementById('ftitle').textContent='Add Drawing';
   show('vForm');
 }
@@ -1012,7 +1022,7 @@ async function saveDrw(){
     content: document.getElementById('fContent').value.trim(),
     del:     document.getElementById('fDel').value||null,
     ns:      document.getElementById('fNs').checked,
-    by_eng:  document.getElementById('fBy').value.trim(),
+    by_eng:  normalize(document.getElementById('fBy').value),
     paid:    document.getElementById('fPaid').value,
     notes:   document.getElementById('fNotes').value.trim(),
     link:    document.getElementById('fLink').value.trim(),
@@ -1033,6 +1043,17 @@ async function saveDrw(){
 
   try{
     var error;
+    // If num conflicts with existing drawing (different id), shift conflicting ones up
+    if(rec.num){
+      var conflicts = drws.filter(function(d){
+        return d.num===rec.num && d.id!==editId;
+      });
+      for(var ci=0;ci<conflicts.length;ci++){
+        await supabase.from('drawings').update({num: conflicts[ci].num+1}).eq('id',conflicts[ci].id);
+        var cidx=drws.findIndex(function(d){return d.id===conflicts[ci].id;});
+        if(cidx>=0) drws[cidx].num = conflicts[ci].num+1;
+      }
+    }
     if(editId){
       var res = await supabase.from('drawings').update(rec).eq('id',editId);
       error = res.error;
@@ -1079,8 +1100,10 @@ function refreshEngDatalist(){
   });
 }
 async function saveNewEng(name){
-  name=name.trim(); if(!name) return;
-  if(engNames.indexOf(name)<0){
+  name=normalize(name); if(!name) return;
+  // check case-insensitive + normalized duplicate
+  var exists=engNames.some(function(n){ return normalize(n).toLowerCase()===name.toLowerCase(); });
+  if(!exists){
     engNames.push(name);
     refreshEngDatalist();
     await supabase.from('engineers').insert({name:name}).select();
@@ -1309,6 +1332,8 @@ function genEngPdf(){
   var showPaid=document.getElementById('ecPaid').checked;
   var showNotes=document.getElementById('ecNotes').checked;
   var showComments=document.getElementById('ecComments').checked;
+  // debug: force paid
+  if(showPaid) console.log('paid enabled');
   var fp=document.getElementById('efPlot').value,fz=document.getElementById('efZone').value,
       fl=document.getElementById('efLevel').value,ft=document.getElementById('efType').value;
   var sL=document.getElementById('sLogo').src;
@@ -1316,6 +1341,7 @@ function genEngPdf(){
   var sc={num:true,plot:true,zone:true,level:true,type:true,name:true,content:true,del:true,by_eng:false};
   if(showComments){sc.r1=true;sc.r2=true;sc.r3=true;}else{sc.r1=false;sc.r2=false;sc.r3=false;}
   sc.notes=showNotes;
+  sc.paid=showPaid;
   var body='';
   for(var k=0;k<keys.length;k++){
     var eng=keys[k];
