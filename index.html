@@ -6,7 +6,7 @@
 <title>SUSTRA Drawing Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- Supabase JS -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#F0F4F3;color:#1C2526}
@@ -1634,7 +1634,20 @@ function genDrwListPdf(){
 // ══════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════
-window.addEventListener('load', appInit);
+window.addEventListener('load', function(){
+  var i = 0;
+  var t = setInterval(function(){
+    i++;
+    if(window.supabase && window.supabase.createClient){
+      clearInterval(t);
+      appInit();
+    } else if(i > 100){
+      clearInterval(t);
+      document.getElementById('loadOverlay').classList.add('hidden');
+      document.getElementById('vLogin').style.display='flex';
+    }
+  }, 50);
+});
 </script>
 </body>
 </html>
