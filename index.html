@@ -1368,7 +1368,7 @@ function pdfShell(sL,oL,ds,title,body){
     '.hm .ldr{font-size:7px;color:#9AA5B4}.hr{text-align:right;font-size:7px;color:#aaa}' +
     '.tbar{height:3px;background:#1A7A6E}' +
     '@media print{@page{size:auto;margin:8mm}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}' +
-    'table{page-break-inside:auto}tr{page-break-inside:avoid}}' +
+    'table{page-break-inside:auto}tr{page-break-inside:avoid}.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);opacity:0.07;width:280px;pointer-events:none;}' +
     'table{width:100%;border-collapse:collapse}' +
     'th,td{border:1px solid #C8D8D0;padding:4px 6px;font-size:8px;vertical-align:middle}' +
     'th{color:#fff}.gp{background:#2D3748}.gs{background:#0D5C52}.g1{background:#7D6608}.g2{background:#6C3483}.g3{background:#1A3A5C}.gm{background:#1A5276}' +
@@ -1382,7 +1382,7 @@ function pdfShell(sL,oL,ds,title,body){
     '<div class="hm"><h1>'+title+'</h1><div class="sub">SUSTRA · Engineering · BIM · Construction</div>' +
     '<div class="ldr">Structural Team Leader: Eng. Ahmed Doidar</div></div>' +
     '<div class="hr">'+ds+'</div></div>' +
-    '<div class="tbar"></div>'+body+
+    '<div class="tbar"></div><img class="wm" src="'+sL+'"/>'+body+
     '</body></html>';
 }
 
