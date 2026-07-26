@@ -838,6 +838,24 @@ function ovSt(d){
 function sorted(){
   return drws.slice().sort(function(a,b){ return (a.num||9999)-(b.num||9999); });
 }
+
+// إعادة ترقيم تلقائية بعد أي تغيير
+async function renum(){
+  var s = sorted();
+  var updates = [];
+  for(var i=0;i<s.length;i++){
+    var newN = i+1;
+    if(s[i].num !== newN){
+      updates.push({id: s[i].id, num: newN});
+      var idx = drws.findIndex(function(d){return d.id===s[i].id;});
+      if(idx>=0) drws[idx].num = newN;
+    }
+  }
+  // Update in parallel
+  await Promise.all(updates.map(function(u){
+    return supabase.from('drawings').update({num: u.num}).eq('id', u.id);
+  }));
+}
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function showToast(msg, isErr){
@@ -864,11 +882,8 @@ function goUpd(){  show('vUpd'); document.getElementById('impMsg').textContent='
 function normalize(s){ return (s||'').replace(/\s+/g,' ').trim(); }
 
 function nextNum(){
-  var nums=drws.map(function(d){return parseInt(d.num)||0;}).filter(function(n){return n>0;});
-  if(!nums.length) return 1;
-  // find max num in DB (not table row index)
-  var mx = Math.max.apply(null,nums);
-  return mx+1;
+  // بعد الترقيم التلقائي الأرقام دايماً 1..N بدون فجوات
+  return drws.length + 1;
 }
 
 function goAdd(){
@@ -1045,21 +1060,6 @@ async function saveDrw(){
 
   try{
     var error;
-    // Shift all drawings with num >= new num (excluding current edit) up by 1
-    // Sort descending to avoid collision (update 10 before 9 before 8...)
-    if(rec.num){
-      var toShift = drws
-        .filter(function(d){ return (d.num||0) >= rec.num && d.id !== editId; })
-        .sort(function(a,b){ return b.num - a.num; });
-      for(var ci=0;ci<toShift.length;ci++){
-        var shiftedNum = toShift[ci].num + 1;
-        var {error:shiftErr} = await supabase.from('drawings').update({num: shiftedNum}).eq('id', toShift[ci].id);
-        if(!shiftErr){
-          var cidx = drws.findIndex(function(d){ return d.id === toShift[ci].id; });
-          if(cidx>=0) drws[cidx] = Object.assign({}, drws[cidx], {num: shiftedNum});
-        }
-      }
-    }
     if(editId){
       var res = await supabase.from('drawings').update(rec).eq('id',editId);
       error = res.error;
@@ -1077,6 +1077,8 @@ async function saveDrw(){
     if(error) throw error;
     // Save engineer name
     if(rec.by_eng) await saveNewEng(rec.by_eng);
+    // إعادة ترقيم تلقائية
+    await renum();
     saveLastVals();
     showToast(editId?'✓ تم التحديث':'✓ تم الحفظ');
     goList();
@@ -1091,6 +1093,7 @@ async function delD(id){
   var {error} = await supabase.from('drawings').delete().eq('id',id);
   if(error){ showToast('خطأ في الحذف: '+error.message, true); return; }
   drws = drws.filter(function(d){return d.id!==id;});
+  await renum();
   render();
   showToast('🗑️ تم الحذف');
 }
