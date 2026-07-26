@@ -6,7 +6,7 @@
 <title>SUSTRA Drawing Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- Supabase JS -->
-<script src="./supabase.js" onload="window._sbReady=true"></script>
+<script src="./supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#F0F4F3;color:#1C2526}
@@ -1585,21 +1585,13 @@ function genDrwListPdf(){
 // ══════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════
-window.addEventListener('load', function(){
-  if(window.supabase && window.supabase.createClient){
-    appInit();
-  } else {
-    var t = setInterval(function(){
-      if(window.supabase && window.supabase.createClient){
-        clearInterval(t);
-        appInit();
-      }
-    }, 50);
-    setTimeout(function(){ clearInterval(t);
-      document.getElementById('loadOverlay').classList.add('hidden');
-      alert('خطأ: لم يتم تحميل Supabase. أعد تحميل الصفحة.');
-    }, 10000);
-  }
+document.addEventListener('DOMContentLoaded', function(){
+  var t = setInterval(function(){
+    if(window.supabase && window.supabase.createClient){
+      clearInterval(t);
+      appInit();
+    }
+  }, 50);
 });
 </script>
 </body>
