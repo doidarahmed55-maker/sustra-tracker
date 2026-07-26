@@ -6,7 +6,13 @@
 <title>SUSTRA Drawing Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- Supabase JS -->
-<script src="./supabase.js"></script>
+<script type="importmap">
+{"imports": {"@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.3"}}
+</script>
+<script type="module">
+import { createClient } from '@supabase/supabase-js';
+window._createClient = createClient;
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#F0F4F3;color:#1C2526}
@@ -576,7 +582,7 @@ var currentUser = null;
 var realtimeSub = null;
 
 function initSupabase(url, key){
-  supabase = window.supabase.createClient(url, key);
+  supabase = window._createClient(url, key);
 }
 
 // ══════════════════════════════════════════
@@ -1587,7 +1593,7 @@ function genDrwListPdf(){
 // ══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', function(){
   var t = setInterval(function(){
-    if(window.supabase && window.supabase.createClient){
+    if(window._createClient){
       clearInterval(t);
       appInit();
     }
