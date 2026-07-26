@@ -770,7 +770,7 @@ async function doLogin(){
 
 async function doLogout(){
   await supabase.auth.signOut();
-  if(realtimeSub) supabase.removeChannel(realtimeSub);
+  if(realtimeSub) clearInterval(realtimeSub);
   currentUser=null; drws=[];
   document.getElementById('appShell').style.display='none';
   showLoginScreen();
@@ -824,14 +824,17 @@ async function fetchEngineers(){
 //  REALTIME
 // ══════════════════════════════════════════
 function setupRealtime(){
-  realtimeSub = supabase.channel('drawings-changes')
-    .on('postgres_changes', {event:'*', schema:'public', table:'drawings'}, function(payload){
-      handleRealtimeChange(payload);
-    })
-    .subscribe(function(status){
-      if(status==='SUBSCRIBED') setSyncStatus('on');
-      else if(status==='CLOSED'||status==='CHANNEL_ERROR') setSyncStatus('off');
-    });
+  setSyncStatus('on');
+  // Poll every 10 seconds for changes
+  realtimeSub = setInterval(async function(){
+    var {data, error} = await supabase.from('drawings').select('*').order('num',{ascending:true,nullsFirst:false});
+    if(error){ setSyncStatus('off'); return; }
+    setSyncStatus('on');
+    if(data && JSON.stringify(data)!==JSON.stringify(drws)){
+      drws = data;
+      render();
+    }
+  }, 10000);
 }
 
 function handleRealtimeChange(payload){
