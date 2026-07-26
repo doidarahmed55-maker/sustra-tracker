@@ -6,13 +6,7 @@
 <title>SUSTRA Drawing Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- Supabase JS -->
-<script type="importmap">
-{"imports": {"@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.3"}}
-</script>
-<script type="module">
-import { createClient } from '@supabase/supabase-js';
-window._createClient = createClient;
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#F0F4F3;color:#1C2526}
@@ -426,7 +420,7 @@ User 2:
       <div class="f s2"><label>Drive Link <span style="font-size:9px;color:#7F8C8D;font-weight:400;text-transform:none">(اختياري)</span></label><input id="fLink" placeholder="https://drive.google.com/..." type="url"/></div>
       <div class="f"><label>Delivery Date</label>
         <div class="nc-row amber" style="margin-bottom:4px"><input type="checkbox" id="fNs" onchange="onNs()"/><label for="fNs">Not Sent Yet</label></div>
-        <input type="date" id="fDel"/>
+        <input type="date" id="fDel" onchange="onDelChange()"/>
       </div>
       <div class="f"><label>Paid</label>
         <select id="fPaid"><option value="unpaid">Unpaid</option><option value="half">50% Paid</option><option value="paid">100% Paid</option></select>
@@ -582,7 +576,7 @@ var currentUser = null;
 var realtimeSub = null;
 
 function initSupabase(url, key){
-  supabase = window._createClient(url, key);
+  supabase = window.supabase.createClient(url, key);
 }
 
 // ══════════════════════════════════════════
@@ -1020,6 +1014,32 @@ function onNs(){
   var ns=document.getElementById('fNs').checked, d=document.getElementById('fDel');
   d.disabled=ns; d.style.opacity=ns?'0.4':'1'; if(ns) d.value='';
 }
+function onDelChange(){
+  var delVal = document.getElementById('fDel').value;
+  if(!delVal) return;
+  var plot  = document.getElementById('fPlot').value.trim();
+  var zone  = document.getElementById('fZone').value.trim();
+  var level = document.getElementById('fLevel').value.trim();
+  var type  = document.getElementById('fType').value;
+  if(!plot) return;
+  // Find matching drawings
+  var matches = drws.filter(function(d){
+    return (d.plot||'')===plot && (d.zone||'')===zone &&
+           (d.level||'')===level && (d.type||'')===type &&
+           d.id !== editId && !d.ns;
+  });
+  if(!matches.length) return;
+  if(confirm('في '+matches.length+' لوحة بنفس Plot/Zone/Level/Type — تطبق نفس التاريخ عليهم؟')){
+    // Update in background
+    matches.forEach(async function(d){
+      await supabase.from('drawings').update({del: delVal}).eq('id', d.id);
+      var idx = drws.findIndex(function(x){return x.id===d.id;});
+      if(idx>=0) drws[idx].del = delVal;
+    });
+    showToast('✓ تم تطبيق التاريخ على '+matches.length+' لوحة');
+  }
+}
+
 function onNc(r){
   var nc=document.getElementById('fR'+r+'nc').checked;
   var rv=document.getElementById('fR'+r+'r'), rp=document.getElementById('fR'+r+'p');
@@ -1494,14 +1514,37 @@ async function readXls(file){
         var r=data[i];
         var plotVal=String(r[1]||'').trim(),nameVal=String(r[5]||'').trim();
         if(!plotVal&&!nameVal) continue;
+        // Parse date helper - handles Excel serial numbers and dd/mm/yyyy strings
+        function parseDate(v){
+          if(!v) return null;
+          // Excel serial number
+          if(typeof v === 'number'){
+            var d = new Date(Math.round((v-25569)*86400*1000));
+            return d.toISOString().split('T')[0];
+          }
+          var s = String(v).trim();
+          if(!s || s==='Not Sent Yet' || s==='-') return null;
+          // dd/mm/yyyy
+          if(s.indexOf('/')>0){
+            var p=s.split('/');
+            if(p.length===3) return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');
+          }
+          // yyyy-mm-dd already
+          if(s.match(/^\d{4}-\d{2}-\d{2}/)) return s.split('T')[0];
+          return null;
+        }
         toImport.push({
           num:parseInt(r[0])||null,
           plot:plotVal,zone:String(r[2]||'').trim(),level:String(r[3]||'').trim(),
           type:String(r[4]||'').trim(),name:nameVal,content:String(r[6]||'').trim(),
           ns:String(r[7]||'').indexOf('Not Sent')>=0,
+          del:parseDate(r[7]),
           by_eng:String(r[8]||'').trim(),
+          r1r:parseDate(r[9]),r1p:parseDate(r[10]),
           r1nc:String(r[11]||'').indexOf('No Comments')>=0,
+          r2r:parseDate(r[12]),r2p:parseDate(r[13]),
           r2nc:String(r[14]||'').indexOf('No Comments')>=0,
+          r3r:parseDate(r[15]),r3p:parseDate(r[16]),
           r3nc:String(r[17]||'').indexOf('No Comments')>=0,
           paid:String(r[18]||'').indexOf('100')>=0?'paid':String(r[18]||'').indexOf('50')>=0?'half':'unpaid',
           notes:String(r[19]||'').trim()
@@ -1591,14 +1634,7 @@ function genDrwListPdf(){
 // ══════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', function(){
-  var t = setInterval(function(){
-    if(window._createClient){
-      clearInterval(t);
-      appInit();
-    }
-  }, 50);
-});
+window.addEventListener('load', appInit);
 </script>
 </body>
 </html>
