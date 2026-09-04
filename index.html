@@ -305,6 +305,29 @@ User 2:
   </div>
 </div>
 
+<!-- ══════════════ PROJECT SELECTOR ══════════════ -->
+<div id="vProject" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1C2526 0%,#2D3748 60%,#1A3A5C 100%)">
+  <div style="background:#fff;border-radius:14px;padding:44px 40px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center">
+    <div id="projLogoBox" style="margin-bottom:16px"></div>
+    <div style="font-size:18px;font-weight:800;color:#2D3748;margin-bottom:6px">Select Project</div>
+    <div style="font-size:11px;color:#1A7A6E;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:30px">SUSTRA · Drawing Tracker</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+      <button onclick="selectProject('WADI_YAMM')" style="padding:20px 16px;border:2.5px solid #1A7A6E;border-radius:10px;background:#E8F5F3;cursor:pointer;transition:all .2s;font-family:inherit" onmouseover="this.style.background='#1A7A6E';this.style.color='#fff'" onmouseout="this.style.background='#E8F5F3';this.style.color='#1C2526'">
+        <div style="font-size:22px;margin-bottom:8px">🏜️</div>
+        <div style="font-size:13px;font-weight:800;color:inherit;letter-spacing:.5px">WADI YAMM</div>
+        <div style="font-size:10px;color:#7F8C8D;margin-top:4px">Existing Project</div>
+      </button>
+      <button onclick="selectProject('ALKHOBAR')" style="padding:20px 16px;border:2.5px solid #1A3A5C;border-radius:10px;background:#EAF2FF;cursor:pointer;transition:all .2s;font-family:inherit" onmouseover="this.style.background='#1A3A5C';this.style.color='#fff'" onmouseout="this.style.background='#EAF2FF';this.style.color='#1C2526'">
+        <div style="font-size:22px;margin-bottom:8px">🏙️</div>
+        <div style="font-size:13px;font-weight:800;color:inherit;letter-spacing:.5px">ALKHOBAR</div>
+        <div style="font-size:10px;color:#7F8C8D;margin-top:4px">New Project</div>
+      </button>
+    </div>
+    <div style="font-size:10px;color:#BDC3C7">Logged in as <span id="projUserName" style="font-weight:700;color:#2D3748"></span></div>
+    <button onclick="doLogout()" style="margin-top:14px;background:transparent;border:1px solid #E8F0EF;border-radius:6px;padding:5px 14px;font-size:10px;color:#9AA5B4;cursor:pointer">Sign Out</button>
+  </div>
+</div>
+
 <!-- ══════════════ MAIN APP ══════════════ -->
 <div id="appShell" style="display:none">
 
@@ -321,6 +344,10 @@ User 2:
     <div class="ldr">Structural Team Leader: Eng. Ahmed Doidar</div>
   </div>
   <div class="hdr-r">
+    <!-- Project Badge -->
+    <div id="projBadge" style="background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 12px;font-size:11px;font-weight:700;color:#fff;cursor:pointer" onclick="changeProject()" title="Switch Project">
+      <span id="projBadgeTxt">—</span> <span style="font-size:9px;opacity:.6">▼</span>
+    </div>
     <!-- Sync Status -->
     <div class="sync-label">
       <span class="sync-dot" id="syncDot"></span>
@@ -574,6 +601,26 @@ var SUPABASE_KEY = localStorage.getItem('sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cC
 var supabase = null;
 var currentUser = null;
 var realtimeSub = null;
+var currentProject = null; // 'WADI_YAMM' or 'ALKHOBAR'
+
+var PROJECT_CONFIG = {
+  'WADI_YAMM': {
+    label: 'WADI YAMM',
+    col1: 'Plot',
+    col2: 'Zone',
+    color: '#1A7A6E',
+    filterField: 'project_id',
+    filterVal: 'WADI_YAMM'
+  },
+  'ALKHOBAR': {
+    label: 'ALKHOBAR',
+    col1: 'Building Name',
+    col2: 'Part',
+    color: '#1A3A5C',
+    filterField: 'project_id',
+    filterVal: 'ALKHOBAR'
+  }
+};
 
 function initSupabase(url, key){
   var h = {'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json'};
@@ -789,16 +836,75 @@ async function loadApp(){
   document.getElementById('userNm').textContent = name;
   document.getElementById('userAv').textContent = initials;
 
-  // Load data
+  // Show project selector
+  document.getElementById('loadOverlay').classList.add('hidden');
+  document.getElementById('projUserName').textContent = name;
+
+  // Set logo in project selector
+  var sLogo = document.getElementById('sLogo');
+  if(sLogo) document.getElementById('projLogoBox').innerHTML = '<img src="'+sLogo.src+'" style="height:50px;width:50px;border-radius:8px;object-fit:contain"/>';
+
+  showProjectSelector();
+}
+
+function showProjectSelector(){
+  document.getElementById('appShell').style.display='none';
+  var ps = document.getElementById('vProject');
+  ps.style.display='flex';
+}
+
+function changeProject(){
+  // Stop realtime polling
+  if(realtimeSub) clearInterval(realtimeSub);
+  drws = [];
+  showProjectSelector();
+}
+
+async function selectProject(proj){
+  currentProject = proj;
+  var cfg = PROJECT_CONFIG[proj];
+
+  // Update header badge
+  document.getElementById('projBadgeTxt').textContent = cfg.label;
+  document.getElementById('projBadge').style.borderColor = cfg.color;
+
+  // Update column headers
+  updateColumnHeaders(cfg);
+
+  // Hide project selector, show app
+  document.getElementById('vProject').style.display='none';
+  document.getElementById('appShell').style.display='block';
+  document.getElementById('loadOverlay').classList.remove('hidden');
+  document.getElementById('loadOverlay').querySelector('.load-txt').textContent = 'Loading '+cfg.label+'...';
+
+  // Load data filtered by project
   await fetchDrawings();
   await fetchEngineers();
-
-  // Setup realtime
   setupRealtime();
 
   document.getElementById('loadOverlay').classList.add('hidden');
-  document.getElementById('appShell').style.display='block';
   show('vList'); render();
+}
+
+function updateColumnHeaders(cfg){
+  // Update Plot/Zone column labels in table header
+  var ths = document.querySelectorAll('th');
+  ths.forEach(function(th){
+    if(th.textContent.trim()==='Plot' || th.textContent.trim()==='Building Name') th.textContent = cfg.col1;
+    if(th.textContent.trim()==='Zone' || th.textContent.trim()==='Part') th.textContent = cfg.col2;
+  });
+  // Update form labels
+  var labels = document.querySelectorAll('label');
+  labels.forEach(function(lb){
+    if(lb.textContent.trim()==='Project No. *'||lb.textContent.trim()==='Building Name *') {
+      lb.innerHTML = cfg.col1+(lb.innerHTML.includes('*')?' <span class="req">*</span>':'');
+    }
+    if(lb.textContent.trim()==='Zone') lb.textContent = cfg.col2;
+  });
+  var fPlot = document.getElementById('fPlot');
+  if(fPlot) fPlot.placeholder = cfg.col1==='Plot'?'PLOT1029':'Building A';
+  var fZone = document.getElementById('fZone');
+  if(fZone) fZone.placeholder = cfg.col2==='Zone'?'ZONE.02':'Part 1';
 }
 
 // ══════════════════════════════════════════
@@ -810,7 +916,14 @@ var editId = null;  // stores drawing UUID when editing
 
 async function fetchDrawings(){
   setSyncStatus('loading');
-  var {data,error} = await supabase.from('drawings').select('*').order('num',{ascending:true,nullsFirst:false});
+  var q = supabase.from('drawings').select('*');
+  if(currentProject){
+    q = q.eq('project_id', currentProject);
+  } else {
+    q = q.eq('project_id', 'WADI_YAMM');
+  }
+  q = q.order('num',{ascending:true,nullsFirst:false});
+  var {data,error} = await q;
   if(error){ console.error(error); setSyncStatus('off'); return; }
   drws = data||[];
   setSyncStatus('on');
@@ -1156,6 +1269,7 @@ async function saveDrw(){
 
   var rec={
     num:     numV,
+    project_id: currentProject || 'WADI_YAMM',
     plot:    plot,
     name:    name,
     zone:    document.getElementById('fZone').value.trim(),
