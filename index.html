@@ -1408,7 +1408,8 @@ function applyLastVals(){
 // ══════════════════════════════════════════
 var selRows={}, selCols={}, selEngs={};
 
-function goPdf(){
+async function goPdf(){
+  await fetchDrawings();
   if(!drws.length){alert('No drawings');return;}
   selRows={}; selCols={};
   for(var c=0;c<COLS.length;c++) selCols[COLS[c].k]=true;
@@ -1431,7 +1432,8 @@ function goPdf(){
   show('vPdf');
 }
 
-function goEng(){
+async function goEng(){
+  await fetchDrawings();
   if(!drws.length){alert('No drawings');return;}
   selEngs={};
   function fillSel(id,vals){
@@ -1468,7 +1470,8 @@ function buildEngCards(){
   eg.innerHTML=eh||'<p style="font-size:11px;color:#aaa;padding:10px">No engineers match filters.</p>';
 }
 
-function goPlot(){
+async function goPlot(){
+  await fetchDrawings();
   if(!drws.length){alert('No drawings');return;}
   function fillSel(id,vals){var el=document.getElementById(id);el.innerHTML='<option value="">All</option>';vals.sort().forEach(function(v){if(v)el.innerHTML+='<option>'+v+'</option>';});}
   var plots={},zones={},levels={},types={};
@@ -1816,7 +1819,8 @@ async function readXls(file){
 
 // ── DRAWINGS LIST ──
 var dlSelRows={},dlSelCols={};
-function goDrwList(){
+async function goDrwList(){
+  await fetchDrawings();
   if(!drws.length){alert('No drawings');return;}
   dlSelRows={};dlSelCols={};
   function fillSel(id,vals){var el=document.getElementById(id);el.innerHTML='<option value="">All</option>';vals.sort().forEach(function(v){if(v)el.innerHTML+='<option>'+v+'</option>';});}
