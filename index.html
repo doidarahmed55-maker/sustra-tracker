@@ -772,10 +772,11 @@ async function appInit(){
     showSetup();
     return;
   }
+  // Always init supabase first
   initSupabase(SUPABASE_URL, SUPABASE_KEY);
   // Check existing session
   var {data:{session}} = await supabase.auth.getSession();
-  if(session && session.user){
+  if(session && session.user && session.access_token){
     currentUser = session.user;
     await loadApp();
   } else {
