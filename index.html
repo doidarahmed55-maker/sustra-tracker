@@ -398,16 +398,15 @@ User 2:
         <th rowspan="2" class="gp">By</th>
         <th colspan="3" class="g1" style="text-align:center">Round 1</th>
         <th colspan="3" class="g2" style="text-align:center">Round 2</th>
-        <th colspan="3" class="g3" style="text-align:center">Round 3</th>
+
         <th rowspan="2" class="gm">Paid</th>
-        <th rowspan="2" class="gp">Notes</th>
         <th rowspan="2" class="gp" id="invColHdr" style="display:none;background:#6C3483">Invoice</th>
         <th rowspan="2" class="gp"></th>
       </tr><tr>
         <th class="gp">Plot</th><th class="gp">Zone</th><th class="gp">Level</th><th class="gp">Type</th>
         <th class="g1">Recv</th><th class="g1">Reply</th><th class="g1">Status</th>
         <th class="g2">Recv</th><th class="g2">Reply</th><th class="g2">Status</th>
-        <th class="g3">Recv</th><th class="g3">Reply</th><th class="g3">Status</th>
+
       </tr></thead>
       <tbody id="tb"></tbody>
     </table></div>
@@ -438,9 +437,9 @@ User 2:
         <input id="fTypeC" placeholder="Custom type" style="display:none;margin-top:4px" oninput="this.value=this.value.toUpperCase()"/>
       </div>
       <div class="f s2"><label>Board Name <span class="req">*</span></label><input id="fName" placeholder="e.g. S-COL-01 Ground Floor Columns"/></div>
-      <div class="f"><label>By (Engineer)</label>
-        <input id="fBy" list="engList" placeholder="Eng. Ahmed" autocomplete="off"/>
-        <datalist id="engList"></datalist>
+      <div class="f s2"><label>By (Engineer) — اختر واحد أو أكتر</label>
+        <div id="engCheckboxes" style="max-height:120px;overflow-y:auto;border:1.5px solid #D5E5E2;border-radius:6px;padding:8px;background:#FAFEFE;display:flex;flex-wrap:wrap;gap:6px"></div>
+        <input id="fBy" type="hidden"/>
       </div>
     </div>
     <div class="sl">Content &amp; Delivery</div>
@@ -1175,6 +1174,7 @@ function nextNum(){
 function goAdd(){
   editId=null; clearF(); applyLastVals();
   document.getElementById('fNum').value = nextNum();
+  setTimeout(refreshEngDatalist, 50);
   document.getElementById('ftitle').textContent='Add Drawing';
   show('vForm');
 }
@@ -1193,6 +1193,7 @@ function goEdit(id){
   document.getElementById('fContent').value= d.content|| '';
   document.getElementById('fDel').value    = toInputDate(d.del);
   document.getElementById('fBy').value     = d.by_eng || '';
+  setTimeout(refreshEngDatalist, 50);
   document.getElementById('fNotes').value  = d.notes  || '';
   document.getElementById('fLink').value   = d.link   || '';
   document.getElementById('fPaid').value   = d.paid   || 'unpaid';
@@ -1245,7 +1246,7 @@ function render(){
     var d=s[i];
     var s1=rs(d.r1r,d.r1p,d.r1nc);
     var s2=rs(d.r2r,d.r2p,d.r2nc);
-    var s3=rs(d.r3r,d.r3p,d.r3nc);
+
     var p=pv(d.paid);
     var tt=d.type?'<span class="tt">'+d.type+'</span>':'-';
     var dc=d.ns?'<span class="bdg bns">Not Sent</span>':fd(d.del);
@@ -1257,12 +1258,14 @@ function render(){
     h+='<td style="font-weight:600;max-width:170px;white-space:normal">'+nameCell+'</td>';
     h+='<td style="max-width:120px;white-space:normal;font-size:10px;color:#555">'+(d.content||'-')+'</td>';
     h+='<td>'+dc+'</td>';
-    h+='<td style="font-size:10px;font-weight:600">'+(d.by_eng||'-')+'</td>';
+    var engList_d = (d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean);
+    var engHtml = engList_d.length ? engList_d.map(function(e){return '<span style="display:inline-block;background:#E8F5F3;color:#0D5C52;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin:1px">'+e+'</span>';}).join(' ') : '-';
+    h+='<td style="font-size:10px;max-width:120px;white-space:normal">'+engHtml+'</td>';
     h+='<td>'+fd(d.r1r)+'</td><td>'+fd(d.r1p)+'</td><td><span class="bdg '+s1.c+'">'+s1.l+'</span></td>';
     h+='<td>'+fd(d.r2r)+'</td><td>'+fd(d.r2p)+'</td><td><span class="bdg '+s2.c+'">'+s2.l+'</span></td>';
-    h+='<td>'+fd(d.r3r)+'</td><td>'+fd(d.r3p)+'</td><td><span class="bdg '+s3.c+'">'+s3.l+'</span></td>';
+
     h+='<td><span class="bdg '+p.c+'">'+p.l+'</span></td>';
-    h+='<td style="color:#7F8C8D;font-size:10px;max-width:110px;white-space:normal">'+(d.notes||'-')+'</td>';
+
     // Invoice column (WADI YAMM only)
     if(currentProject==='WADI_YAMM'){
       var inv = d.invoice||0;
@@ -1429,10 +1432,29 @@ async function delD(id){
 //  ENGINEER LIST
 // ══════════════════════════════════════════
 function refreshEngDatalist(){
-  var dl=document.getElementById('engList'); if(!dl) return;
-  dl.innerHTML='';
+  var box=document.getElementById('engCheckboxes'); if(!box) return;
+  var current = (document.getElementById('fBy').value||'').split(',').map(function(e){return e.trim();}).filter(Boolean);
+  box.innerHTML='';
   engNames.forEach(function(n){
-    var o=document.createElement('option'); o.value=n; dl.appendChild(o);
+    var checked = current.indexOf(n)>=0;
+    var id='engcb_'+n.replace(/[^a-zA-Z0-9]/g,'_');
+    box.innerHTML+='<label style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#2D3748;cursor:pointer;padding:4px 8px;border:1.5px solid #E8F0EF;border-radius:5px;background:'+(checked?'#E8F5F3':'#fff')+'">'
+      +'<input type="checkbox" id="'+id+'" value="'+n+'" '+(checked?'checked':'')+' onchange="updateByEng()" style="accent-color:#1A7A6E"/>'
+      +n+'</label>';
+  });
+}
+
+function updateByEng(){
+  var checked=[];
+  document.querySelectorAll('#engCheckboxes input[type=checkbox]:checked').forEach(function(cb){
+    checked.push(cb.value);
+  });
+  document.getElementById('fBy').value=checked.join(',');
+  // Refresh colors
+  document.querySelectorAll('#engCheckboxes label').forEach(function(lb){
+    var cb=lb.querySelector('input');
+    lb.style.background=cb.checked?'#E8F5F3':'#fff';
+    lb.style.borderColor=cb.checked?'#1A7A6E':'#E8F0EF';
   });
 }
 async function saveNewEng(name){
@@ -1519,7 +1541,12 @@ function buildEngCards(){
            (!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft);
   });
   var engs={};
-  filtered.forEach(function(d){var e=d.by_eng||'Unassigned';engs[e]=(engs[e]||0)+1;});
+  filtered.forEach(function(d){
+    var engsInDwg=(d.by_eng||'Unassigned').split(',').map(function(e){return e.trim();}).filter(Boolean);
+    if(!engsInDwg.length) engsInDwg=['Unassigned'];
+    var share=1/engsInDwg.length;
+    engsInDwg.forEach(function(e){engs[e]=(engs[e]||0)+share;});
+  });
   var eg=document.getElementById('engGrid'),eh='',keys=Object.keys(engs);
   selEngs={};
   for(var k=0;k<keys.length;k++){
@@ -1685,10 +1712,17 @@ function genEngPdf(){
   for(var k=0;k<keys.length;k++){
     var eng=keys[k];
     var sub=sorted().filter(function(d){
-      return (d.by_eng||'Unassigned')===eng&&(!fp||(d.plot||'')===fp)&&(!fz||(d.zone||'')===fz)&&(!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft);
+      var engsInD=(d.by_eng||'Unassigned').split(',').map(function(e){return e.trim();}).filter(Boolean);
+      if(!engsInD.length) engsInD=['Unassigned'];
+      return engsInD.indexOf(eng)>=0&&(!fp||(d.plot||'')===fp)&&(!fz||(d.zone||'')===fz)&&(!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft);
     });
     if(!sub.length) continue;
-    body+='<div class="sec"><div class="sec-title">'+eng+'<span class="sec-badge">'+sub.length+' drawing'+(sub.length>1?'s':'')+'</span></div>'+buildTbl(sub,showPaid,sc)+'</div>';
+    var totalShare=sub.reduce(function(acc,d){
+      var engsInD=(d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean);
+      return acc+(engsInD.length>0?1/engsInD.length:1);
+    },0);
+    var shareStr=Number.isInteger(totalShare)?totalShare:totalShare.toFixed(2);
+    body+='<div class="sec"><div class="sec-title">'+eng+'<span class="sec-badge">'+shareStr+' / '+sub.length+' drawings</span></div>'+buildTbl(sub,showPaid,sc)+'</div>';
   }
   if(!body){alert('No drawings match filters');return;}
   openWin(sL,'',ds,'Engineer Drawing Report',body);
