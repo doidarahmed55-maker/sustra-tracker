@@ -1754,24 +1754,29 @@ function doXlsData(){
   if(!drws.length){alert('No drawings');return;}
   if(typeof XLSX==='undefined'){alert('Excel library loading, try again');return;}
   var s=sorted();
-  var hdr=['#','Project No.','Zone','Level','Type','Board Name','Content','Delivery','By',
-    'R1 Recv','R1 Replied','R1 Status','R2 Recv','R2 Replied','R2 Status',
-    'R3 Recv','R3 Replied','R3 Status','Paid','Notes'];
+  var proj=currentProject||'WADI_YAMM';
+  var isWY=proj==='WADI_YAMM';
+  var cfg=PROJECT_CONFIG[proj];
+  var hdr=['#',cfg.col1,cfg.col2,'Level','Type','Board Name','Content','Delivery','By',
+    'R1 Recv','R1 Replied','R1 Status','R2 Recv','R2 Replied','R2 Status','Paid'];
+  if(isWY) hdr.push('Invoice');
   var rows=[hdr];
   for(var i=0;i<s.length;i++){
     var d=s[i];
-    rows.push([i+1,d.plot||'',d.zone||'',d.level||'',d.type||'',d.name||'',d.content||'',
+    var row=[i+1,d.plot||'',d.zone||'',d.level||'',d.type||'',d.name||'',d.content||'',
       d.ns?'Not Sent Yet':(d.del?fd(d.del):''),d.by_eng||'',
       d.r1r?fd(d.r1r):'',d.r1p?fd(d.r1p):'',rs(d.r1r,d.r1p,d.r1nc).l,
       d.r2r?fd(d.r2r):'',d.r2p?fd(d.r2p):'',rs(d.r2r,d.r2p,d.r2nc).l,
-      d.r3r?fd(d.r3r):'',d.r3p?fd(d.r3p):'',rs(d.r3r,d.r3p,d.r3nc).l,
-      pv(d.paid).l,d.notes||'']);
+      pv(d.paid).l];
+    if(isWY) row.push(d.invoice||0);
+    rows.push(row);
   }
   var ws=XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols']=[5,14,10,16,14,28,22,13,16,13,13,12,13,13,12,13,13,12,12,20].map(function(w){return{wch:w};});
-  var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Drawing Tracker');
+  ws['!cols']=[5,14,10,16,14,28,22,13,16,13,13,12,13,13,12,12,8].map(function(w){return{wch:w};});
+  var wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,cfg.label);
   var now=new Date();
-  XLSX.writeFile(wb,'SUSTRA_DATA_'+now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'.xlsx');
+  XLSX.writeFile(wb,'SUSTRA_'+proj+'_DATA_'+now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'.xlsx');
 }
 
 function doXlsReport(){
@@ -1867,8 +1872,10 @@ async function readXls(file){
           if(s.match(/^\d{4}-\d{2}-\d{2}/)) return s.split('T')[0];
           return null;
         }
-        toImport.push({
+        var isWY=(currentProject||'WADI_YAMM')==='WADI_YAMM';
+        var rec={
           num:parseInt(r[0])||null,
+          project_id:currentProject||'WADI_YAMM',
           plot:plotVal,zone:String(r[2]||'').trim(),level:String(r[3]||'').trim(),
           type:String(r[4]||'').trim(),name:nameVal,content:String(r[6]||'').trim(),
           ns:String(r[7]||'').indexOf('Not Sent')>=0,
@@ -1878,16 +1885,15 @@ async function readXls(file){
           r1nc:String(r[11]||'').indexOf('No Comments')>=0,
           r2r:parseDate(r[12]),r2p:parseDate(r[13]),
           r2nc:String(r[14]||'').indexOf('No Comments')>=0,
-          r3r:parseDate(r[15]),r3p:parseDate(r[16]),
-          r3nc:String(r[17]||'').indexOf('No Comments')>=0,
-          paid:String(r[18]||'').indexOf('100')>=0?'paid':String(r[18]||'').indexOf('50')>=0?'half':'unpaid',
-          notes:String(r[19]||'').trim()
-        });
+          paid:String(r[15]||'').indexOf('100')>=0?'paid':String(r[15]||'').indexOf('50')>=0?'half':'unpaid'
+        };
+        if(isWY) rec.invoice=parseInt(r[16])||0;
+        toImport.push(rec);
       }
       if(!toImport.length){impMsg.style.color='#C0392B';impMsg.textContent='لم يتم العثور على بيانات صالحة';return;}
       // Clear existing and insert new
-      // Delete all existing drawings one by one
-      var {data:existing} = await supabase.from('drawings').select('id');
+      // Delete only current project drawings
+      var {data:existing} = await supabase.from('drawings').select('id').eq('project_id', currentProject||'WADI_YAMM');
       if(existing && existing.length){
         for(var di=0;di<existing.length;di++){
           await supabase.from('drawings').delete().eq('id',existing[di].id);
