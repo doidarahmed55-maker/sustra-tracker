@@ -1002,9 +1002,10 @@ async function fetchEngineers(){
 // ══════════════════════════════════════════
 function setupRealtime(){
   setSyncStatus('on');
-  // Poll every 10 seconds for changes
+  // Poll every 10 seconds for changes - filtered by current project
   realtimeSub = setInterval(async function(){
-    var {data, error} = await supabase.from('drawings').select('*').order('num',{ascending:true,nullsFirst:false});
+    var proj = currentProject || 'WADI_YAMM';
+    var {data, error} = await supabase.from('drawings').select('*').eq('project_id', proj).order('num',{ascending:true,nullsFirst:false});
     if(error){ setSyncStatus('off'); return; }
     setSyncStatus('on');
     if(data && JSON.stringify(data)!==JSON.stringify(drws)){
