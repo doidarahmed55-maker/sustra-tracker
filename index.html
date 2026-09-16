@@ -513,7 +513,8 @@ User 2:
     <div class="psect">Show columns:</div>
     <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px">
       <label class="radio-row"><input type="checkbox" id="ecComments" checked/> Comments (Rounds)</label>
-      <label class="radio-row"><input type="checkbox" id="ecNotes" checked/> Notes</label>
+      <label class="radio-row"><input type="checkbox" id="ecContent" checked/> Content</label>
+      <label class="radio-row"><input type="checkbox" id="ecDel" checked/> Delivery</label>
       <label class="radio-row"><input type="checkbox" id="ecPaid" checked/> Paid</label>
     </div>
   </div>
@@ -594,9 +595,10 @@ User 2:
   <div class="box-hdr" style="background:#6C3483"><h2>📋 Invoice Report</h2><button class="btn" style="padding:5px 11px;font-size:11px;color:#fff;border:1.5px solid #fff;background:transparent" onclick="goList()">← Back</button></div>
   <div class="box-body">
     <div class="psect">Invoice Number:</div>
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
-      <input type="number" id="invNum" min="1" max="99" value="1" style="width:100px;padding:8px;border:1.5px solid #D5E5E2;border-radius:6px;font-size:16px;font-weight:700;text-align:center"/>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+      <input type="number" id="invNum" min="0" max="99" value="1" style="width:100px;padding:8px;border:1.5px solid #D5E5E2;border-radius:6px;font-size:16px;font-weight:700;text-align:center"/>
       <button class="btn bt" onclick="loadInvoiceRows()" style="font-size:12px">Load Drawings</button>
+      <button class="btn" style="background:#C0392B;color:#fff;font-size:12px" onclick="document.getElementById('invNum').value=0;loadInvoiceRows()">🔴 Not in Invoice</button>
     </div>
     <div id="invRowsArea" style="display:none">
       <div class="pdiv"></div>
@@ -1697,17 +1699,19 @@ function genEngPdf(){
   var keys=Object.keys(selEngs);
   if(!keys.length){alert('Select at least one engineer');return;}
   var showPaid=document.getElementById('ecPaid').checked;
-  var showNotes=document.getElementById('ecNotes').checked;
   var showComments=document.getElementById('ecComments').checked;
-  // debug: force paid
-  if(showPaid) console.log('paid enabled');
+  var showContent=document.getElementById('ecContent')?document.getElementById('ecContent').checked:true;
+  var showDel=document.getElementById('ecDel')?document.getElementById('ecDel').checked:true;
   var fp=document.getElementById('efPlot').value,fz=document.getElementById('efZone').value,
       fl=document.getElementById('efLevel').value,ft=document.getElementById('efType').value;
   var sL=document.getElementById('sLogo').src;
   var now=new Date(),ds=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
-  var sc={num:true,plot:true,zone:true,level:true,type:true,name:true,content:true,del:true,by_eng:false};
-  if(showComments){sc.r1=true;sc.r2=true;sc.r3=true;}else{sc.r1=false;sc.r2=false;sc.r3=false;}
-  sc.notes=showNotes;
+  var sc={num:true,plot:true,zone:true,level:true,type:true,name:true,by_eng:false};
+  sc.content=showContent;
+  sc.del=showDel;
+  if(showComments){sc.r1=true;sc.r2=true;}else{sc.r1=false;sc.r2=false;}
+  sc.r3=false;
+  sc.notes=false;
   sc.paid=showPaid;
   var body='';
   for(var k=0;k<keys.length;k++){
@@ -1991,15 +1995,18 @@ function goInvoice(){
   show('vInv');
   document.getElementById('invRowsArea').style.display='none';
   document.getElementById('invPdfBtn').style.display='none';
+  document.getElementById('invNum').value='1';
 }
 
 function loadInvoiceRows(){
-  var num = parseInt(document.getElementById('invNum').value)||1;
+  var num = parseInt(document.getElementById('invNum').value);
+  if(isNaN(num)) num=1;
   var subset = drws.filter(function(d){ return (d.invoice||0)===num; });
+  var label = num===0?'Not in any Invoice':'Invoice '+num;
   document.getElementById('invCount').textContent = subset.length + ' drawing'+(subset.length!==1?'s':'');
   
   if(!subset.length){
-    document.getElementById('invRowList').innerHTML='<p style="color:#C0392B;font-size:12px;padding:10px">No drawings found for Invoice '+num+'</p>';
+    document.getElementById('invRowList').innerHTML='<p style="color:#C0392B;font-size:12px;padding:10px">No drawings found for '+label+'</p>';
     document.getElementById('invSummary').innerHTML='';
     document.getElementById('invRowsArea').style.display='block';
     document.getElementById('invPdfBtn').style.display='none';
@@ -2026,7 +2033,7 @@ function loadInvoiceRows(){
     if(!groups[key]) groups[key]=0;
     groups[key]++;
   });
-  var sh='<strong style="color:#6C3483">Invoice '+num+' Summary:</strong><br/><br/>';
+  var sh='<strong style="color:#6C3483">'+(num===0?'Not in Invoice Summary':'Invoice '+num+' Summary')+':</strong><br/><br/>';
   Object.keys(groups).forEach(function(k){
     sh+='• '+k+' → <strong>'+groups[k]+' drawing'+(groups[k]>1?'s':'')+'</strong><br/>';
   });
@@ -2099,11 +2106,12 @@ function genInvoicePdf(){
   summaryHTML+='<div style="font-size:9px;font-weight:700;color:#2D3748;margin-top:8px;border-top:1px solid #D5C8FF;padding-top:6px">Total: '+subset.length+' Drawings</div>';
   summaryHTML+='</div>';
 
-  var body='<div class="sec"><div class="sec-title">Invoice No. '+num+'<span class="sec-badge">'+subset.length+' drawings</span><span style="float:right;font-size:8px;color:#9AA5B4">'+ds+'</span></div>';
-  body+='<table><thead>'+th+'</thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="20" class="tot">INVOICE '+num+' · TOTAL: '+subset.length+' DRAWINGS · SUSTRA · WADI YAMM</td></tr></tfoot></table>';
+  var invLabel2=num===0?'Drawings Not in Any Invoice':'Invoice No. '+num;
+  var body='<div class="sec"><div class="sec-title">'+invLabel2+'<span class="sec-badge">'+subset.length+' drawings</span><span style="float:right;font-size:8px;color:#9AA5B4">'+ds+'</span></div>';
+  body+='<table><thead>'+th+'</thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="20" class="tot">'+(num===0?'NOT IN INVOICE':'INVOICE '+num)+' · TOTAL: '+subset.length+' DRAWINGS · SUSTRA · WADI YAMM</td></tr></tfoot></table>';
   body+=summaryHTML+'</div>';
 
-  openWin(sL,'',ds,'Invoice No. '+num+' — WADI YAMM',body);
+  openWin(sL,'',ds,invLabel2+' — WADI YAMM',body);
 }
 
 // ══════════════════════════════════════════
