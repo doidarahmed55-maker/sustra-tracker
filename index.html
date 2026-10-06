@@ -422,8 +422,8 @@ User 2:
     <div class="sl">Project ID</div>
     <div class="fg">
       <div class="f"><label>DWG # <span class="req">*</span></label><input id="fNum" type="number" placeholder="5" min="1"/></div>
-      <div class="f"><label>Project No. <span class="req">*</span></label><input id="fPlot" placeholder="PLOT1035" oninput="this.value=this.value.toUpperCase()"/></div>
-      <div class="f"><label>Zone</label><input id="fZone" placeholder="ZONE.02" oninput="this.value=this.value.toUpperCase()"/></div>
+      <div class="f"><label id="lPlot">Project No. <span class="req">*</span></label><input id="fPlot" placeholder="PLOT1035" oninput="this.value=this.value.toUpperCase()"/></div>
+      <div class="f"><label id="lZone">Zone</label><input id="fZone" placeholder="ZONE.02" oninput="this.value=this.value.toUpperCase()"/></div>
       <div class="f"><label>Level</label><input id="fLevel" placeholder="GROUND LEVEL" oninput="this.value=this.value.toUpperCase()"/></div>
     </div>
     <div class="fg">
@@ -584,7 +584,7 @@ User 2:
 <div class="page"><div class="box">
   <div class="box-hdr" style="background:#1A5276"><h2>Update from Excel</h2><button class="btn" style="padding:5px 11px;font-size:11px;color:#fff;border:1.5px solid #fff;background:transparent" onclick="goList()">&#8592; Back</button></div>
   <div class="box-body">
-    <p style="font-size:11px;color:#555;margin-bottom:14px">ارفع ملف <b>Excel Data</b> (.xlsx) المُصدَّر من هذا التطبيق لاستعادة أو تحديث البيانات.</p>
+    <p style="font-size:11px;color:#555;margin-bottom:14px">ارفع ملف <b>Excel Data</b> (.xlsx) المُصدَّر من هذا التطبيق لاستعادة أو تحديث البيانات. لوحات المشروع الحالي هتتبدّل باللي في الملف.</p>
     <div class="dz" onclick="document.getElementById('xlsFile').click()" ondragover="event.preventDefault()" ondrop="onDrop(event)">
       <div style="font-size:36px;margin-bottom:8px">&#128194;</div>
       <div style="font-size:12px;font-weight:600;color:#2D3748;margin-bottom:4px">Click to browse or drag &amp; drop</div>
@@ -669,10 +669,86 @@ var PROJECT_CONFIG = {
 function initSupabase(url, key){
   var h = {'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json'};
   var _sess = null;
-  try{var s=localStorage.getItem('sb_session')||localStorage.getItem('sb-'+url.split('//')[1].split('.')[0]+'-auth-token');if(s){_sess=JSON.parse(s);if(_sess&&_sess.access_token){h['Authorization']='Bearer '+_sess.access_token;}}}catch(e){}
+
+  function readStored(){
+    try{
+      var s=localStorage.getItem('sb_session')||localStorage.getItem('sb-'+url.split('//')[1].split('.')[0]+'-auth-token');
+      if(s){var o=JSON.parse(s);if(o&&o.access_token)return o;}
+    }catch(e){}
+    return null;
+  }
+  _sess = readStored();
+  if(_sess) h['Authorization']='Bearer '+_sess.access_token;
 
   function setH(tok){ h['Authorization']='Bearer '+(tok||key); }
   function saveS(s){ _sess=s; try{if(s)localStorage.setItem('sb_session',JSON.stringify(s));else localStorage.removeItem('sb_session');}catch(e){} }
+
+  // ── SESSION REFRESH ──
+  // The access token lives ~1 hour. Its expiry is read from the token itself,
+  // and it is renewed with the refresh token shortly before it runs out.
+  function tokExp(tok){
+    try{
+      var p=String(tok).split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+      while(p.length%4) p+='=';
+      return JSON.parse(atob(p)).exp||0;
+    }catch(e){ return 0; }
+  }
+  function secsLeft(tok){ return tokExp(tok)-Math.floor(Date.now()/1000); }
+
+  // Another tab may already have renewed the session — use its token instead of refreshing again
+  function adoptStored(){
+    var o=readStored();
+    if(o && _sess && o.access_token!==_sess.access_token && secsLeft(o.access_token)>60){
+      _sess=o; setH(o.access_token); return true;
+    }
+    return false;
+  }
+
+  function expire(){
+    setH(null); saveS(null);
+    if(typeof handleSessionExpired==='function') handleSessionExpired();
+  }
+
+  var _refP=null;
+  function refresh(){
+    if(_refP) return _refP;
+    if(adoptStored()) return Promise.resolve(true);
+    if(!_sess) return Promise.resolve(false);
+    if(!_sess.refresh_token){ expire(); return Promise.resolve(false); }
+    _refP=fetch(url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{'apikey':key,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:_sess.refresh_token})})
+      .then(function(r){return r.json().then(function(d){
+        if(r.ok&&d.access_token){
+          if(!d.user&&_sess) d.user=_sess.user;
+          setH(d.access_token); saveS(d); return true;
+        }
+        if(adoptStored()) return true;
+        // refresh token rejected → the user has to sign in again
+        if(r.status===400||r.status===401||r.status===403) expire();
+        return false;
+      });})
+      .catch(function(){ return false; })   // network problem: keep the session and try again later
+      .then(function(ok){ _refP=null; return ok; });
+    return _refP;
+  }
+  function ensureFresh(){
+    if(!_sess||secsLeft(_sess.access_token)>60) return Promise.resolve(true);
+    return refresh();
+  }
+
+  // All REST calls go through here: renew the token first if needed,
+  // and if the server still answers 401, renew once and retry.
+  function api(path,method,extra,body,_retried){
+    return ensureFresh().then(function(){
+      var o={method:method||'GET',headers:Object.assign({},h,extra||{})};
+      if(body!==undefined) o.body=JSON.stringify(body);
+      return fetch(url+path,o);
+    }).then(function(r){
+      if(r.status===401&&_sess&&!_retried){
+        return refresh().then(function(ok){ return ok?api(path,method,extra,body,true):r; });
+      }
+      return r;
+    });
+  }
 
   function qb(tbl){
     var _f=[],_s='*',_ord=null,_lim=null,_sing=false;
@@ -684,30 +760,37 @@ function initSupabase(url, key){
       eq:function(c,v){_f.push(c+'=eq.'+encodeURIComponent(v));return o;},
       neq:function(c,v){_f.push(c+'=neq.'+encodeURIComponent(v));return o;},
       then:function(res,rej){
-        var q=url+'/rest/v1/'+tbl+'?select='+_s+(_f.length?'&'+_f.join('&'):'')+(  _ord?'&order='+_ord:'')+(_lim?'&limit='+_lim:'');
-        return fetch(q,{headers:Object.assign({},h,{Prefer:''})}).then(function(r){return r.json().then(function(d){
+        var q='/rest/v1/'+tbl+'?select='+_s+(_f.length?'&'+_f.join('&'):'')+(  _ord?'&order='+_ord:'')+(_lim?'&limit='+_lim:'');
+        return api(q,'GET',{Prefer:''}).then(function(r){return r.json().then(function(d){
           return r.ok?{data:_sing?(Array.isArray(d)?d[0]:d):d,error:null}:{data:null,error:{message:d.message||d.hint||JSON.stringify(d)}};
         });}).then(res,rej);
       },
       insert:function(data){
-        var _h2=Object.assign({},h,{Prefer:'return=representation'});
         return{select:function(){return{single:function(){
-          return fetch(url+'/rest/v1/'+tbl,{method:'POST',headers:_h2,body:JSON.stringify(data)}).then(function(r){return r.json().then(function(d){
+          return api('/rest/v1/'+tbl,'POST',{Prefer:'return=representation'},data).then(function(r){return r.json().then(function(d){
             return r.ok?{data:Array.isArray(d)?d[0]:d,error:null}:{data:null,error:{message:d.message||JSON.stringify(d)}};
           });});
         }};}}; 
       },
+      // Insert many rows in ONE request: either all rows are saved or none
+      insertMany:function(rows){
+        return api('/rest/v1/'+tbl,'POST',{Prefer:'return=representation'},rows).then(function(r){return r.json().then(function(d){
+          return r.ok?{data:Array.isArray(d)?d:[d],error:null}:{data:null,error:{message:d.message||JSON.stringify(d)}};
+        });});
+      },
       update:function(data){
         return{eq:function(c,v){
-          return fetch(url+'/rest/v1/'+tbl+'?'+c+'=eq.'+encodeURIComponent(v),{method:'PATCH',headers:Object.assign({},h,{Prefer:'return=representation'}),body:JSON.stringify(data)}).then(function(r){return r.json().then(function(d){
+          return api('/rest/v1/'+tbl+'?'+c+'=eq.'+encodeURIComponent(v),'PATCH',{Prefer:'return=representation'},data).then(function(r){return r.json().then(function(d){
             return r.ok?{data:d,error:null}:{data:null,error:{message:d.message||JSON.stringify(d)}};
           });});
         }};
       },
       delete:function(){
+        function del(filter){return api('/rest/v1/'+tbl+'?'+filter,'DELETE').then(function(r){return{data:null,error:r.ok?null:{message:'Delete failed'}};});}
         return{
-          eq:function(c,v){return fetch(url+'/rest/v1/'+tbl+'?'+c+'=eq.'+encodeURIComponent(v),{method:'DELETE',headers:h}).then(function(r){return{data:null,error:r.ok?null:{message:'Delete failed'}};});},
-          neq:function(c,v){return fetch(url+'/rest/v1/'+tbl+'?'+c+'=neq.'+encodeURIComponent(v),{method:'DELETE',headers:h}).then(function(r){return{data:null,error:r.ok?null:{message:'Delete failed'}};});}
+          eq:function(c,v){return del(c+'=eq.'+encodeURIComponent(v));},
+          neq:function(c,v){return del(c+'=neq.'+encodeURIComponent(v));},
+          'in':function(c,vals){return del(c+'=in.('+vals.map(encodeURIComponent).join(',')+')');}
         };
       }
     };
@@ -741,7 +824,11 @@ function initSupabase(url, key){
 
   supabase = {
     auth:{
-      getSession:function(){return Promise.resolve({data:{session:_sess}});},
+      // Returns the stored session, renewing the access token first if it has expired
+      getSession:function(){
+        if(!_sess) return Promise.resolve({data:{session:null}});
+        return ensureFresh().then(function(){ return {data:{session:_sess}}; });
+      },
       signInWithPassword:function(creds){
         return fetch(url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':key,'Content-Type':'application/json'},body:JSON.stringify(creds)}).then(function(r){return r.json().then(function(d){
           if(d.access_token){setH(d.access_token);saveS(d);return{data:{user:d.user,session:d},error:null};}
@@ -756,6 +843,16 @@ function initSupabase(url, key){
     channel:channel,
     removeChannel:function(){if(_ws)_ws.close();}
   };
+}
+
+// Called when the session can no longer be renewed (refresh token rejected)
+function handleSessionExpired(){
+  if(!currentUser) return;
+  if(realtimeSub) clearInterval(realtimeSub);
+  currentUser=null; drws=[];
+  document.getElementById('appShell').style.display='none';
+  showLoginScreen();
+  document.getElementById('lErr').textContent='انتهت الجلسة — سجّل الدخول تاني';
 }
 
 // ══════════════════════════════════════════
@@ -833,6 +930,8 @@ async function appInit(){
 
 function showLoginScreen(){
   document.getElementById('vLogin').style.display='flex';
+  document.getElementById('vProject').style.display='none';
+  var lb=document.getElementById('lBtn'); lb.disabled=false; lb.textContent='Sign In';
   document.getElementById('loadOverlay').classList.add('hidden');
   setTimeout(function(){ document.getElementById('lEmail').focus(); },100);
 }
@@ -1013,10 +1112,12 @@ function setupRealtime(){
   setSyncStatus('on');
   // Poll every 10 seconds for changes - filtered by current project
   realtimeSub = setInterval(async function(){
+    if(importBusy) return;   // don't refresh the table in the middle of an Excel import
     var proj = currentProject || 'WADI_YAMM';
     var {data, error} = await supabase.from('drawings').select('*').eq('project_id', proj).order('num',{ascending:true,nullsFirst:false});
     if(error){ setSyncStatus('off'); return; }
     setSyncStatus('on');
+    if(importBusy) return;
     if(data && JSON.stringify(data)!==JSON.stringify(drws)){
       drws = data;
       render();
@@ -1165,7 +1266,7 @@ function showToast(msg, isErr){
 //  NAVIGATION
 // ══════════════════════════════════════════
 function show(id){
-  var all=['vList','vForm','vPdf','vEng','vPlot','vUpd','vDrwList'];
+  var all=['vList','vForm','vPdf','vEng','vPlot','vUpd','vDrwList','vInv'];
   for(var i=0;i<all.length;i++) document.getElementById(all[i]).style.display='none';
   document.getElementById(id).style.display='block';
   window.scrollTo(0,0);
@@ -1368,7 +1469,7 @@ function onNc(r){
 async function saveDrw(){
   var plot=document.getElementById('fPlot').value.trim();
   var name=document.getElementById('fName').value.trim();
-  if(!plot){alert('Project No. is required');return;}
+  if(!plot){alert(((PROJECT_CONFIG[currentProject]||{}).col1||'Project No.')+' is required');return;}
   if(!name){alert('Board name is required');return;}
   var st=document.getElementById('fType').value;
   var ct=document.getElementById('fTypeC').value.trim().toUpperCase();
@@ -1652,7 +1753,7 @@ function pdfShell(sL,oL,ds,title,body){
     '<div class="hm"><h1>'+title+'</h1><div class="sub">SUSTRA · Engineering · BIM · Construction</div>' +
     '<div class="ldr">Structural Team Leader: Eng. Ahmed Doidar</div></div>' +
     '<div class="hr">'+ds+'</div></div>' +
-    '<div class="tbar"></div><img class="wm" src="'+sL+'"/>'+body+
+    '<div class="tbar"></div><img class="wm" src="'+sL+'"/>'+body
     +'<div style="margin-top:20px">'+getPdfFooter()+'</div>'+'</body></html>';
 }
 
@@ -1796,9 +1897,15 @@ function doXlsData(){
   var proj=currentProject||'WADI_YAMM';
   var isWY=proj==='WADI_YAMM';
   var cfg=PROJECT_CONFIG[proj];
+  // The first columns keep their old order; the columns that used to be missing
+  // from the file (Delivery, Round 3, Notes, Drive Link) are added at the end.
+  // Import reads columns by header name, so the order does not matter there.
   var hdr=['#',cfg.col1,cfg.col2,'Level','Type','Board Name','Content','Status','By',
     'R1 Recv','R1 Replied','R1 Status','R2 Recv','R2 Replied','R2 Status','Paid'];
-  if(isWY) hdr.push('Invoice');
+  var wch=[5,14,10,16,14,28,22,13,16,13,13,12,13,13,12,12];
+  if(isWY){ hdr.push('Invoice'); wch.push(8); }
+  hdr.push('Delivery','R3 Recv','R3 Replied','R3 Status','Notes','Drive Link');
+  wch.push(13,13,13,12,30,40);
   var rows=[hdr];
   for(var i=0;i<s.length;i++){
     var d=s[i];
@@ -1808,10 +1915,13 @@ function doXlsData(){
       d.r2r?fd(d.r2r):'',d.r2p?fd(d.r2p):'',rs(d.r2r,d.r2p,d.r2nc).l,
       pv(d.paid).l];
     if(isWY) row.push(d.invoice||0);
+    row.push(d.ns?'Not Sent Yet':(d.del?fd(d.del):''),
+      d.r3r?fd(d.r3r):'',d.r3p?fd(d.r3p):'',rs(d.r3r,d.r3p,d.r3nc).l,
+      d.notes||'',d.link||'');
     rows.push(row);
   }
   var ws=XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols']=[5,14,10,16,14,28,22,13,16,13,13,12,13,13,12,12,8].map(function(w){return{wch:w};});
+  ws['!cols']=wch.map(function(w){return{wch:w};});
   var wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,ws,cfg.label);
   var now=new Date();
@@ -1876,83 +1986,169 @@ function doXlsReport(){
 function onFileSelect(e){var f=e.target.files[0];if(f)readXls(f);}
 function onDrop(e){e.preventDefault();var f=e.dataTransfer.files[0];if(f)readXls(f);}
 
+var importBusy=false;
+
 async function readXls(file){
   var impMsg=document.getElementById('impMsg');
-  impMsg.style.color='#1A7A6E'; impMsg.textContent='جاري قراءة الملف...';
+  function say(m,color){impMsg.style.color=color||'#1A7A6E';impMsg.textContent=m;}
   if(typeof XLSX==='undefined'){alert('Excel library loading, try again');return;}
+  if(importBusy) return;
+  say('جاري قراءة الملف...');
   var reader=new FileReader();
   reader.onload=async function(e){
+    importBusy=true;
+    var saved=false;   // becomes true once the new rows are safely in the database
     try{
       var wb=XLSX.read(e.target.result,{type:'binary'});
       var ws=wb.Sheets[wb.SheetNames[0]];
       var data=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-      if(data.length<2){impMsg.style.color='#C0392B';impMsg.textContent='الملف فارغ';return;}
-      var toImport=[];
-      for(var i=1;i<data.length;i++){
-        var r=data[i];
-        var plotVal=String(r[1]||'').trim(),nameVal=String(r[5]||'').trim();
-        if(!plotVal&&!nameVal) continue;
-        // Parse date helper - handles Excel serial numbers and dd/mm/yyyy strings
-        function parseDate(v){
-          if(!v) return null;
-          // Excel serial number
-          if(typeof v === 'number'){
-            var d = new Date(Math.round((v-25569)*86400*1000));
-            return d.toISOString().split('T')[0];
-          }
-          var s = String(v).trim();
-          if(!s || s==='Not Sent Yet' || s==='-') return null;
-          // dd/mm/yyyy
-          if(s.indexOf('/')>0){
-            var p=s.split('/');
-            if(p.length===3) return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');
-          }
-          // yyyy-mm-dd already
-          if(s.match(/^\d{4}-\d{2}-\d{2}/)) return s.split('T')[0];
-          return null;
+      if(data.length<2){say('الملف فارغ','#C0392B');return;}
+
+      // ── Find each column by its header name (works with old and new Excel Data files) ──
+      var H={};
+      data[0].forEach(function(c,i){
+        var k=String(c===null||c===undefined?'':c).replace(/\s+/g,' ').trim().toLowerCase();
+        if(k&&H[k]===undefined) H[k]=i;
+      });
+      function col(names,fallback){
+        for(var n=0;n<names.length;n++){ if(H[names[n]]!==undefined) return H[names[n]]; }
+        return fallback===undefined?-1:fallback;
+      }
+      var C={
+        num:col(['#','no','no.','num'],0),
+        plot:col(['plot','building name','project no.','project'],1),
+        zone:col(['zone','part'],2),
+        level:col(['level'],3),
+        type:col(['type'],4),
+        name:col(['board name','drawing name','name']),
+        content:col(['content'],6),
+        status:col(['status']),
+        del:col(['delivery','delivery date']),
+        by:col(['by','engineer']),
+        r1r:col(['r1 recv','r1 received']),r1p:col(['r1 replied','r1 reply']),r1s:col(['r1 status']),
+        r2r:col(['r2 recv','r2 received']),r2p:col(['r2 replied','r2 reply']),r2s:col(['r2 status']),
+        r3r:col(['r3 recv','r3 received']),r3p:col(['r3 replied','r3 reply']),r3s:col(['r3 status']),
+        paid:col(['paid']),
+        notes:col(['notes']),
+        link:col(['drive link','link']),
+        invoice:col(['invoice'])
+      };
+      if(C.name<0){say('الملف ده مش Excel Data من التطبيق — مفيش عمود Board Name. البيانات الحالية لم تتغير.','#C0392B');return;}
+
+      // Parse date helper - handles Excel serial numbers and dd/mm/yyyy strings
+      function parseDate(v){
+        if(!v) return null;
+        // Excel serial number
+        if(typeof v === 'number'){
+          var d = new Date(Math.round((v-25569)*86400*1000));
+          return d.toISOString().split('T')[0];
         }
-        var isWY=(currentProject||'WADI_YAMM')==='WADI_YAMM';
-        var rec={
-          num:parseInt(r[0])||null,
-          project_id:currentProject||'WADI_YAMM',
-          plot:plotVal,zone:String(r[2]||'').trim(),level:String(r[3]||'').trim(),
-          type:String(r[4]||'').trim(),name:nameVal,content:String(r[6]||'').trim(),
-          ns:String(r[7]||'').indexOf('Not Sent')>=0,
-          del:parseDate(r[7]),
-          by_eng:String(r[8]||'').trim(),
-          r1r:parseDate(r[9]),r1p:parseDate(r[10]),
-          r1nc:String(r[11]||'').indexOf('No Comments')>=0,
-          r2r:parseDate(r[12]),r2p:parseDate(r[13]),
-          r2nc:String(r[14]||'').indexOf('No Comments')>=0,
-          paid:String(r[15]||'').indexOf('100')>=0?'paid':String(r[15]||'').indexOf('50')>=0?'half':'unpaid'
+        var s = String(v).trim();
+        if(!s || s==='Not Sent Yet' || s==='-') return null;
+        // dd/mm/yyyy
+        if(s.indexOf('/')>0){
+          var p=s.split('/');
+          if(p.length===3) return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');
+        }
+        // yyyy-mm-dd already
+        if(s.match(/^\d{4}-\d{2}-\d{2}/)) return s.split('T')[0];
+        return null;
+      }
+      function raw(r,i){ return i<0||r[i]===undefined||r[i]===null?'':r[i]; }
+      function txt(r,i){ return String(raw(r,i)).trim(); }
+
+      var proj=currentProject||'WADI_YAMM';
+      var isWY=proj==='WADI_YAMM';
+      var STATUSES=['NOT STARTED','IN PROGRESS','RECEIVED','DELIVERED','HOLD'];
+
+      // ── Current drawings of this project ──
+      // If the file has no column for a field (e.g. an older Excel Data file without
+      // Round 3 / Notes / Drive Link), the value already stored for the same drawing is kept.
+      var exRes=await supabase.from('drawings').select('*').eq('project_id',proj);
+      if(exRes.error) throw new Error(exRes.error.message);
+      var existing=exRes.data||[];
+      function keyOf(o){
+        return [o.plot,o.zone,o.level,o.type,o.name].map(function(v){
+          return String(v===null||v===undefined?'':v).replace(/\s+/g,' ').trim().toUpperCase();
+        }).join('|');
+      }
+      var pool={};
+      existing.forEach(function(x){ var k=keyOf(x); (pool[k]=pool[k]||[]).push(x); });
+
+      var toImport=[],r,rec,m;
+      // m = the same drawing as it is stored now (null if it is a new one)
+      function keep(f,def){ return m&&m[f]!==undefined&&m[f]!==null?m[f]:def; }
+      function rnd(n){
+        var cr=C['r'+n+'r'],cp=C['r'+n+'p'],cs=C['r'+n+'s'];
+        rec['r'+n+'r']=cr>=0?parseDate(raw(r,cr)):keep('r'+n+'r',null);
+        rec['r'+n+'p']=cp>=0?parseDate(raw(r,cp)):keep('r'+n+'p',null);
+        rec['r'+n+'nc']=cs>=0?txt(r,cs).indexOf('No Comments')>=0:!!keep('r'+n+'nc',false);
+      }
+      for(var i=1;i<data.length;i++){
+        r=data[i];
+        var plotVal=txt(r,C.plot),nameVal=txt(r,C.name);
+        if(!plotVal&&!nameVal) continue;
+        if(!nameVal){say('الصف رقم '+(i+1)+' في الملف مفيهوش Board Name — صلّحه وارفع الملف تاني. البيانات الحالية لم تتغير.','#C0392B');return;}
+        rec={
+          num:parseInt(raw(r,C.num))||null,
+          project_id:proj,
+          plot:plotVal,zone:txt(r,C.zone),level:txt(r,C.level),
+          type:txt(r,C.type),name:nameVal
         };
-        if(isWY) rec.invoice=parseInt(r[16])||0;
+        m=(pool[keyOf(rec)]||[]).shift()||null;
+        rec.content=C.content>=0?txt(r,C.content):keep('content','');
+        var stv=txt(r,C.status).toUpperCase();
+        rec.status=STATUSES.indexOf(stv)>=0?stv:keep('status','NOT STARTED');
+        if(C.del>=0){
+          rec.ns=txt(r,C.del).indexOf('Not Sent')>=0;
+          rec.del=rec.ns?null:parseDate(raw(r,C.del));
+        } else {
+          rec.ns=!!keep('ns',false);
+          rec.del=keep('del',null);
+        }
+        rec.by_eng=C.by>=0?txt(r,C.by):keep('by_eng','');
+        rnd(1); rnd(2); rnd(3);
+        if(C.paid>=0){ var pvv=txt(r,C.paid); rec.paid=pvv.indexOf('100')>=0?'paid':pvv.indexOf('50')>=0?'half':'unpaid'; }
+        else rec.paid=keep('paid','unpaid');
+        rec.notes=C.notes>=0?txt(r,C.notes):keep('notes','');
+        rec.link=C.link>=0?txt(r,C.link):keep('link','');
+        if(isWY) rec.invoice=C.invoice>=0?(parseInt(raw(r,C.invoice))||0):(parseInt(keep('invoice',0))||0);
+        rec.updated_at=new Date().toISOString();
         toImport.push(rec);
       }
-      if(!toImport.length){impMsg.style.color='#C0392B';impMsg.textContent='لم يتم العثور على بيانات صالحة';return;}
-      // Clear existing and insert new
-      // Delete only current project drawings
-      var {data:existing} = await supabase.from('drawings').select('id').eq('project_id', currentProject||'WADI_YAMM');
-      if(existing && existing.length){
-        for(var di=0;di<existing.length;di++){
-          await supabase.from('drawings').delete().eq('id',existing[di].id);
-        }
+      if(!toImport.length){say('لم يتم العثور على بيانات صالحة','#C0392B');return;}
+
+      if(existing.length && !confirm('هيتم استبدال '+existing.length+' لوحة موجودة في '+PROJECT_CONFIG[proj].label+' بـ '+toImport.length+' لوحة من الملف — متأكد؟')){
+        say('تم الإلغاء — البيانات الحالية لم تتغير','#7F8C8D');return;
       }
-      var delErr = null;
-      if(delErr) throw delErr;
-      var inserted = [];
-      for(var ii=0;ii<toImport.length;ii++){
-        var {data:iData,error:iErr} = await supabase.from('drawings').insert(toImport[ii]).select().single();
-        if(iErr){ console.error('Insert error:', iErr); continue; }
-        if(iData) inserted.push(iData);
+
+      // ── 1) Save the new rows first, all in one request (all or nothing) ──
+      say('جاري حفظ '+toImport.length+' لوحة...');
+      var ins=await supabase.from('drawings').insertMany(toImport);
+      if(ins.error) throw new Error(ins.error.message);
+      saved=true;
+
+      // ── 2) Only now remove the old rows of this project ──
+      var oldIds=existing.map(function(x){return x.id;}),notDeleted=0;
+      for(var c0=0;c0<oldIds.length;c0+=50){
+        var part=oldIds.slice(c0,c0+50);
+        var dr=await supabase.from('drawings').delete().in('id',part);
+        if(dr.error) notDeleted+=part.length;
       }
-      drws = inserted;
-      impMsg.style.color='#1E8449';
-      impMsg.textContent='✓ تم استيراد '+toImport.length+' لوحة بنجاح!';
-      setTimeout(function(){goList();},1000);
+
+      await fetchDrawings();
+      await renum();
+      if(notDeleted){
+        say('⚠️ تم استيراد '+toImport.length+' لوحة، لكن '+notDeleted+' لوحة قديمة ماتمسحتش وهتظهر مكررة — امسحها من الجدول.','#D35400');
+      } else {
+        say('✓ تم استيراد '+toImport.length+' لوحة بنجاح!','#1E8449');
+        setTimeout(function(){goList();},1000);
+      }
     } catch(err){
-      impMsg.style.color='#C0392B';
-      impMsg.textContent='خطأ: '+err.message;
+      say('خطأ: '+(err&&err.message||err)+(saved?' — اللوحات الجديدة اتحفظت، راجع الجدول.':' — البيانات الحالية لم تتغير.'),'#C0392B');
+    } finally {
+      importBusy=false;
+      document.getElementById('xlsFile').value='';
     }
   };
   reader.readAsBinaryString(file);
