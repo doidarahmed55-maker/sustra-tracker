@@ -46,7 +46,7 @@ body{font-family:Arial,sans-serif;background:#F0F4F3;color:#1C2526}
 .setup-err{color:#C0392B;font-size:11px;font-weight:600;margin-top:8px;min-height:16px}
 
 /* ── HEADER ── */
-#vList,#vForm,#vPdf,#vEng,#vPlot,#vUpd,#vDrwList{display:none}
+#vList,#vForm,#vPdf,#vEng,#vPlot,#vUpd,#vDrwList,#vWip{display:none}
 .hdr{background:#2D3748;display:flex;align-items:center;gap:12px;padding:10px 20px;flex-wrap:wrap}
 .hdr-logos{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
 .hdr-logos img.sl{height:44px;width:44px;object-fit:contain;border-radius:5px;background:#fff;padding:2px}
@@ -170,6 +170,68 @@ input:disabled{opacity:.4;cursor:not-allowed}
 
 /* ── CONFIG BANNER ── */
 #configBanner{background:#7D6608;color:#fff;padding:10px 20px;font-size:11px;font-weight:600;display:none;align-items:center;gap:10px}
+
+/* ── TABS ── */
+.tabs{background:#fff;border-bottom:1px solid #D5E5E2;padding:0 20px;display:flex;gap:4px;flex-wrap:wrap}
+.tab{background:none;border:none;border-bottom:3px solid transparent;padding:11px 16px 9px;font-size:12px;font-weight:700;color:#7F8C8D;cursor:pointer;font-family:inherit;white-space:nowrap}
+.tab:hover{color:#2D3748}
+.tab.active{color:#0D5C52;border-bottom-color:#1A7A6E}
+.tab-n{display:inline-block;background:#1A7A6E;color:#fff;border-radius:9px;padding:1px 7px;font-size:10px;margin-left:5px}
+
+/* ── WORK IN PROGRESS ── */
+.wip-top{background:#fff;border-radius:8px;margin-bottom:18px}
+.wip-top .chdr{border-radius:8px 8px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.wip-hint{font-size:10px;color:#9AA5B4}
+.wip-acts{margin-left:auto;display:flex;gap:6px}
+.wip-bar{display:flex;gap:11px;align-items:flex-end;flex-wrap:wrap;padding:14px 16px}
+.wip-bar .f{flex:1;min-width:150px;max-width:280px}
+.wip-chips{display:flex;gap:7px;flex-wrap:wrap;padding:0 16px 14px}
+.wip-chips:empty{display:none}
+.wip-chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid #D5E5E2;border-left-width:5px;border-radius:6px;padding:5px 6px 5px 9px;font-size:11px;font-weight:700;color:#2D3748;background:#FAFEFE}
+.wip-chip .n{background:#EAECEE;color:#555;border-radius:9px;padding:1px 7px;font-size:10px}
+.wip-chip .n.zero{background:#FADBD8;color:#C0392B}
+.wip-chip button{border:none;background:#FADBD8;color:#C0392B;border-radius:4px;width:20px;height:20px;cursor:pointer;font-size:11px;font-weight:700;line-height:1;font-family:inherit}
+.wip-chip button:hover{background:#C0392B;color:#fff}
+.wip-empty{background:#fff;border-radius:8px;padding:44px 20px;text-align:center;color:#9AA5B4;font-size:12px;line-height:1.9}
+.wip-sec{background:#fff;border-radius:8px;margin-bottom:18px;border-left:6px solid var(--c);overflow:hidden}
+.wip-sec-h{background:var(--c);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700}
+.wip-sec-h .sep{opacity:.5;font-weight:400}
+.wip-cnt{margin-left:auto;font-size:10px;font-weight:600;opacity:.9}
+.wip-t{padding:12px 14px 4px}
+.wip-t:last-child{padding-bottom:14px}
+.wip-t-h{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--c);margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.wip-t-h span{background:var(--c);color:#fff;border-radius:9px;padding:1px 7px;font-size:10px;letter-spacing:0}
+.wip-tw{overflow-x:auto;border:1px solid #E8F0EF;border-radius:6px}
+.wip-tbl{table-layout:fixed;min-width:1040px}
+.wip-tbl thead{position:static}
+.wip-tbl th{background:var(--c);overflow:hidden;text-overflow:ellipsis}
+.wip-tbl td{padding:3px 5px}
+.wip-tbl td.ro{padding:7px;overflow:hidden;text-overflow:ellipsis}
+.wip-tbl tr:last-child td{border-bottom:none}
+.wip-in{width:100%;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:5px 6px;font-size:11px;font-family:inherit;color:#1C2526}
+.wip-in:hover{border-color:#D5E5E2;background:#fff}
+.wip-in:focus{background:#fff}
+.wip-in::placeholder{color:#BDC3C7;font-size:10px}
+.wip-name{font-weight:700;color:#0D5C52}
+.wip-name.open{position:relative;z-index:5;width:360px;max-width:70vw;font-weight:600;color:#1C2526;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+select.wip-st{font-size:10px;font-weight:700;border-radius:10px;padding:4px 6px;cursor:pointer;border-color:transparent}
+select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
+.wip-eng{width:100%;min-height:27px;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:3px 4px;cursor:pointer;font-family:inherit;font-size:10px;color:#9AA5B4;white-space:normal;line-height:1.5}
+.wip-eng:hover,.wip-eng.on{border-color:#1A7A6E;background:#fff}
+.wip-eng b{display:inline-block;background:#E8F5F3;color:#0D5C52;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin:1px}
+.wip-days{font-size:10px;font-weight:700;white-space:nowrap}
+.wip-d{display:inline-block;padding:2px 8px;border-radius:10px}
+.wip-d.ok{background:#D5F5E3;color:#1E8449}.wip-d.soon{background:#FEF9E7;color:#9A7D0A}.wip-d.late{background:#FADBD8;color:#C0392B}.wip-d.done{background:#EAF2FF;color:#1A3A5C}.wip-d.none{color:#BDC3C7;padding-left:6px}
+#wipPop{position:absolute;z-index:500;background:#fff;border:1.5px solid #1A7A6E;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:8px;min-width:210px;max-height:280px;overflow-y:auto}
+#wipPop label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:#2D3748;text-transform:none;letter-spacing:0;padding:6px 7px;border-radius:5px;cursor:pointer;margin:0}
+#wipPop label:hover{background:#E8F5F3}
+#wipPop input{width:14px;height:14px;accent-color:#1A7A6E;flex-shrink:0;padding:0}
+#wipPop p{font-size:11px;color:#9AA5B4;padding:8px}
+#wipPop .pop-foot{border-top:1px solid #E8F0EF;margin-top:6px;padding-top:6px;text-align:right}
+.wip-setup{background:#FEF9E7;border:1.5px solid #F0DFA0;border-radius:8px;padding:14px 16px;margin-bottom:18px;font-size:12px;color:#7D6608;direction:rtl}
+.wip-setup p{margin:6px 0 10px;color:#555;line-height:1.7}
+.wip-setup pre{background:#fff;border:1px solid #F0DFA0;border-radius:6px;padding:10px;font-size:10px;line-height:1.55;color:#1A3A5C;white-space:pre-wrap;text-align:left;margin-bottom:8px}
+.wip-tbl input:disabled{cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -376,6 +438,10 @@ User 2:
   </div>
 </div>
 <div class="tbar"></div>
+<div class="tabs">
+  <button class="tab active" id="tabList" onclick="goList()">&#128203; Drawing Register</button>
+  <button class="tab" id="tabWip" onclick="goWip()">&#128736; Work in Progress <span class="tab-n" id="tabWipN" style="display:none">0</span></button>
+</div>
 
 <!-- ── LIST VIEW ── -->
 <div id="vList">
@@ -627,6 +693,31 @@ User 2:
   </div>
   <div class="box-foot"><button class="btn bo" onclick="goList()">Cancel</button><button class="btn" style="background:#6C3483;color:#fff" id="invPdfBtn" onclick="genInvoicePdf()" style="display:none">📋 Generate PDF</button></div>
 </div></div>
+</div>
+
+<!-- ── WORK IN PROGRESS VIEW ── -->
+<div id="vWip">
+<div class="main">
+  <div class="wip-top">
+    <div class="chdr">
+      <h2>&#128736; Work in Progress</h2>
+      <span class="wip-hint" dir="rtl">اختار واضغط Add — تقدر تتابع أكتر من Plot / Zone / Floor في نفس الوقت. أي تعديل هنا بيتحفظ في التراكر، والقايمة نفسها محفوظة فيه.</span>
+      <div class="wip-acts">
+        <button class="btn bp" onclick="genWipPdf()">&#8998; PDF</button>
+        <button class="btn" style="background:#C0392B;color:#fff" onclick="wipClearAll()">&#128465; Clear All</button>
+      </div>
+    </div>
+    <div class="wip-bar">
+      <div class="f"><label id="wlPlot" for="wfPlot">Plot</label><select id="wfPlot" onchange="wipFillFilter()"></select></div>
+      <div class="f"><label id="wlZone" for="wfZone">Zone</label><select id="wfZone" onchange="wipFillFilter()"></select></div>
+      <div class="f"><label for="wfLevel">Floor</label><select id="wfLevel"></select></div>
+      <button class="btn bt" onclick="wipAdd()">+ Add</button>
+    </div>
+    <div class="wip-chips" id="wipChips"></div>
+  </div>
+  <div id="wipSetup"></div>
+  <div id="wipBody"></div>
+</div>
 </div>
 
 </div><!-- /appShell -->
@@ -929,6 +1020,7 @@ async function appInit(){
 }
 
 function showLoginScreen(){
+  wipEngClose(true);
   document.getElementById('vLogin').style.display='flex';
   document.getElementById('vProject').style.display='none';
   var lb=document.getElementById('lBtn'); lb.disabled=false; lb.textContent='Sign In';
@@ -992,6 +1084,7 @@ async function loadApp(){
 }
 
 function showProjectSelector(){
+  wipEngClose(true);
   document.getElementById('appShell').style.display='none';
   var ps = document.getElementById('vProject');
   ps.style.display='flex';
@@ -1042,6 +1135,7 @@ async function selectProject(proj){
   setupRealtime();
 
   document.getElementById('loadOverlay').classList.add('hidden');
+  wipWatch=[]; wipBadge(); wipLoad();
   show('vList'); render();
 }
 
@@ -1114,14 +1208,19 @@ function setupRealtime(){
   realtimeSub = setInterval(async function(){
     if(importBusy) return;   // don't refresh the table in the middle of an Excel import
     var proj = currentProject || 'WADI_YAMM';
+    wipPollWatch();
+    var ep = dataEpoch;
     var {data, error} = await supabase.from('drawings').select('*').eq('project_id', proj).order('num',{ascending:true,nullsFirst:false});
     if(error){ setSyncStatus('off'); return; }
-    setSyncStatus('on');
+    if(!wipPending) setSyncStatus('on');
     if(importBusy) return;
+    if(ep!==dataEpoch || wipPending || proj!==(currentProject||'WADI_YAMM')) return;   // an edit was made meanwhile — the next poll picks it up
     if(data && JSON.stringify(data)!==JSON.stringify(drws)){
       drws = data;
       render();
+      wipOnData();
     }
+    wipTick();
   }, 10000);
 }
 
@@ -1266,9 +1365,12 @@ function showToast(msg, isErr){
 //  NAVIGATION
 // ══════════════════════════════════════════
 function show(id){
-  var all=['vList','vForm','vPdf','vEng','vPlot','vUpd','vDrwList','vInv'];
+  var all=['vList','vForm','vPdf','vEng','vPlot','vUpd','vDrwList','vInv','vWip'];
   for(var i=0;i<all.length;i++) document.getElementById(all[i]).style.display='none';
   document.getElementById(id).style.display='block';
+  document.getElementById('tabList').classList.toggle('active',id==='vList');
+  document.getElementById('tabWip').classList.toggle('active',id==='vWip');
+  if(id!=='vWip') wipEngClose(true);
   window.scrollTo(0,0);
 }
 function goList(){ show('vList'); editId=null; render(); }
@@ -1906,6 +2008,8 @@ function doXlsData(){
   if(isWY){ hdr.push('Invoice'); wch.push(8); }
   hdr.push('Delivery','R3 Recv','R3 Replied','R3 Status','Notes','Drive Link');
   wch.push(13,13,13,12,30,40);
+  var hasTarget=wipTargetCol===true;
+  if(hasTarget){ hdr.push('Target Date'); wch.push(13); }
   var rows=[hdr];
   for(var i=0;i<s.length;i++){
     var d=s[i];
@@ -1918,6 +2022,7 @@ function doXlsData(){
     row.push(d.ns?'Not Sent Yet':(d.del?fd(d.del):''),
       d.r3r?fd(d.r3r):'',d.r3p?fd(d.r3p):'',rs(d.r3r,d.r3p,d.r3nc).l,
       d.notes||'',d.link||'');
+    if(hasTarget) row.push(d.target_date?fd(d.target_date):'');
     rows.push(row);
   }
   var ws=XLSX.utils.aoa_to_sheet(rows);
@@ -2031,7 +2136,8 @@ async function readXls(file){
         paid:col(['paid']),
         notes:col(['notes']),
         link:col(['drive link','link']),
-        invoice:col(['invoice'])
+        invoice:col(['invoice']),
+        target:col(['target date'])
       };
       if(C.name<0){say('الملف ده مش Excel Data من التطبيق — مفيش عمود Board Name. البيانات الحالية لم تتغير.','#C0392B');return;}
 
@@ -2113,6 +2219,7 @@ async function readXls(file){
         rec.notes=C.notes>=0?txt(r,C.notes):keep('notes','');
         rec.link=C.link>=0?txt(r,C.link):keep('link','');
         if(isWY) rec.invoice=C.invoice>=0?(parseInt(raw(r,C.invoice))||0):(parseInt(keep('invoice',0))||0);
+        if(wipTargetCol===true) rec.target_date=C.target>=0?parseDate(raw(r,C.target)):keep('target_date',null);
         rec.updated_at=new Date().toISOString();
         toImport.push(rec);
       }
@@ -2343,6 +2450,674 @@ function genInvoicePdf(){
 
   openWin(sL,'',ds,invLabel2+' — WADI YAMM',body);
 }
+
+// ══════════════════════════════════════════
+//  WORK IN PROGRESS
+// ══════════════════════════════════════════
+// This tab stores only a list of "watched" Plot / Zone / Floor filters, in the tracker database
+// (table wip_watch, shared by everyone on the project).
+// The rows themselves are always read from `drws` — the same data as the Drawing Register —
+// so an edit here is written straight to the tracker, and a tracker change shows up here.
+// The Target Date is its own column (drawings.target_date); Delivery and Invoice are not touched.
+var wipWatch=[];       // [{id, plot, zone, level}] — zone / level === null means "all"
+var wipSig='';         // structure currently on screen: sections → tables → row ids
+var wipStale=false;    // structure changed while a cell was being edited → redraw when editing ends
+var wipPop=null;       // open engineer picker {id, btn, el}
+var wipTimers={};      // pending (debounced) date edits, by drawing id
+var wipPending=0;      // saves in flight
+var dataEpoch=0;       // bumped on every local edit, so a poll that started earlier is not applied over it
+var WIP_ALL='*';
+var WIP_COLORS=['#1A7A6E','#1A3A5C','#6C3483','#9A6A00','#922B21','#1A5276','#4A5568','#0E6655'];
+var WIP_STATUSES=['NOT STARTED','IN PROGRESS','RECEIVED','DELIVERED','HOLD'];
+
+function wn(v){ return String(v===null||v===undefined?'':v).trim(); }
+function wipEl(id){ return document.getElementById(id); }
+function wipCfg(){ return PROJECT_CONFIG[currentProject||'WADI_YAMM']||{col1:'Plot',col2:'Zone',label:''}; }
+function wipVisible(){ var v=wipEl('vWip'); return !!v&&v.style.display==='block'; }
+
+// ── watch list: saved in the tracker database (table wip_watch), one list per project ──
+var wipMode='local';      // 'db' once the wip_watch table answers; 'local' = this browser only (table not created yet)
+var wipNeedTable=false;   // wip_watch is missing → show the one-time setup box
+var wipTargetCol=null;    // does drawings.target_date exist? true / false once known
+var wipWatchEpoch=0;      // bumped on every change of the list, so a slower reload is not applied over it
+var WIP_SQL=[
+  "-- SUSTRA Drawing Tracker — Work in Progress (run once)",
+  "alter table drawings add column if not exists target_date date;",
+  "",
+  "create table if not exists wip_watch (",
+  "  id uuid primary key default gen_random_uuid(),",
+  "  project_id text not null,",
+  "  plot text not null,",
+  "  zone text not null default '*',",
+  "  level text not null default '*',",
+  "  created_by text,",
+  "  created_at timestamptz default now(),",
+  "  unique (project_id, plot, zone, level)",
+  ");",
+  "alter table wip_watch enable row level security;",
+  "grant select, insert, update, delete on wip_watch to authenticated;",
+  "do $$ begin",
+  "  if not exists (select 1 from pg_policies where tablename = 'wip_watch' and policyname = 'auth_all_wip') then",
+  "    create policy \"auth_all_wip\" on wip_watch for all to authenticated using (true) with check (true);",
+  "  end if;",
+  "end $$;",
+  "",
+  "notify pgrst, 'reload schema';"
+].join('\n');
+
+function wipProj(){ return currentProject||'WADI_YAMM'; }
+function wipMe(){ return wn(currentUser&&currentUser.email).toLowerCase(); }
+function wipSame(a,b){ return a.plot===b.plot&&a.zone===b.zone&&a.level===b.level; }
+// in the table '*' means "all"; in memory that is null
+function wipFromRow(r){ return {id:r.id,plot:wn(r.plot),zone:r.zone===WIP_ALL||r.zone===null||r.zone===undefined?null:String(r.zone),level:r.level===WIP_ALL||r.level===null||r.level===undefined?null:String(r.level)}; }
+function wipToRow(w){ return {project_id:wipProj(),plot:w.plot,zone:w.zone===null?WIP_ALL:w.zone,level:w.level===null?WIP_ALL:w.level,created_by:wipMe()}; }
+
+// browser copy — used only until the wip_watch table exists
+function wipKey(){ return 'sustra_wip::'+wipMe()+'::'+wipProj(); }
+function wipLocalRead(){
+  var out=[];
+  try{
+    var a=JSON.parse(localStorage.getItem(wipKey())||'[]');
+    if(Array.isArray(a)) a.forEach(function(w){
+      if(w&&typeof w.plot==='string'&&w.plot) out.push({plot:w.plot,zone:typeof w.zone==='string'?w.zone:null,level:typeof w.level==='string'?w.level:null});
+    });
+  }catch(e){}
+  return out;
+}
+function wipLocalWrite(){ try{localStorage.setItem(wipKey(),JSON.stringify(wipWatch));}catch(e){} }
+
+// load the list (and find out whether the database has what this tab needs)
+async function wipLoad(){
+  var proj=wipProj(), ep=++wipWatchEpoch, res;
+  if(wipTargetCol!==true){
+    try{
+      res=await supabase.from('drawings').select('target_date').limit(1);
+      if(!res.error) wipTargetCol=true;
+      else if(/target_date|42703/i.test(res.error.message||'')) wipTargetCol=false;
+    }catch(e){}
+  }
+  try{ res=await supabase.from('wip_watch').select('*').eq('project_id',proj).order('created_at',{ascending:true}); }
+  catch(e){ res={error:{message:'network'}}; }
+  if(ep!==wipWatchEpoch||proj!==wipProj()) return;
+  if(res.error){
+    // table not created yet → keep working from this browser; any other error (offline…) → keep what we have
+    if(/wip_watch|schema cache|does not exist|42P01|PGRST205/i.test(res.error.message||'')){ wipMode='local'; wipNeedTable=true; wipWatch=wipLocalRead(); }
+  } else {
+    wipMode='db'; wipNeedTable=false;
+    wipWatch=(res.data||[]).map(wipFromRow);
+    // a list made in this browser before the table existed moves into the tracker once
+    var loc=wipLocalRead().filter(function(w){ return !wipWatch.some(function(x){return wipSame(x,w);}); });
+    if(loc.length){
+      try{
+        var ins=await supabase.from('wip_watch').insertMany(loc.map(wipToRow));
+        if(ep!==wipWatchEpoch||proj!==wipProj()) return;
+        if(!ins.error){ ins.data.forEach(function(r){ wipWatch.push(wipFromRow(r)); }); try{localStorage.removeItem(wipKey());}catch(e){} }
+      }catch(e){}
+    } else { try{localStorage.removeItem(wipKey());}catch(e){} }
+  }
+  wipBadge();
+}
+function wipListChanged(){ if(wipMode==='local') wipLocalWrite(); wipBadge(); }
+function wipBadge(){
+  var b=wipEl('tabWipN'); if(!b) return;
+  b.textContent=wipWatch.length; b.style.display=wipWatch.length?'':'none';
+}
+// someone else on the project may have changed the list
+async function wipPollWatch(){
+  if(wipMode!=='db'||!wipVisible()) return;
+  var before=JSON.stringify(wipWatch);
+  await wipLoad();
+  if(JSON.stringify(wipWatch)!==before&&wipVisible()){ if(wipEditing()) wipStale=true; else renderWip(); }
+}
+
+// one-time database setup box
+function wipSetupBox(){
+  var box=wipEl('wipSetup'); if(!box) return;
+  if(!wipNeedTable&&wipTargetCol!==false){ box.innerHTML=''; return; }
+  var why=[];
+  if(wipNeedTable) why.push('قايمة المتابعة محفوظة على المتصفح ده بس لحد ما الجدول يتعمل');
+  if(wipTargetCol===false) why.push('عمود Target Date مقفول');
+  box.innerHTML='<div class="wip-setup"><b>&#9881;&#65039; خطوة واحدة في Supabase (مرة واحدة بس)</b>'
+    +'<p>'+why.join(' — ')+'. افتح <b>SQL Editor</b> في Supabase، الصق الكود ده واضغط Run، وبعدين اضغط «تم — افحص تاني».</p>'
+    +'<pre id="wipSql" dir="ltr">'+escHtml(WIP_SQL)+'</pre>'
+    +'<button type="button" class="copy-btn" onclick="wipCopySql()">&#128203; نسخ الكود</button> '
+    +'<button type="button" class="btn bt" style="padding:4px 12px;font-size:11px" onclick="wipRecheck()">تم — افحص تاني</button></div>';
+}
+function wipCopySql(){
+  try{ navigator.clipboard.writeText(WIP_SQL).then(function(){ showToast('تم نسخ كود SQL'); },function(){ showToast('انسخ الكود يدوي',true); }); }
+  catch(e){ showToast('انسخ الكود يدوي',true); }
+}
+async function wipRecheck(){
+  wipTargetCol=null;
+  await wipLoad(); await fetchDrawings();
+  wipFillFilter(); renderWip();
+  if(!wipNeedTable&&wipTargetCol===true) showToast('✓ تمام — قايمة المتابعة بقت محفوظة في التراكر');
+  else showToast('لسه — اتأكد إن الكود اشتغل من غير أخطاء',true);
+}
+
+// ── drawing number: REH-MD01-MDU-ST-OCC-1036-SD-053011-00 → 053011 ──
+function drwNo(name){
+  var s=wn(name); if(!s) return '-';
+  var p=s.split(/[\s_\-\/]+/).filter(Boolean), L=p.length;
+  // 1) the number that follows "SD"
+  for(var i=0;i<L-1;i++){ if(/^SD$/i.test(p[i])&&/^\d{3,}/.test(p[i+1])) return p[i+1]; }
+  // 2) a number at the end, or just before a short revision code (…-053011-00)
+  if(/^\d{4,}$/.test(p[L-1])) return p[L-1];
+  if(L>=2&&p[L-1].length<=3&&/^\d{3,}$/.test(p[L-2])) return p[L-2];
+  return s;   // no recognisable number → show the name as it is
+}
+
+// ── table order inside a zone: Slab → Beams → Columns → Cores → Stairs → Stair beams → the rest ──
+function wipTypeRank(t){
+  var u=wn(t).toUpperCase();
+  if(!u) return 99;
+  if(u.indexOf('STAIR')>=0) return u.indexOf('BEAM')>=0?6:5;
+  if(u.indexOf('SLAB')>=0) return 1;
+  if(u.indexOf('BEAM')>=0) return 2;
+  if(u.indexOf('COL')>=0) return 3;
+  if(u.indexOf('CORE')>=0) return 4;
+  if(u.indexOf('WALL')>=0) return 7;
+  if(u.indexOf('RAMP')>=0) return 8;
+  if(u.indexOf('FOUND')>=0||u.indexOf('FOOT')>=0||u.indexOf('RAFT')>=0) return 9;
+  return 50;
+}
+
+function wipStColor(st){
+  return {
+    fg: st==='DELIVERED'?'#1E8449':st==='IN PROGRESS'?'#B7950B':st==='RECEIVED'?'#D35400':st==='HOLD'?'#C0392B':'#7F8C8D',
+    bg: st==='DELIVERED'?'#D5F5E3':st==='IN PROGRESS'?'#FEF9E7':st==='RECEIVED'?'#FDEBD0':st==='HOLD'?'#FADBD8':'#EAECEE'
+  };
+}
+function wipStatus(d){ return wn(d.status).toUpperCase()||'NOT STARTED'; }
+
+// days between today and the target date
+function wipDays(d){
+  if(wipStatus(d)==='DELIVERED') return {t:'Delivered',c:'done'};
+  var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(toInputDate(d.target_date)||'');
+  if(!m) return {t:'-',c:'none'};
+  var now=new Date(), t0=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+  var n=Math.round((Date.UTC(+m[1],+m[2]-1,+m[3])-t0)/86400000);
+  if(n<0) return {t:(-n)+(n===-1?' day late':' days late'),c:'late'};
+  if(n===0) return {t:'Due today',c:'soon'};
+  return {t:n+(n===1?' day left':' days left'),c:n<=2?'soon':'ok'};
+}
+
+function wipEngList(v){ return wn(v).split(',').map(function(e){return e.trim();}).filter(Boolean); }
+function wipEngHtml(d){
+  var l=wipEngList(d.by_eng);
+  return l.length?l.map(function(e){return '<b>'+escHtml(e)+'</b>';}).join(' '):'+ engineer';
+}
+
+// ── build sections from the watch list ──
+function wipMatch(w,d){
+  return wn(d.plot)===w.plot&&(w.zone===null||wn(d.zone)===w.zone)&&(w.level===null||wn(d.level)===w.level);
+}
+function wipSections(){
+  var all=sorted(), secs=[], byKey={}, zoneOrd={}, zn=0;
+  wipWatch.forEach(function(w){
+    all.forEach(function(d){
+      if(!wipMatch(w,d)) return;
+      var p=wn(d.plot), z=wn(d.zone), l=wn(d.level), k=p+'\u0001'+z+'\u0001'+l, zk=p+'\u0001'+z, s=byKey[k];
+      if(!s){
+        if(zoneOrd[zk]===undefined) zoneOrd[zk]=zn++;
+        s=byKey[k]={key:k,plot:p,zone:z,level:l,zi:zoneOrd[zk],ord:secs.length,rows:[],ids:{}};
+        secs.push(s);
+      }
+      if(!s.ids[d.id]){ s.ids[d.id]=1; s.rows.push(d); }
+    });
+  });
+  // floors of the same zone stay together; each zone gets its own colour
+  secs.sort(function(a,b){ return a.zi-b.zi||a.ord-b.ord; });
+  secs.forEach(function(s){
+    s.color=WIP_COLORS[s.zi%WIP_COLORS.length];
+    var g={}, list=[];
+    s.rows.forEach(function(d){
+      var t=wn(d.type), tk=t.toUpperCase();
+      if(!g[tk]){ g[tk]={type:t,rank:wipTypeRank(t),rows:[]}; list.push(g[tk]); }
+      g[tk].rows.push(d);
+    });
+    list.forEach(function(t){ t.rows.sort(function(a,b){ return (a.num||9999)-(b.num||9999); }); });
+    list.sort(function(a,b){ return a.rank-b.rank||a.type.localeCompare(b.type,undefined,{numeric:true}); });
+    s.tables=list;
+  });
+  return secs;
+}
+function wipSignature(secs){
+  return secs.map(function(s){
+    return s.key+'#'+s.zi+'{'+s.tables.map(function(t){
+      return t.type+'['+t.rows.map(function(d){return d.id;}).join(',')+']';
+    }).join('')+'}';
+  }).join('|');
+}
+function wipCountTxt(rows){
+  var done=0; rows.forEach(function(d){ if(wipStatus(d)==='DELIVERED') done++; });
+  return rows.length+' drawing'+(rows.length!==1?'s':'')+' · '+done+' delivered';
+}
+
+// ── render ──
+var WIP_COLW=[8,7,10.5,8,7.5,17.5,11,10,11.5,9];
+function wipRowHtml(d){
+  var st=wipStatus(d), sc=wipStColor(st), dy=wipDays(d);
+  var opts=WIP_STATUSES.slice(); if(opts.indexOf(st)<0) opts.push(st);
+  var h='<tr data-id="'+escHtml(d.id)+'">';
+  h+='<td class="ro" style="font-weight:600" title="'+escHtml(wn(d.plot))+'">'+escHtml(wn(d.plot)||'-')+'</td>';
+  h+='<td class="ro" title="'+escHtml(wn(d.zone))+'">'+escHtml(wn(d.zone)||'-')+'</td>';
+  h+='<td class="ro" title="'+escHtml(wn(d.level))+'">'+escHtml(wn(d.level)||'-')+'</td>';
+  h+='<td class="ro">'+(wn(d.type)?'<span class="tt">'+escHtml(wn(d.type))+'</span>':'-')+'</td>';
+  h+='<td><input class="wip-in wip-name" data-f="name" value="'+escHtml(drwNo(d.name))+'" title="'+escHtml(wn(d.name))+'" autocomplete="off" spellcheck="false"/></td>';
+  h+='<td><input class="wip-in" data-f="content" value="'+escHtml(wn(d.content))+'" placeholder="+ content" autocomplete="off"/></td>';
+  h+='<td><select class="wip-in wip-st" data-f="status" style="background:'+sc.bg+';color:'+sc.fg+'">';
+  opts.forEach(function(o){ h+='<option value="'+escHtml(o)+'"'+(o===st?' selected':'')+'>'+escHtml(o)+'</option>'; });
+  h+='</select></td>';
+  h+='<td><button type="button" class="wip-eng" data-f="by_eng">'+wipEngHtml(d)+'</button></td>';
+  h+='<td><input type="date" class="wip-in" data-f="target_date" value="'+escHtml(toInputDate(d.target_date))+'"'+(wipTargetCol===true?'':' disabled title="محتاج خطوة الإعداد اللي فوق"')+'/></td>';
+  h+='<td class="wip-days"><span class="wip-d '+dy.c+'">'+dy.t+'</span></td>';
+  return h+'</tr>';
+}
+
+function renderWip(){
+  wipEngClose(true);
+  var secs=wipSections(), cfg=wipCfg(), body=wipEl('wipBody'), h='';
+  wipSig=wipSignature(secs); wipStale=false;
+  wipChips(secs); wipSetupBox();
+  if(!wipWatch.length){
+    body.innerHTML='<div class="wip-empty"><div style="font-size:30px">&#128736;</div>اختار '+escHtml(cfg.col1)+' / '+escHtml(cfg.col2)+' / Floor من فوق واضغط <b>+ Add</b> عشان تبدأ المتابعة.<br/>تقدر تضيف أكتر من واحد وتتابعهم مع بعض.</div>';
+    return;
+  }
+  if(!secs.length){
+    body.innerHTML='<div class="wip-empty">مفيش لوحات في التراكر مطابقة للي اخترته دلوقتي.<br/>أول ما تتضاف لوحات بنفس البيانات هتظهر هنا لوحدها.</div>';
+    return;
+  }
+  var head='<colgroup>'+WIP_COLW.map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>'
+    +'<thead><tr><th>'+escHtml(cfg.col1)+'</th><th>'+escHtml(cfg.col2)+'</th><th>Floor</th><th>Type</th><th>DWG No.</th>'
+    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Target Date</th><th>Days Left</th></tr></thead>';
+  secs.forEach(function(s){
+    h+='<div class="wip-sec" style="--c:'+s.color+'">';
+    h+='<div class="wip-sec-h"><span>'+escHtml(s.plot)+'</span><span class="sep">›</span><span>'+escHtml(s.zone||'-')+'</span><span class="sep">›</span><span>'+escHtml(s.level||'-')+'</span>';
+    h+='<span class="wip-cnt">'+wipCountTxt(s.rows)+'</span></div>';
+    s.tables.forEach(function(t){
+      h+='<div class="wip-t"><div class="wip-t-h">'+escHtml(t.type||'No Type')+' <span>'+t.rows.length+'</span></div>';
+      h+='<div class="wip-tw"><table class="wip-tbl">'+head+'<tbody>'+t.rows.map(wipRowHtml).join('')+'</tbody></table></div></div>';
+    });
+    h+='</div>';
+  });
+  body.innerHTML=h;
+}
+
+function wipChips(secs){
+  var cfg=wipCfg(), h='';
+  wipWatch.forEach(function(w,i){
+    var n=0, color='#BDC3C7';
+    secs.forEach(function(s){
+      if(s.plot===w.plot&&(w.zone===null||s.zone===w.zone)&&(w.level===null||s.level===w.level)){
+        if(!n) color=s.color;
+        n+=s.rows.length;
+      }
+    });
+    var parts=[w.plot, w.zone===null?'All '+cfg.col2+'s':(w.zone||'(blank)'), w.level===null?'All Floors':(w.level||'(blank)')];
+    h+='<span class="wip-chip" style="border-left-color:'+color+'">'+escHtml(parts.join(' › '))
+      +' <span class="n'+(n?'':' zero')+'">'+n+'</span>'
+      +'<button type="button" title="شيل من المتابعة" onclick="wipRemove('+i+')">&#10005;</button></span>';
+  });
+  wipEl('wipChips').innerHTML=h;
+}
+
+// ── light refresh: the same rows are on screen, only their values changed ──
+function wipPaintRow(tr,d,force){
+  var a=force?null:document.activeElement, el, st, sc, dy;
+  el=tr.querySelector('.wip-name');
+  if(el){ if(el!==a){ el.value=drwNo(d.name); el.classList.remove('open'); } el.title=wn(d.name); }
+  el=tr.querySelector('[data-f="content"]'); if(el&&el!==a) el.value=wn(d.content);
+  el=tr.querySelector('.wip-st');
+  if(el){
+    st=wipStatus(d);
+    if(el!==a){
+      if(!Array.prototype.some.call(el.options,function(o){return o.value===st;})) el.appendChild(new Option(st,st));
+      el.value=st;
+    }
+    sc=wipStColor(el.value); el.style.background=sc.bg; el.style.color=sc.fg;
+  }
+  el=tr.querySelector('.wip-eng'); if(el) el.innerHTML=wipEngHtml(d);
+  el=tr.querySelector('[data-f="target_date"]'); if(el&&el!==a&&!wipTimers[d.id]) el.value=toInputDate(d.target_date);
+  el=tr.querySelector('.wip-days');
+  if(el){ dy=wipDays(d); el.innerHTML='<span class="wip-d '+dy.c+'">'+dy.t+'</span>'; }
+}
+function wipTr(id){
+  var trs=wipEl('wipBody').querySelectorAll('tr[data-id]');
+  for(var i=0;i<trs.length;i++){ if(trs[i].getAttribute('data-id')===String(id)) return trs[i]; }
+  return null;
+}
+function wipSync(){
+  var map={}, body=wipEl('wipBody');
+  drws.forEach(function(d){ map[d.id]=d; });
+  Array.prototype.forEach.call(body.querySelectorAll('tr[data-id]'),function(tr){
+    var d=map[tr.getAttribute('data-id')]; if(d) wipPaintRow(tr,d);
+  });
+  Array.prototype.forEach.call(body.querySelectorAll('.wip-sec'),function(sec){
+    var rows=[];
+    Array.prototype.forEach.call(sec.querySelectorAll('tr[data-id]'),function(tr){ var d=map[tr.getAttribute('data-id')]; if(d) rows.push(d); });
+    var c=sec.querySelector('.wip-cnt'); if(c) c.textContent=wipCountTxt(rows);
+  });
+}
+function wipEditing(){
+  if(wipPop) return true;
+  for(var k in wipTimers){ if(wipTimers[k]) return true; }
+  var a=document.activeElement, b=wipEl('wipBody');
+  return !!(a&&b&&b.contains(a)&&a.tagName==='INPUT'&&a.type!=='date');
+}
+// called whenever `drws` was replaced with fresh tracker data
+function wipOnData(){
+  if(!wipVisible()) return;
+  var secs=wipSections();
+  if(wipSignature(secs)===wipSig){ wipSync(); wipChips(secs); }
+  else if(wipEditing()) wipStale=true;      // don't pull the table from under a cell being typed in
+  else renderWip();
+  var a=document.activeElement;
+  if(!a||['wfPlot','wfZone','wfLevel'].indexOf(a.id)<0) wipFillFilter();
+}
+function wipTick(){ if(wipStale&&wipVisible()&&!wipEditing()) renderWip(); }
+
+// ── filter bar ──
+function wipSortVals(o){ return Object.keys(o).sort(function(a,b){ return a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}); }); }
+function wipSetOpts(sel,list){
+  var keep=sel.options.length?sel.value:null;
+  sel.innerHTML='';
+  list.forEach(function(o){ sel.appendChild(new Option(o[1],o[0])); });
+  sel.value=list.some(function(o){return o[0]===keep;})?keep:list[0][0];
+}
+function wipFillFilter(){
+  var sp=wipEl('wfPlot'), sz=wipEl('wfZone'), sl=wipEl('wfLevel'), cfg=wipCfg();
+  wipEl('wlPlot').textContent=cfg.col1; wipEl('wlZone').textContent=cfg.col2;
+  var plots={}; drws.forEach(function(d){ var p=wn(d.plot); if(p) plots[p]=1; });
+  wipSetOpts(sp,[['','-- Select --']].concat(wipSortVals(plots).map(function(p){return [p,p];})));
+  var p=sp.value, zones={};
+  drws.forEach(function(d){ if(p&&wn(d.plot)===p) zones[wn(d.zone)]=1; });
+  wipSetOpts(sz,[[WIP_ALL,'All']].concat(wipSortVals(zones).map(function(z){return [z,z||'(blank)'];})));
+  var z=sz.value, levels={};
+  drws.forEach(function(d){ if(p&&wn(d.plot)===p&&(z===WIP_ALL||wn(d.zone)===z)) levels[wn(d.level)]=1; });
+  wipSetOpts(sl,[[WIP_ALL,'All']].concat(wipSortVals(levels).map(function(l){return [l,l||'(blank)'];})));
+  sz.disabled=sl.disabled=!p;
+}
+var wipBusy=false;   // one change of the list at a time
+async function wipAdd(){
+  var p=wipEl('wfPlot').value, z=wipEl('wfZone').value, l=wipEl('wfLevel').value;
+  if(!p){ showToast('اختار '+wipCfg().col1+' الأول',true); return; }
+  var w={plot:p,zone:z===WIP_ALL?null:z,level:l===WIP_ALL?null:l};
+  if(wipWatch.some(function(x){return wipSame(x,w);})){ showToast('موجود بالفعل في المتابعة',true); return; }
+  if(wipBusy) return;
+  if(wipMode==='db'){
+    wipBusy=true; wipWatchEpoch++;
+    var res;
+    try{ res=await supabase.from('wip_watch').insert(wipToRow(w)).select().single(); }
+    catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+    wipBusy=false; wipWatchEpoch++;
+    if(res.error){
+      if(/duplicate|unique|23505/i.test(res.error.message||'')){ await wipLoad(); renderWip(); showToast('موجود بالفعل في المتابعة',true); }
+      else showToast('خطأ — ماتضافش: '+res.error.message,true);
+      return;
+    }
+    w=wipFromRow(res.data);
+    if(wipWatch.some(function(x){return x.id===w.id||wipSame(x,w);})){ renderWip(); return; }
+  }
+  wipWatch.push(w); wipListChanged(); renderWip();
+}
+async function wipRemove(i){
+  var w=wipWatch[i]; if(!w||wipBusy) return;
+  if(wipMode==='db'&&w.id){
+    wipBusy=true; wipWatchEpoch++;
+    var res;
+    try{ res=await supabase.from('wip_watch').delete().eq('id',w.id); }
+    catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+    wipBusy=false; wipWatchEpoch++;
+    if(res.error){ showToast('خطأ — ماتشالش: '+res.error.message,true); return; }
+  }
+  wipWatch=wipWatch.filter(function(x){return x!==w;}); wipListChanged(); renderWip();
+}
+async function wipClearAll(){
+  if(!wipWatch.length){ showToast('مفيش حاجة في المتابعة'); return; }
+  if(wipBusy) return;
+  if(!confirm('هتشيل كل جداول المتابعة ('+wipWatch.length+') — بيانات التراكر نفسها مش هتتأثر. متأكد؟')) return;
+  if(wipMode==='db'){
+    wipBusy=true; wipWatchEpoch++;
+    var res;
+    try{ res=await supabase.from('wip_watch').delete().eq('project_id',wipProj()); }
+    catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+    wipBusy=false; wipWatchEpoch++;
+    if(res.error){ showToast('خطأ — ماتمسحتش: '+res.error.message,true); return; }
+  }
+  wipWatch=[]; wipListChanged(); renderWip();
+  showToast('✓ تم مسح جداول المتابعة');
+}
+
+function goWip(){
+  show('vWip'); wipFillFilter(); renderWip();
+  Promise.all([wipLoad(),fetchDrawings()]).then(function(){
+    if(!wipVisible()) return;
+    wipFillFilter();
+    if(wipEditing()) wipStale=true; else renderWip();
+  });
+}
+
+// ── editing ──
+function wipRow(el){
+  var tr=el.closest?el.closest('tr[data-id]'):null; if(!tr) return null;
+  var id=tr.getAttribute('data-id');
+  var d=drws.find(function(x){return String(x.id)===id;});
+  return d?{tr:tr,d:d}:null;
+}
+// while the full name is open for editing, select just its number part, so typing replaces the number
+function wipSelNo(el){
+  var full=el.value, no=drwNo(full), i=no===full?-1:full.lastIndexOf(no);
+  try{ if(i>=0) el.setSelectionRange(i,i+no.length); else el.setSelectionRange(full.length,full.length); }catch(x){}
+}
+function wipDateOk(v){
+  var m=/^(\d{4})-\d{2}-\d{2}$/.exec(v);
+  return !!m&&+m[1]>=2000&&+m[1]<=2100;
+}
+function wipCommit(el,fromBlur){
+  var r=wipRow(el); if(!r) return;
+  var d=r.d, f=el.getAttribute('data-f'), v, patch=null;
+  if(f==='name'){
+    if(!el.classList.contains('open')) return;     // the cell is showing the short number, not the name
+    v=el.value.trim();
+    if(!v) showToast('اسم اللوحة مينفعش يكون فاضي',true);
+    else if(v!==wn(d.name)) patch={name:v};
+  } else if(f==='content'){
+    v=el.value.trim(); if(v!==wn(d.content)) patch={content:v};
+  } else if(f==='status'){
+    v=el.value; if(v!==wipStatus(d)) patch={status:v};
+  } else if(f==='target_date'){
+    if(wipTimers[d.id]){ clearTimeout(wipTimers[d.id]); delete wipTimers[d.id]; }
+    if(wipTargetCol!==true) return;
+    v=el.value;
+    if(!v){
+      if(el.validity&&el.validity.badInput) el.value=toInputDate(d.target_date);   // half-typed date → keep the old one
+      else if(fromBlur&&d.target_date) patch={target_date:null};
+    }
+    else if(wipDateOk(v)){ if(v!==toInputDate(d.target_date)) patch={target_date:v}; }
+    else if(fromBlur) el.value=toInputDate(d.target_date);
+  }
+  if(patch) wipSave(d.id,patch);
+}
+function wipDateSoon(el){
+  var r=wipRow(el); if(!r) return;
+  var id=r.d.id;
+  if(wipTimers[id]){ clearTimeout(wipTimers[id]); delete wipTimers[id]; }
+  if(!el.value) return;                       // an empty date is only saved when you leave the cell
+  wipTimers[id]=setTimeout(function(){
+    delete wipTimers[id];
+    if(document.body.contains(el)) wipCommit(el,false);
+    wipTick();
+  },700);
+}
+
+// write one edit to the tracker (Supabase) and keep the local copy in step
+async function wipSave(id,patch){
+  var idx=drws.findIndex(function(x){return x.id===id;}); if(idx<0) return;
+  var before={}, k;
+  for(k in patch) before[k]=drws[idx][k];
+  Object.assign(drws[idx],patch);
+  dataEpoch++; wipPending++;
+  var tr=wipTr(id); if(tr) wipPaintRow(tr,drws[idx]);
+  setSyncStatus('loading');
+  var err=null, res=null;
+  try{
+    res=await supabase.from('drawings').update(Object.assign({},patch,{updated_at:new Date().toISOString()})).eq('id',id);
+    if(res.error) err=res.error.message;
+    else if(!res.data||!res.data.length) err='اللوحة مش موجودة في التراكر (ممكن تكون اتمسحت)';
+  }catch(e){ err=(e&&e.message)||String(e); }
+  wipPending--; dataEpoch++;
+  idx=drws.findIndex(function(x){return x.id===id;});
+  if(err){
+    if(idx>=0){ for(k in patch){ if(drws[idx][k]===patch[k]) drws[idx][k]=before[k]; } }
+    showToast('خطأ في الحفظ — التعديل ماتسجلش: '+err,true);
+  } else {
+    if(idx>=0&&res.data[0]&&res.data[0].updated_at) drws[idx].updated_at=res.data[0].updated_at;
+    showToast('✓ اتحفظ في التراكر');
+  }
+  if(!wipPending) setSyncStatus(err?'off':'on');
+  if(wipVisible()){
+    tr=wipTr(id);
+    if(tr&&idx>=0) wipPaintRow(tr,drws[idx],!!err);
+    wipSync();
+  }
+}
+
+// ── engineer picker ──
+function wipEngOpen(btn,id){
+  wipEngClose(true);
+  var d=drws.find(function(x){return x.id===id;}); if(!d) return;
+  var cur=wipEngList(d.by_eng), names=[];
+  engNames.forEach(function(n){ n=wn(n); if(n&&n.indexOf(',')<0&&names.indexOf(n)<0) names.push(n); });
+  cur.forEach(function(n){ if(names.indexOf(n)<0) names.push(n); });
+  var pop=document.createElement('div'), h='';
+  pop.id='wipPop';
+  names.forEach(function(n){ h+='<label><input type="checkbox" value="'+escHtml(n)+'"'+(cur.indexOf(n)>=0?' checked':'')+'/> '+escHtml(n)+'</label>'; });
+  if(!names.length) h='<p>مفيش مهندسين متسجلين — ضيف من فورم اللوحة.</p>';
+  h+='<div class="pop-foot"><button type="button" class="btn bt" style="padding:4px 12px;font-size:11px">Done</button></div>';
+  pop.innerHTML=h;
+  document.body.appendChild(pop);
+  var rc=btn.getBoundingClientRect(), vw=document.documentElement.clientWidth;
+  pop.style.left=Math.max(8,Math.min(rc.left,vw-pop.offsetWidth-8))+window.pageXOffset+'px';
+  var top=rc.bottom+3;
+  if(top+pop.offsetHeight+8>window.innerHeight&&rc.top-pop.offsetHeight-3>0) top=rc.top-pop.offsetHeight-3;
+  pop.style.top=top+window.pageYOffset+'px';
+  btn.classList.add('on');
+  wipPop={id:id,btn:btn,el:pop};
+  pop.addEventListener('change',function(){
+    var sel=[];
+    Array.prototype.forEach.call(pop.querySelectorAll('input:checked'),function(c){ sel.push(c.value); });
+    wipSave(id,{by_eng:sel.join(',')});
+  });
+  pop.querySelector('.pop-foot button').addEventListener('click',function(){ wipEngClose(); });
+}
+function wipEngClose(silent){
+  if(!wipPop) return;
+  var p=wipPop; wipPop=null;
+  if(p.el.parentNode) p.el.parentNode.removeChild(p.el);
+  p.btn.classList.remove('on');
+  if(!silent) setTimeout(wipTick,0);
+}
+
+function wipInit(){
+  var b=wipEl('wipBody'); if(!b||b._wip) return; b._wip=1;
+  b.addEventListener('focusin',function(e){
+    var el=e.target;
+    if(el.classList&&el.classList.contains('wip-name')){
+      var r=wipRow(el); if(!r) return;
+      el.value=wn(r.d.name); el.classList.add('open');     // show the full name while editing
+      el._fresh=true; wipSelNo(el);
+    }
+  });
+  // a click puts the caret where you clicked — re-select the number once the click has finished
+  b.addEventListener('mouseup',function(e){
+    var el=e.target;
+    if(el.classList&&el.classList.contains('wip-name')&&el._fresh){ el._fresh=false; wipSelNo(el); }
+  });
+  b.addEventListener('focusout',function(e){
+    var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
+    if(f==='name'||f==='content'||f==='target_date') wipCommit(el,true);
+    if(f==='name'){
+      var r=wipRow(el);
+      el.classList.remove('open');
+      if(r){ el.value=drwNo(r.d.name); el.title=wn(r.d.name); }
+    }
+    setTimeout(wipTick,0);
+  });
+  b.addEventListener('change',function(e){
+    var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
+    if(f==='status') wipCommit(el,false);
+    else if(f==='target_date') wipDateSoon(el);
+  });
+  b.addEventListener('keydown',function(e){
+    var el=e.target; if(el.tagName!=='INPUT') return;
+    el._fresh=false;
+    if(e.key==='Enter'){ e.preventDefault(); el.blur(); }
+    else if(e.key==='Escape'){
+      var r=wipRow(el), f=el.getAttribute('data-f');
+      if(r){
+        if(f==='target_date'&&wipTimers[r.d.id]){ clearTimeout(wipTimers[r.d.id]); delete wipTimers[r.d.id]; }
+        el.value=f==='name'?wn(r.d.name):f==='content'?wn(r.d.content):toInputDate(r.d.target_date);
+      }
+      el.blur();
+    }
+  });
+  b.addEventListener('click',function(e){
+    var btn=e.target.closest?e.target.closest('.wip-eng'):null; if(!btn) return;
+    var r=wipRow(btn); if(!r) return;
+    if(wipPop&&wipPop.btn===btn) wipEngClose(); else wipEngOpen(btn,r.d.id);
+  });
+  document.addEventListener('mousedown',function(e){
+    if(!wipPop||wipPop.el.contains(e.target)||wipPop.btn.contains(e.target)) return;
+    wipEngClose();
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&wipPop) wipEngClose(); });
+  window.addEventListener('resize',function(){ if(wipPop) wipEngClose(); });
+}
+
+// ── PDF (same header, signature and stamp as the other reports) ──
+function genWipPdf(){
+  var secs=wipSections(), cfg=wipCfg();
+  if(!secs.length){ alert('No drawings in Work in Progress'); return; }
+  var sL=wipEl('sLogo').src;
+  var now=new Date(), ds=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
+  var cols=[cfg.col1,cfg.col2,'Floor','Type','DWG No.','Content','Status','Engineer','Target Date','Days Left'];
+  var colg='<colgroup>'+[8,7,11,9,7,17,11,12,8.5,9.5].map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>';
+  var dayFg={ok:'#1E8449',soon:'#9A7D0A',late:'#C0392B',done:'#1A3A5C',none:'#7F8C8D'};
+  var body='', total=0;
+  secs.forEach(function(s){
+    total+=s.rows.length;
+    body+='<div class="sec" style="padding-bottom:0">';
+    body+='<div style="background:'+s.color+';color:#fff;font-size:10px;font-weight:700;padding:6px 10px;border-radius:3px;page-break-after:avoid">'
+      +escHtml(s.plot)+' &nbsp;›&nbsp; '+escHtml(s.zone||'-')+' &nbsp;›&nbsp; '+escHtml(s.level||'-')
+      +'<span style="float:right;font-size:8px;font-weight:600">'+wipCountTxt(s.rows)+'</span></div>';
+    s.tables.forEach(function(t){
+      body+='<div style="font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:'+s.color+';margin:8px 0 3px;page-break-after:avoid">'
+        +escHtml(t.type||'No Type')+' ('+t.rows.length+')</div>';
+      body+='<table style="table-layout:fixed">'+colg+'<thead><tr>'+cols.map(function(c){return '<th style="background:'+s.color+';text-align:left">'+escHtml(c)+'</th>';}).join('')+'</tr></thead><tbody>';
+      t.rows.forEach(function(d,i){
+        var st=wipStatus(d), sc=wipStColor(st), dy=wipDays(d);
+        body+='<tr style="background:'+(i%2===0?'#fff':'#F4F9F8')+'">'
+          +'<td style="font-weight:600">'+escHtml(wn(d.plot)||'-')+'</td>'
+          +'<td>'+escHtml(wn(d.zone)||'-')+'</td>'
+          +'<td>'+escHtml(wn(d.level)||'-')+'</td>'
+          +'<td>'+escHtml(wn(d.type)||'-')+'</td>'
+          +'<td style="font-weight:700;color:#0D5C52">'+escHtml(drwNo(d.name))+'</td>'
+          +'<td class="wrap" style="color:#555">'+escHtml(wn(d.content)||'-')+'</td>'
+          +'<td><span style="white-space:nowrap;padding:1px 5px;border-radius:6px;font-size:7px;font-weight:700;background:'+sc.bg+';color:'+sc.fg+'">'+escHtml(st)+'</span></td>'
+          +'<td class="wrap" style="font-weight:600">'+escHtml(wipEngList(d.by_eng).join(', ')||'-')+'</td>'
+          +'<td>'+(d.target_date?fd(d.target_date):'-')+'</td>'
+          +'<td style="white-space:nowrap;font-weight:700;color:'+dayFg[dy.c]+'">'+dy.t+'</td></tr>';
+      });
+      body+='</tbody></table>';
+    });
+    body+='</div>';
+  });
+  body+='<div class="sec" style="padding-top:8px"><div style="background:#2D3748;color:#fff;font-weight:700;text-align:center;font-size:9px;padding:5px">TOTAL: '+total+' DRAWINGS · WORK IN PROGRESS · SUSTRA · '+escHtml(cfg.label)+'</div></div>';
+  openWin(sL,'',ds,'Work in Progress Report — '+cfg.label,body);
+}
+
+window.addEventListener('load',wipInit);
 
 // ══════════════════════════════════════════
 //  START
