@@ -182,7 +182,11 @@ input:disabled{opacity:.4;cursor:not-allowed}
 .wip-top{background:#fff;border-radius:8px;margin-bottom:18px}
 .wip-top .chdr{border-radius:8px 8px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .wip-hint{font-size:10px;color:#9AA5B4}
-.wip-acts{margin-left:auto;display:flex;gap:6px}
+.wip-acts{margin-left:auto;display:flex;gap:6px;align-items:center}
+.wip-view{display:flex;border:1.5px solid rgba(255,255,255,.25);border-radius:6px;overflow:hidden;margin-right:4px}
+.wip-view button{background:transparent;color:#9AA5B4;border:none;padding:6px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.wip-view button:hover{color:#fff}
+.wip-view button.on{background:#1A7A6E;color:#fff}
 .wip-bar{display:flex;gap:11px;align-items:flex-end;flex-wrap:wrap;padding:14px 16px}
 .wip-bar .f{flex:1;min-width:150px;max-width:280px}
 .wip-chips{display:flex;gap:7px;flex-wrap:wrap;padding:0 16px 14px}
@@ -197,18 +201,24 @@ input:disabled{opacity:.4;cursor:not-allowed}
 .wip-sec-h{background:var(--c);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700}
 .wip-sec-h .sep{opacity:.5;font-weight:400}
 .wip-cnt{margin-left:auto;font-size:10px;font-weight:600;opacity:.9}
-.wip-t{padding:12px 14px 4px}
-.wip-t:last-child{padding-bottom:14px}
+.wip-tabs{padding:4px 2px 10px}
+.wip-grid .wip-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.wip-grid .wip-t:only-child{grid-column:1/-1}
+@media(max-width:1150px){.wip-grid .wip-tabs{grid-template-columns:minmax(0,1fr)}}
+.wip-t{padding:8px 12px 2px}
 .wip-t-h{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--c);margin-bottom:6px;display:flex;align-items:center;gap:7px}
 .wip-t-h span{background:var(--c);color:#fff;border-radius:9px;padding:1px 7px;font-size:10px;letter-spacing:0}
 .wip-tw{overflow-x:auto;border:1px solid #E8F0EF;border-radius:6px}
-.wip-tbl{table-layout:fixed;min-width:940px}
+.wip-tbl{table-layout:fixed;min-width:700px}
+.wip-grid .wip-tbl{min-width:590px}
+.wip-tbl col.wc1{width:17%}.wip-tbl col.wc2{width:9%}.wip-tbl col.wc3{width:32%}.wip-tbl col.wc4{width:13%}.wip-tbl col.wc5{width:15%}.wip-tbl col.wc6{width:14%}
+.wip-grid .wip-tbl col.wc1{width:24%}.wip-grid .wip-tbl col.wc2{width:10%}.wip-grid .wip-tbl col.wc3{width:19%}.wip-grid .wip-tbl col.wc4{width:17%}.wip-grid .wip-tbl col.wc5{width:15%}.wip-grid .wip-tbl col.wc6{width:15%}
 .wip-tbl thead{position:static}
-.wip-tbl th{background:var(--c);overflow:hidden;text-overflow:ellipsis}
-.wip-tbl td{padding:3px 5px}
-.wip-tbl td.ro{padding:7px;overflow:hidden;text-overflow:ellipsis}
+.wip-tbl th{background:var(--c);overflow:hidden;text-overflow:ellipsis;padding:5px 6px}
+.wip-tbl td{padding:1px 3px}
+.wip-tbl td.ro{padding:5px 6px;font-size:10px;overflow:hidden;text-overflow:ellipsis}
 .wip-tbl tr:last-child td{border-bottom:none}
-.wip-in{width:100%;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:5px 6px;font-size:11px;font-family:inherit;color:#1C2526}
+.wip-in{width:100%;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:4px 5px;font-size:11px;font-family:inherit;color:#1C2526}
 .wip-in:hover{border-color:#D5E5E2;background:#fff}
 .wip-in:focus{background:#fff}
 .wip-in::placeholder{color:#BDC3C7;font-size:10px}
@@ -216,7 +226,7 @@ input:disabled{opacity:.4;cursor:not-allowed}
 .wip-name.open{position:relative;z-index:5;width:360px;max-width:70vw;font-weight:600;color:#1C2526;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 select.wip-st{font-size:10px;font-weight:700;border-radius:10px;padding:4px 6px;cursor:pointer;border-color:transparent}
 select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
-.wip-eng{width:100%;min-height:27px;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:3px 4px;cursor:pointer;font-family:inherit;font-size:10px;color:#9AA5B4;white-space:normal;line-height:1.5}
+.wip-eng{width:100%;min-height:24px;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:3px 4px;cursor:pointer;font-family:inherit;font-size:10px;color:#9AA5B4;white-space:normal;line-height:1.5}
 .wip-eng:hover,.wip-eng.on{border-color:#1A7A6E;background:#fff}
 .wip-eng b{display:inline-block;background:#E8F5F3;color:#0D5C52;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin:1px}
 .wip-dbtn{width:100%;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:3px 2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -710,6 +720,7 @@ User 2:
       <h2>&#128736; Work in Progress</h2>
       <span class="wip-hint" dir="rtl">اختار واضغط Add — تقدر تتابع أكتر من Plot / Zone / Floor في نفس الوقت. أي تعديل هنا بيتحفظ في التراكر، والقايمة نفسها محفوظة فيه.</span>
       <div class="wip-acts">
+        <div class="wip-view" id="wipView"><button type="button" data-v="grid" onclick="wipSetView('grid')" title="جدولين جنب بعض">&#9638; Grid</button><button type="button" data-v="list" onclick="wipSetView('list')" title="جدول تحت جدول">&#9776; List</button></div>
         <button class="btn bp" onclick="genWipPdf()">&#8998; PDF</button>
         <button class="btn" style="background:#C0392B;color:#fff" onclick="wipClearAll()">&#128465; Clear All</button>
       </div>
@@ -2614,6 +2625,20 @@ function drwNo(name){
   return s;   // no recognisable number → show the name as it is
 }
 
+// ── Plot + Zone + Floor as one short code: PLOT.1036 / ZONE.02 / FOURTH LEVEL → PLOT1036-ZONE02-4TH ──
+var WIP_ORD={FIRST:'1ST',SECOND:'2ND',THIRD:'3RD',FOURTH:'4TH',FIFTH:'5TH',SIXTH:'6TH',SEVENTH:'7TH',EIGHTH:'8TH',NINTH:'9TH',TENTH:'10TH',
+  ELEVENTH:'11TH',TWELFTH:'12TH',THIRTEENTH:'13TH',FOURTEENTH:'14TH',FIFTEENTH:'15TH',SIXTEENTH:'16TH',SEVENTEENTH:'17TH',EIGHTEENTH:'18TH',NINETEENTH:'19TH',TWENTIETH:'20TH'};
+function wipLevelShort(l){
+  var full=wn(l).toUpperCase();
+  var u=full.replace(/\b(LEVEL|FLOOR)\b/g,' ').replace(/\s+/g,' ').trim();   // "FOURTH LEVEL" → "FOURTH"
+  if(!u) return full;
+  u=u.split(' ').map(function(w){ return WIP_ORD[w]||w; }).join(' ');          // → "4TH"
+  return /^\d+$/.test(u)?'L'+u:u;                                              // "LEVEL 4" → "L4"
+}
+function wipLoc(d){
+  return [wn(d.plot).replace(/[.\s]+/g,''),wn(d.zone).replace(/[.\s]+/g,''),wipLevelShort(d.level)].filter(Boolean).join('-');
+}
+
 // ── table order inside a zone: Slab → Beams → Columns → Cores → Stairs → Stair beams → the rest ──
 function wipTypeRank(t){
   var u=wn(t).toUpperCase();
@@ -2639,28 +2664,29 @@ function wipStatus(d){ return wn(d.status).toUpperCase()||'NOT STARTED'; }
 
 // days between today and the target date
 function wipDays(d){
-  if(wipStatus(d)==='DELIVERED') return {t:'Delivered',c:'done'};
+  if(wipStatus(d)==='DELIVERED') return {t:'Delivered',s:'Delivered',c:'done'};
   var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(toInputDate(d.target_date)||'');
-  if(!m) return {t:'-',c:'none'};
+  if(!m) return {t:'-',s:'-',c:'none'};
   var now=new Date(), t0=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
   var n=Math.round((Date.UTC(+m[1],+m[2]-1,+m[3])-t0)/86400000);
-  if(n<0) return {t:(-n)+(n===-1?' day late':' days late'),c:'late'};
-  if(n===0) return {t:'Due today',c:'soon'};
-  return {t:n+(n===1?' day left':' days left'),c:n<=2?'soon':'ok'};
+  if(n<0) return {t:(-n)+(n===-1?' day late':' days late'),s:(-n)+'d late',c:'late'};
+  if(n===0) return {t:'Due today',s:'Today',c:'soon',today:true};
+  return {t:n+(n===1?' day left':' days left'),s:n+'d left',c:n<=2?'soon':'ok'};
 }
 
-// the Target Date cell: date and days left together, e.g. "13/10 · 5 days left"
+// the Target Date cell: date and days left together, e.g. "13/10 · 5d left"
 function wipTargetHtml(d){
   var dy=wipDays(d), m=/^\d{4}-(\d{2})-(\d{2})/.exec(toInputDate(d.target_date)||'');
   if(dy.c==='none') return '<span class="wip-d none">+ date</span>';
-  var dt=(m&&dy.c!=='done'&&dy.t!=='Due today')?m[2]+'/'+m[1]+' · ':'';
-  return '<span class="wip-d '+dy.c+'">'+dt+dy.t+'</span>';
+  var dt=(m&&dy.c!=='done'&&!dy.today)?m[2]+'/'+m[1]+' · ':'';
+  return '<span class="wip-d '+dy.c+'">'+dt+dy.s+'</span>';
 }
 function wipTargetTip(d){ return d.target_date?'Target: '+fd(d.target_date)+' — اضغط للتعديل':'اضغط لتحديد التاريخ المتوقع'; }
 function wipEngList(v){ return wn(v).split(',').map(function(e){return e.trim();}).filter(Boolean); }
 function wipEngHtml(d){
   var l=wipEngList(d.by_eng);
-  return l.length?l.map(function(e){return '<b>'+escHtml(e)+'</b>';}).join(' '):'+ engineer';
+  // chips drop the "Eng." prefix to stay narrow; the full name is on hover and in the list
+  return l.length?l.map(function(e){return '<b title="'+escHtml(e)+'">'+escHtml(e.replace(/^eng\.?\s*/i,'')||e)+'</b>';}).join(' '):'+ engineer';
 }
 
 // ── build sections from the watch list ──
@@ -2710,17 +2736,15 @@ function wipCountTxt(rows){
 }
 
 // ── render ──
-var WIP_COLW=[8.5,7,10.5,8,7.5,22,11,12,13.5];
+var WIP_NCOL=6;
 function wipRowHtml(d){
   var st=wipStatus(d), sc=wipStColor(st), dy=wipDays(d);
   var opts=WIP_STATUSES.slice(); if(opts.indexOf(st)<0) opts.push(st);
   var h='<tr data-id="'+escHtml(d.id)+'">';
-  h+='<td class="ro" style="font-weight:600" title="'+escHtml(wn(d.plot))+'">'+escHtml(wn(d.plot)||'-')+'</td>';
-  h+='<td class="ro" title="'+escHtml(wn(d.zone))+'">'+escHtml(wn(d.zone)||'-')+'</td>';
-  h+='<td class="ro" title="'+escHtml(wn(d.level))+'">'+escHtml(wn(d.level)||'-')+'</td>';
-  h+='<td class="ro">'+(wn(d.type)?'<span class="tt">'+escHtml(wn(d.type))+'</span>':'-')+'</td>';
+  // Plot + Zone + Floor in one short code; the type is the table's own title
+  h+='<td class="ro" style="font-weight:600" title="'+escHtml([wn(d.plot),wn(d.zone),wn(d.level)].filter(Boolean).join(' › '))+'">'+escHtml(wipLoc(d)||'-')+'</td>';
   h+='<td><input class="wip-in wip-name" data-f="name" value="'+escHtml(drwNo(d.name))+'" title="'+escHtml(wn(d.name))+'" autocomplete="off" spellcheck="false"/></td>';
-  h+='<td><input class="wip-in" data-f="content" value="'+escHtml(wn(d.content))+'" placeholder="+ content" autocomplete="off"/></td>';
+  h+='<td><input class="wip-in" data-f="content" value="'+escHtml(wn(d.content))+'" title="'+escHtml(wn(d.content))+'" placeholder="+ content" autocomplete="off"/></td>';
   h+='<td><select class="wip-in wip-st" data-f="status" style="background:'+sc.bg+';color:'+sc.fg+'">';
   opts.forEach(function(o){ h+='<option value="'+escHtml(o)+'"'+(o===st?' selected':'')+'>'+escHtml(o)+'</option>'; });
   h+='</select></td>';
@@ -2744,18 +2768,20 @@ function renderWip(){
     body.innerHTML='<div class="wip-empty">مفيش لوحات في التراكر مطابقة للي اخترته دلوقتي.<br/>أول ما تتضاف لوحات بنفس البيانات هتظهر هنا لوحدها.</div>';
     return;
   }
-  var head='<colgroup>'+WIP_COLW.map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>'
-    +'<thead><tr><th>'+escHtml(cfg.col1)+'</th><th>'+escHtml(cfg.col2)+'</th><th>Floor</th><th>Type</th><th>DWG No.</th>'
+  var head='<colgroup>', ci;
+  for(ci=1;ci<=WIP_NCOL;ci++) head+='<col class="wc'+ci+'"/>';
+  head+='</colgroup>'
+    +'<thead><tr><th>'+escHtml(cfg.col1+' / '+cfg.col2+' / Floor')+'</th><th>DWG No.</th>'
     +'<th>Content</th><th>Status</th><th>Engineer</th><th>Target Date</th></tr></thead>';
   secs.forEach(function(s){
     h+='<div class="wip-sec" style="--c:'+s.color+'">';
     h+='<div class="wip-sec-h"><span>'+escHtml(s.plot)+'</span><span class="sep">›</span><span>'+escHtml(s.zone||'-')+'</span><span class="sep">›</span><span>'+escHtml(s.level||'-')+'</span>';
-    h+='<span class="wip-cnt">'+wipCountTxt(s.rows)+'</span></div>';
+    h+='<span class="wip-cnt">'+wipCountTxt(s.rows)+'</span></div><div class="wip-tabs">';
     s.tables.forEach(function(t){
       h+='<div class="wip-t"><div class="wip-t-h">'+escHtml(t.type||'No Type')+' <span>'+t.rows.length+'</span></div>';
       h+='<div class="wip-tw"><table class="wip-tbl">'+head+'<tbody>'+t.rows.map(wipRowHtml).join('')+'</tbody></table></div></div>';
     });
-    h+='</div>';
+    h+='</div></div>';
   });
   body.innerHTML=h;
 }
@@ -2783,7 +2809,7 @@ function wipPaintRow(tr,d,force){
   var a=force?null:document.activeElement, el, st, sc, dy;
   el=tr.querySelector('.wip-name');
   if(el){ if(el!==a){ el.value=drwNo(d.name); el.classList.remove('open'); } el.title=wn(d.name); }
-  el=tr.querySelector('[data-f="content"]'); if(el&&el!==a) el.value=wn(d.content);
+  el=tr.querySelector('[data-f="content"]'); if(el){ if(el!==a) el.value=wn(d.content); el.title=wn(d.content); }
   el=tr.querySelector('.wip-st');
   if(el){
     st=wipStatus(d);
@@ -3064,8 +3090,22 @@ function wipEngClose(silent){
   if(!silent) setTimeout(wipTick,0);
 }
 
+// ── Grid (two tables side by side) / List (one under the other) — remembered per browser ──
+var wipView='grid';
+function wipViewApply(){
+  var b=wipEl('wipBody'); if(b) b.classList.toggle('wip-grid',wipView==='grid');
+  Array.prototype.forEach.call(document.querySelectorAll('#wipView button'),function(x){ x.classList.toggle('on',x.getAttribute('data-v')===wipView); });
+}
+function wipSetView(v){
+  wipView=v==='list'?'list':'grid';
+  try{localStorage.setItem('sustra_wip_view',wipView);}catch(e){}
+  wipEngClose(true); wipViewApply();
+}
+
 function wipInit(){
   var b=wipEl('wipBody'); if(!b||b._wip) return; b._wip=1;
+  try{ var sv=localStorage.getItem('sustra_wip_view'); if(sv==='grid'||sv==='list') wipView=sv; }catch(e){}
+  wipViewApply();
   b.addEventListener('focusin',function(e){
     var el=e.target;
     if(el.classList&&el.classList.contains('wip-name')){
@@ -3138,8 +3178,8 @@ function genWipPdf(){
   if(!secs.length){ alert('No drawings in Work in Progress'); return; }
   var sL=wipEl('sLogo').src;
   var now=new Date(), ds=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
-  var cols=[cfg.col1,cfg.col2,'Floor','Type','DWG No.','Content','Status','Engineer','Target Date'];
-  var colg='<colgroup>'+[8,7,11,9,7,19,11,12,16].map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>';
+  var cols=[cfg.col1+' / '+cfg.col2+' / Floor','DWG No.','Content','Status','Engineer','Target Date'];
+  var colg='<colgroup>'+[20,9,29,12,14,16].map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>';
   var dayFg={ok:'#1E8449',soon:'#9A7D0A',late:'#C0392B',done:'#1A3A5C',none:'#7F8C8D'};
   var body='', total=0;
   secs.forEach(function(s){
@@ -3155,10 +3195,7 @@ function genWipPdf(){
       t.rows.forEach(function(d,i){
         var st=wipStatus(d), sc=wipStColor(st), dy=wipDays(d);
         body+='<tr style="background:'+(i%2===0?'#fff':'#F4F9F8')+'">'
-          +'<td style="font-weight:600">'+escHtml(wn(d.plot)||'-')+'</td>'
-          +'<td>'+escHtml(wn(d.zone)||'-')+'</td>'
-          +'<td>'+escHtml(wn(d.level)||'-')+'</td>'
-          +'<td>'+escHtml(wn(d.type)||'-')+'</td>'
+          +'<td style="font-weight:600">'+escHtml(wipLoc(d)||'-')+'</td>'
           +'<td style="font-weight:700;color:#0D5C52">'+escHtml(drwNo(d.name))+'</td>'
           +'<td class="wrap" style="color:#555">'+escHtml(wn(d.content)||'-')+'</td>'
           +'<td><span style="white-space:nowrap;padding:1px 5px;border-radius:6px;font-size:7px;font-weight:700;background:'+sc.bg+';color:'+sc.fg+'">'+escHtml(st)+'</span></td>'
