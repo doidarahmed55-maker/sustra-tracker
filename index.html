@@ -202,7 +202,7 @@ input:disabled{opacity:.4;cursor:not-allowed}
 .wip-t-h{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--c);margin-bottom:6px;display:flex;align-items:center;gap:7px}
 .wip-t-h span{background:var(--c);color:#fff;border-radius:9px;padding:1px 7px;font-size:10px;letter-spacing:0}
 .wip-tw{overflow-x:auto;border:1px solid #E8F0EF;border-radius:6px}
-.wip-tbl{table-layout:fixed;min-width:1040px}
+.wip-tbl{table-layout:fixed;min-width:940px}
 .wip-tbl thead{position:static}
 .wip-tbl th{background:var(--c);overflow:hidden;text-overflow:ellipsis}
 .wip-tbl td{padding:3px 5px}
@@ -219,15 +219,22 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .wip-eng{width:100%;min-height:27px;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:3px 4px;cursor:pointer;font-family:inherit;font-size:10px;color:#9AA5B4;white-space:normal;line-height:1.5}
 .wip-eng:hover,.wip-eng.on{border-color:#1A7A6E;background:#fff}
 .wip-eng b{display:inline-block;background:#E8F5F3;color:#0D5C52;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin:1px}
-.wip-days{font-size:10px;font-weight:700;white-space:nowrap}
+.wip-dbtn{width:100%;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:3px 2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wip-dbtn:hover{border-color:#D5E5E2;background:#fff}
+.wip-dbtn:disabled{cursor:not-allowed;opacity:.55}
+.wip-tg input{display:none}
+.wip-tg.ed input{display:block}
+.wip-tg.ed .wip-dbtn{display:none}
 .wip-d{display:inline-block;padding:2px 8px;border-radius:10px}
-.wip-d.ok{background:#D5F5E3;color:#1E8449}.wip-d.soon{background:#FEF9E7;color:#9A7D0A}.wip-d.late{background:#FADBD8;color:#C0392B}.wip-d.done{background:#EAF2FF;color:#1A3A5C}.wip-d.none{color:#BDC3C7;padding-left:6px}
-#wipPop{position:absolute;z-index:500;background:#fff;border:1.5px solid #1A7A6E;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:8px;min-width:210px;max-height:280px;overflow-y:auto}
+.wip-d.ok{background:#D5F5E3;color:#1E8449}.wip-d.soon{background:#FEF9E7;color:#9A7D0A}.wip-d.late{background:#FADBD8;color:#C0392B}.wip-d.done{background:#EAF2FF;color:#1A3A5C}.wip-d.none{color:#9AA5B4;font-weight:400;padding-left:4px}
+#wipPop{position:absolute;z-index:500;background:#fff;border:1.5px solid #1A7A6E;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:8px;min-width:230px;max-height:320px;overflow-y:auto}
 #wipPop label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:#2D3748;text-transform:none;letter-spacing:0;padding:6px 7px;border-radius:5px;cursor:pointer;margin:0}
 #wipPop label:hover{background:#E8F5F3}
-#wipPop input{width:14px;height:14px;accent-color:#1A7A6E;flex-shrink:0;padding:0}
+#wipPop input[type=checkbox]{width:14px;height:14px;accent-color:#1A7A6E;flex-shrink:0;padding:0}
+#wipPop .pop-new{display:flex;gap:6px;align-items:center;border-top:1px solid #E8F0EF;margin-top:6px;padding-top:8px}
+#wipPop .pop-new input{flex:1;min-width:0;padding:5px 8px;font-size:11px}
 #wipPop p{font-size:11px;color:#9AA5B4;padding:8px}
-#wipPop .pop-foot{border-top:1px solid #E8F0EF;margin-top:6px;padding-top:6px;text-align:right}
+#wipPop .pop-foot{margin-top:8px;text-align:right}
 .wip-setup{background:#FEF9E7;border:1.5px solid #F0DFA0;border-radius:8px;padding:14px 16px;margin-bottom:18px;font-size:12px;color:#7D6608;direction:rtl}
 .wip-setup p{margin:6px 0 10px;color:#555;line-height:1.7}
 .wip-setup pre{background:#fff;border:1px solid #F0DFA0;border-radius:6px;padding:10px;font-size:10px;line-height:1.55;color:#1A3A5C;white-space:pre-wrap;text-align:left;margin-bottom:8px}
@@ -2642,6 +2649,14 @@ function wipDays(d){
   return {t:n+(n===1?' day left':' days left'),c:n<=2?'soon':'ok'};
 }
 
+// the Target Date cell: date and days left together, e.g. "13/10 · 5 days left"
+function wipTargetHtml(d){
+  var dy=wipDays(d), m=/^\d{4}-(\d{2})-(\d{2})/.exec(toInputDate(d.target_date)||'');
+  if(dy.c==='none') return '<span class="wip-d none">+ date</span>';
+  var dt=(m&&dy.c!=='done'&&dy.t!=='Due today')?m[2]+'/'+m[1]+' · ':'';
+  return '<span class="wip-d '+dy.c+'">'+dt+dy.t+'</span>';
+}
+function wipTargetTip(d){ return d.target_date?'Target: '+fd(d.target_date)+' — اضغط للتعديل':'اضغط لتحديد التاريخ المتوقع'; }
 function wipEngList(v){ return wn(v).split(',').map(function(e){return e.trim();}).filter(Boolean); }
 function wipEngHtml(d){
   var l=wipEngList(d.by_eng);
@@ -2695,7 +2710,7 @@ function wipCountTxt(rows){
 }
 
 // ── render ──
-var WIP_COLW=[8,7,10.5,8,7.5,17.5,11,10,11.5,9];
+var WIP_COLW=[8.5,7,10.5,8,7.5,22,11,12,13.5];
 function wipRowHtml(d){
   var st=wipStatus(d), sc=wipStColor(st), dy=wipDays(d);
   var opts=WIP_STATUSES.slice(); if(opts.indexOf(st)<0) opts.push(st);
@@ -2710,8 +2725,9 @@ function wipRowHtml(d){
   opts.forEach(function(o){ h+='<option value="'+escHtml(o)+'"'+(o===st?' selected':'')+'>'+escHtml(o)+'</option>'; });
   h+='</select></td>';
   h+='<td><button type="button" class="wip-eng" data-f="by_eng">'+wipEngHtml(d)+'</button></td>';
-  h+='<td><input type="date" class="wip-in" data-f="target_date" value="'+escHtml(toInputDate(d.target_date))+'"'+(wipTargetCol===true?'':' disabled title="محتاج خطوة الإعداد اللي فوق"')+'/></td>';
-  h+='<td class="wip-days"><span class="wip-d '+dy.c+'">'+dy.t+'</span></td>';
+  h+='<td class="wip-tg"><button type="button" class="wip-dbtn"'+(wipTargetCol===true?' title="'+escHtml(wipTargetTip(d))+'"':' disabled title="محتاج خطوة الإعداد اللي فوق"')+'>'+wipTargetHtml(d)+'</button>'
+    +'<input type="date" class="wip-in" data-f="target_date" value="'+escHtml(toInputDate(d.target_date))+'"/></td>';
+
   return h+'</tr>';
 }
 
@@ -2730,7 +2746,7 @@ function renderWip(){
   }
   var head='<colgroup>'+WIP_COLW.map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>'
     +'<thead><tr><th>'+escHtml(cfg.col1)+'</th><th>'+escHtml(cfg.col2)+'</th><th>Floor</th><th>Type</th><th>DWG No.</th>'
-    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Target Date</th><th>Days Left</th></tr></thead>';
+    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Target Date</th></tr></thead>';
   secs.forEach(function(s){
     h+='<div class="wip-sec" style="--c:'+s.color+'">';
     h+='<div class="wip-sec-h"><span>'+escHtml(s.plot)+'</span><span class="sep">›</span><span>'+escHtml(s.zone||'-')+'</span><span class="sep">›</span><span>'+escHtml(s.level||'-')+'</span>';
@@ -2779,8 +2795,8 @@ function wipPaintRow(tr,d,force){
   }
   el=tr.querySelector('.wip-eng'); if(el) el.innerHTML=wipEngHtml(d);
   el=tr.querySelector('[data-f="target_date"]'); if(el&&el!==a&&!wipTimers[d.id]) el.value=toInputDate(d.target_date);
-  el=tr.querySelector('.wip-days');
-  if(el){ dy=wipDays(d); el.innerHTML='<span class="wip-d '+dy.c+'">'+dy.t+'</span>'; }
+  el=tr.querySelector('.wip-dbtn');
+  if(el){ el.innerHTML=wipTargetHtml(d); if(!el.disabled) el.title=wipTargetTip(d); }
 }
 function wipTr(id){
   var trs=wipEl('wipBody').querySelectorAll('tr[data-id]');
@@ -2993,7 +3009,9 @@ function wipEngOpen(btn,id){
   var pop=document.createElement('div'), h='';
   pop.id='wipPop';
   names.forEach(function(n){ h+='<label><input type="checkbox" value="'+escHtml(n)+'"'+(cur.indexOf(n)>=0?' checked':'')+'/> '+escHtml(n)+'</label>'; });
-  if(!names.length) h='<p>مفيش مهندسين متسجلين — ضيف من فورم اللوحة.</p>';
+  if(!names.length) h='<p>مفيش مهندسين متسجلين — اكتب الاسم تحت.</p>';
+  // an engineer who is not in the list yet can simply be typed in
+  h+='<div class="pop-new"><input type="text" placeholder="اسم مهندس جديد…" autocomplete="off" maxlength="80"/><button type="button" class="btn bo" style="padding:4px 9px;font-size:11px">+ Add</button></div>';
   h+='<div class="pop-foot"><button type="button" class="btn bt" style="padding:4px 12px;font-size:11px">Done</button></div>';
   pop.innerHTML=h;
   document.body.appendChild(pop);
@@ -3004,12 +3022,39 @@ function wipEngOpen(btn,id){
   pop.style.top=top+window.pageYOffset+'px';
   btn.classList.add('on');
   wipPop={id:id,btn:btn,el:pop};
-  pop.addEventListener('change',function(){
+  pop.addEventListener('change',function(e){
+    if(e.target.type!=='checkbox') return;
     var sel=[];
     Array.prototype.forEach.call(pop.querySelectorAll('input:checked'),function(c){ sel.push(c.value); });
     wipSave(id,{by_eng:sel.join(',')});
   });
   pop.querySelector('.pop-foot button').addEventListener('click',function(){ wipEngClose(); });
+  var ni=pop.querySelector('.pop-new input');
+  function addNew(){
+    var v=normalize(ni.value);
+    if(!v){ ni.focus(); return; }
+    if(v.indexOf(',')>=0){ showToast('الاسم مينفعش يكون فيه فاصلة ( , )',true); return; }
+    wipEngAdd(btn,id,v);
+  }
+  pop.querySelector('.pop-new button').addEventListener('click',addNew);
+  ni.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); addNew(); } });
+}
+// a typed name: tick it for this drawing and add it to the tracker's engineer list
+async function wipEngAdd(btn,id,name){
+  var d=drws.find(function(x){return x.id===id;}); if(!d) return;
+  var known=null;
+  engNames.forEach(function(n){ if(known===null&&normalize(n).toLowerCase()===name.toLowerCase()) known=wn(n); });
+  var isNew=known===null;
+  if(isNew) engNames.push(name); else name=known;      // already in the list (maybe typed in another case) → use that one
+  var cur=wipEngList(d.by_eng);
+  if(cur.indexOf(name)<0){ cur.push(name); wipSave(id,{by_eng:cur.join(',')}); }
+  wipEngOpen(btn,id);                                  // redraw the list with the name ticked
+  var f=document.querySelector('#wipPop .pop-new input'); if(f) f.focus();
+  if(!isNew) return;
+  var res;
+  try{ res=await supabase.from('engineers').insert({name:name}).select().single(); }
+  catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+  if(res.error&&!/duplicate|unique|23505/i.test(res.error.message||'')) showToast('الاسم اتسجل على اللوحة، بس ماتضافش لقايمة المهندسين: '+res.error.message,true);
 }
 function wipEngClose(silent){
   if(!wipPop) return;
@@ -3042,16 +3087,20 @@ function wipInit(){
       el.classList.remove('open');
       if(r){ el.value=drwNo(r.d.name); el.title=wn(r.d.name); }
     }
+    if(f==='target_date'){ var td=el.closest('td'); if(td) td.classList.remove('ed'); }   // back to the compact view
     setTimeout(wipTick,0);
   });
   b.addEventListener('change',function(e){
     var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
     if(f==='status') wipCommit(el,false);
-    else if(f==='target_date') wipDateSoon(el);
+    else if(f==='target_date'){
+      if(el._keys) wipDateSoon(el);   // typed: wait until the typing settles
+      else el.blur();                 // picked from the calendar: save and close straight away
+    }
   });
   b.addEventListener('keydown',function(e){
     var el=e.target; if(el.tagName!=='INPUT') return;
-    el._fresh=false;
+    el._fresh=false; el._keys=true;
     if(e.key==='Enter'){ e.preventDefault(); el.blur(); }
     else if(e.key==='Escape'){
       var r=wipRow(el), f=el.getAttribute('data-f');
@@ -3063,6 +3112,14 @@ function wipInit(){
     }
   });
   b.addEventListener('click',function(e){
+    var db=e.target.closest?e.target.closest('.wip-dbtn'):null;
+    if(db){
+      if(db.disabled) return;
+      var cell=db.parentNode, inp=cell.querySelector('input[data-f="target_date"]');
+      cell.classList.add('ed'); inp._keys=false; inp.focus();
+      try{ if(inp.showPicker) inp.showPicker(); }catch(x){}
+      return;
+    }
     var btn=e.target.closest?e.target.closest('.wip-eng'):null; if(!btn) return;
     var r=wipRow(btn); if(!r) return;
     if(wipPop&&wipPop.btn===btn) wipEngClose(); else wipEngOpen(btn,r.d.id);
@@ -3081,8 +3138,8 @@ function genWipPdf(){
   if(!secs.length){ alert('No drawings in Work in Progress'); return; }
   var sL=wipEl('sLogo').src;
   var now=new Date(), ds=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
-  var cols=[cfg.col1,cfg.col2,'Floor','Type','DWG No.','Content','Status','Engineer','Target Date','Days Left'];
-  var colg='<colgroup>'+[8,7,11,9,7,17,11,12,8.5,9.5].map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>';
+  var cols=[cfg.col1,cfg.col2,'Floor','Type','DWG No.','Content','Status','Engineer','Target Date'];
+  var colg='<colgroup>'+[8,7,11,9,7,19,11,12,16].map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>';
   var dayFg={ok:'#1E8449',soon:'#9A7D0A',late:'#C0392B',done:'#1A3A5C',none:'#7F8C8D'};
   var body='', total=0;
   secs.forEach(function(s){
@@ -3106,8 +3163,7 @@ function genWipPdf(){
           +'<td class="wrap" style="color:#555">'+escHtml(wn(d.content)||'-')+'</td>'
           +'<td><span style="white-space:nowrap;padding:1px 5px;border-radius:6px;font-size:7px;font-weight:700;background:'+sc.bg+';color:'+sc.fg+'">'+escHtml(st)+'</span></td>'
           +'<td class="wrap" style="font-weight:600">'+escHtml(wipEngList(d.by_eng).join(', ')||'-')+'</td>'
-          +'<td>'+(d.target_date?fd(d.target_date):'-')+'</td>'
-          +'<td style="white-space:nowrap;font-weight:700;color:'+dayFg[dy.c]+'">'+dy.t+'</td></tr>';
+          +'<td style="white-space:nowrap">'+(dy.c==='none'?'-':(d.target_date&&dy.c!=='done'?fd(d.target_date)+' · ':'')+'<span style="font-weight:700;color:'+dayFg[dy.c]+'">'+dy.t+'</span>')+'</td></tr>';
       });
       body+='</tbody></table>';
     });
