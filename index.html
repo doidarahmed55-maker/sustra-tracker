@@ -276,7 +276,9 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .tm-nos{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
 .tm-nos span{background:#E8F5F3;color:#0D5C52;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;cursor:default}
 .tm-free{display:flex;flex-wrap:wrap;gap:7px}
-.tm-free span{background:#fff;border:1.5px solid #A9DFBF;border-left:5px solid #1E8449;border-radius:6px;padding:7px 11px;font-size:12px;font-weight:700;color:#2D3748}
+.tm-free span{background:#fff;border:1.5px solid #A9DFBF;border-left:5px solid #1E8449;border-radius:6px;padding:5px 6px 5px 11px;font-size:12px;font-weight:700;color:#2D3748;display:inline-flex;align-items:center;gap:8px}
+.tm-rm{border:none;background:#F4F6F6;color:#9AA5B4;border-radius:4px;width:20px;height:20px;cursor:pointer;font-size:10px;font-weight:700;line-height:1;font-family:inherit}
+.tm-rm:hover{background:#C0392B;color:#fff}
 </style>
 </head>
 <body>
@@ -769,7 +771,7 @@ User 2:
 <div id="wipTeam" onclick="if(event.target===this)wipTeamClose()">
   <div class="tm-box">
     <div class="tm-top"><h2>&#128119; Engineers</h2><small dir="rtl">شغال = عنده لوحات حالتها IN PROGRESS (في كل المشاريع) — غير كده فاضي ومتاح</small><button type="button" class="tm-x" onclick="wipTeamClose()">&#10005;</button></div>
-    <div class="tm-add" dir="rtl"><input type="text" id="wipTeamNew" dir="auto" placeholder="اسم مهندس جديد…" autocomplete="off" maxlength="80" onkeydown="if(event.key==='Enter'){event.preventDefault();wipTeamAdd();}"/><button type="button" class="btn bt" onclick="wipTeamAdd()">+ إضافة مهندس</button><span>لو مهندس شغال معاكم ومش متسجل في التراكر، ضيفه هنا.</span></div>
+    <div class="tm-add" dir="rtl"><input type="text" id="wipTeamNew" dir="auto" placeholder="اسم مهندس جديد…" autocomplete="off" maxlength="80" onkeydown="if(event.key==='Enter'){event.preventDefault();wipTeamAdd();}"/><button type="button" class="btn bt" onclick="wipTeamAdd()">+ إضافة مهندس</button><span>لو مهندس شغال معاكم ومش متسجل، ضيفه هنا. واللي مبقاش شغال معاكم شيله بعلامة ✕ اللي جنب اسمه.</span></div>
     <div id="wipTeamBody"></div>
   </div>
 </div>
@@ -1709,14 +1711,18 @@ async function delD(id){
 function refreshEngDatalist(){
   var box=document.getElementById('engCheckboxes'); if(!box) return;
   var current = (document.getElementById('fBy').value||'').split(',').map(function(e){return e.trim();}).filter(Boolean);
-  box.innerHTML='';
-  engNames.forEach(function(n){
+  // engineers already on this drawing stay in the list even if they were removed from the engineers list,
+  // otherwise ticking any box would silently drop them from the drawing
+  var list=engNames.slice(), h='';
+  current.forEach(function(n){ if(list.indexOf(n)<0) list.push(n); });
+  list.forEach(function(n){
     var checked = current.indexOf(n)>=0;
     var id='engcb_'+n.replace(/[^a-zA-Z0-9]/g,'_');
-    box.innerHTML+='<label style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#2D3748;cursor:pointer;padding:4px 8px;border:1.5px solid #E8F0EF;border-radius:5px;background:'+(checked?'#E8F5F3':'#fff')+'">'
-      +'<input type="checkbox" id="'+id+'" value="'+n+'" '+(checked?'checked':'')+' onchange="updateByEng()" style="accent-color:#1A7A6E"/>'
-      +n+'</label>';
+    h+='<label style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#2D3748;cursor:pointer;padding:4px 8px;border:1.5px solid #E8F0EF;border-radius:5px;background:'+(checked?'#E8F5F3':'#fff')+'">'
+      +'<input type="checkbox" id="'+id+'" value="'+escHtml(n)+'" '+(checked?'checked':'')+' onchange="updateByEng()" style="accent-color:#1A7A6E"/>'
+      +escHtml(n)+'</label>';
   });
+  box.innerHTML=h;
 }
 
 function updateByEng(){
@@ -3215,12 +3221,20 @@ function wipInit(){
     if(wipPop) wipEngClose(); else if(wipTeamOn) wipTeamClose();
   });
   window.addEventListener('resize',function(){ if(wipPop) wipEngClose(); });
+  var tb=wipEl('wipTeamBody');
+  if(tb) tb.addEventListener('click',function(e){
+    var x=e.target.closest?e.target.closest('.tm-rm'):null;
+    if(x) wipTeamRemove(x.getAttribute('data-n'));
+  });
 }
 
 // ══════════════════════════════════════════
 //  ENGINEERS: who is working, who is free
 // ══════════════════════════════════════════
-// Working = has at least one drawing with status IN PROGRESS (in any project). Everyone else is available.
+// Working   = has at least one drawing with status IN PROGRESS (in any project).
+// Available = is in the tracker's engineers list and has nothing IN PROGRESS.
+// Removing someone from the engineers list (✕) only takes him off that list: his name stays on
+// every drawing he worked on, so counts and reports are unchanged.
 var wipTeamOn=false;
 var wipTeamOther=[];     // IN PROGRESS drawings of the other projects
 
@@ -3231,10 +3245,10 @@ async function wipTeamLoad(){
   }catch(e){}
 }
 function wipTeamData(){
-  var all={}, busy={};
+  var all={}, busy={}, listed={};
   function key(n){ return normalize(n).toLowerCase(); }
   function reg(n){ n=wn(n); if(n&&n.indexOf(',')<0&&!all[key(n)]) all[key(n)]=n; }
-  engNames.forEach(reg);
+  engNames.forEach(function(n){ reg(n); if(wn(n)&&wn(n).indexOf(',')<0) listed[key(n)]=true; });
   function take(d,proj){
     var list=wipEngList(d.by_eng);
     list.forEach(reg);
@@ -3246,7 +3260,7 @@ function wipTeamData(){
   var cmp=function(a,b){ return a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}); };
   var working=[], free=[];
   Object.keys(all).forEach(function(k){
-    if(!busy[k]){ free.push(all[k]); return; }
+    if(!busy[k]){ if(listed[k]) free.push(all[k]); return; }   // not on the engineers list any more → not offered as available
     // what he has, grouped by location + type
     var g={}, groups=[];
     busy[k].forEach(function(it){
@@ -3288,7 +3302,9 @@ function wipTeamRender(){
   });
   h+='</div><div class="tm-col"><div class="tm-h free">&#9989; فاضيين ومتاحين <span>'+t.free.length+'</span></div>';
   if(!t.free.length) h+='<p class="tm-none">كل المهندسين المسجلين معاهم شغل.</p>';
-  else h+='<div class="tm-free">'+t.free.map(function(n){ return '<span>'+escHtml(n)+'</span>'; }).join('')+'</div>';
+  else h+='<div class="tm-free">'+t.free.map(function(n){
+    return '<span>'+escHtml(n)+'<button type="button" class="tm-rm" data-n="'+escHtml(n)+'" title="مبقاش شغال معانا — شيله من القايمة">&#10005;</button></span>';
+  }).join('')+'</div>';
   h+='</div>';
   box.innerHTML=h;
 }
@@ -3301,6 +3317,20 @@ function wipTeamOpen(){
 }
 function wipTeamClose(){ wipTeamOn=false; var m=wipEl('wipTeam'); if(m) m.style.display='none'; }
 function wipTeamPoll(){ if(wipTeamOn) wipTeamLoad().then(function(){ if(wipTeamOn) wipTeamRender(); }); }
+// someone who no longer works with us: take him off the engineers list. Drawings are not touched.
+async function wipTeamRemove(name){
+  if(!confirm('«'+name+'» هيتشال من قايمة المهندسين: مش هيظهر في المتاحين ولا في قوايم اختيار المهندس.\n\nاللوحات اللي باسمه وعددها وتقاريره هتفضل زي ما هي. متأكد؟')) return;
+  var k=normalize(name).toLowerCase(), err=null;
+  var rows=engNames.filter(function(n){ return n.indexOf(',')<0&&normalize(n).toLowerCase()===k; });
+  for(var i=0;i<rows.length;i++){
+    try{ var res=await supabase.from('engineers').delete().eq('name',rows[i]); if(res.error) err=res.error.message; }
+    catch(e){ err=(e&&e.message)||String(e); }
+  }
+  try{ await fetchEngineers(); }catch(e){}      // the tracker's list is the reference
+  if(!err&&engNames.some(function(n){ return normalize(n).toLowerCase()===k; })) err='لسه موجود في التراكر';
+  if(wipTeamOn) wipTeamRender();
+  if(err) showToast('خطأ — ماتشالش: '+err,true); else showToast('✓ '+name+' اتشال من قايمة المهندسين');
+}
 // an engineer who has never been on a drawing yet: register him here so he shows up as available
 async function wipTeamAdd(){
   var inp=wipEl('wipTeamNew'), name=normalize(inp.value);
