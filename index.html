@@ -236,7 +236,7 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .wip-tg.ed input{display:block}
 .wip-tg.ed .wip-dbtn{display:none}
 .wip-d{display:inline-block;padding:2px 8px;border-radius:10px}
-.wip-d.ok{background:#D5F5E3;color:#1E8449}.wip-d.soon{background:#FEF9E7;color:#9A7D0A}.wip-d.late{background:#FADBD8;color:#C0392B}.wip-d.done{background:#EAF2FF;color:#1A3A5C}.wip-d.none{color:#9AA5B4;font-weight:400;padding-left:4px}
+.wip-d.ok{background:#D5F5E3;color:#1E8449}.wip-d.soon{background:#FEF9E7;color:#9A7D0A}.wip-d.late{background:#FADBD8;color:#C0392B}.wip-d.done{background:#EAF2FF;color:#1A3A5C}.wip-d.recv{background:#FDEBD0;color:#D35400}.wip-d.none{color:#9AA5B4;font-weight:400;padding-left:4px}
 #wipPop{position:absolute;z-index:500;background:#fff;border:1.5px solid #1A7A6E;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:8px;min-width:230px;max-height:320px;overflow-y:auto}
 #wipPop label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:#2D3748;text-transform:none;letter-spacing:0;padding:6px 7px;border-radius:5px;cursor:pointer;margin:0}
 #wipPop label:hover{background:#E8F5F3}
@@ -249,6 +249,34 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .wip-setup p{margin:6px 0 10px;color:#555;line-height:1.7}
 .wip-setup pre{background:#fff;border:1px solid #F0DFA0;border-radius:6px;padding:10px;font-size:10px;line-height:1.55;color:#1A3A5C;white-space:pre-wrap;text-align:left;margin-bottom:8px}
 .wip-tbl input:disabled{cursor:not-allowed}
+#wipTeam{position:fixed;inset:0;z-index:700;background:rgba(29,37,38,.6);display:none;align-items:flex-start;justify-content:center;padding:40px 14px;overflow-y:auto}
+.tm-box{background:#F0F4F3;border-radius:10px;width:100%;max-width:1100px;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+.tm-top{background:#2D3748;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tm-top h2{font-size:14px;font-weight:700;margin:0}
+.tm-top small{font-size:10px;color:#9AA5B4}
+.tm-x{margin-left:auto;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:13px;font-family:inherit}
+.tm-add{background:#fff;padding:10px 16px;display:flex;gap:8px;align-items:center;border-bottom:1px solid #D5E5E2;flex-wrap:wrap}
+.tm-add input{max-width:300px;padding:7px 10px}
+.tm-add span{font-size:10px;color:#7F8C8D}
+#wipTeamBody{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:14px;padding:14px;align-items:start}
+@media(max-width:800px){#wipTeamBody{grid-template-columns:minmax(0,1fr)}}
+.tm-h{font-size:12px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.tm-h.busy{color:#B7950B}.tm-h.free{color:#1E8449}
+.tm-h span{background:currentColor;border-radius:9px;padding:1px 0;font-size:10px;min-width:22px;text-align:center}
+.tm-h.busy span,.tm-h.free span{-webkit-text-fill-color:#fff}
+.tm-none{font-size:11px;color:#9AA5B4;background:#fff;border-radius:8px;padding:14px}
+.tm-card{background:#fff;border-radius:8px;border-left:5px solid #B7950B;padding:10px 12px;margin-bottom:9px}
+.tm-name{font-size:13px;font-weight:800;color:#2D3748;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.tm-name span{background:#FEF9E7;color:#B7950B;border-radius:9px;padding:1px 8px;font-size:10px;font-weight:700}
+.tm-g{border-top:1px solid #E8F0EF;padding:6px 0 2px}
+.tm-gh{font-size:11px;color:#2D3748;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.tm-gh i{font-style:normal;background:#1A3A5C;color:#fff;border-radius:4px;padding:1px 6px;font-size:9px;font-weight:700}
+.tm-gh .wip-d{font-size:10px;font-weight:700}
+.tm-n{background:#EAECEE;color:#555;border-radius:9px;padding:1px 7px;font-size:10px;font-weight:700}
+.tm-nos{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.tm-nos span{background:#E8F5F3;color:#0D5C52;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;cursor:default}
+.tm-free{display:flex;flex-wrap:wrap;gap:7px}
+.tm-free span{background:#fff;border:1.5px solid #A9DFBF;border-left:5px solid #1E8449;border-radius:6px;padding:7px 11px;font-size:12px;font-weight:700;color:#2D3748}
 </style>
 </head>
 <body>
@@ -721,6 +749,7 @@ User 2:
       <span class="wip-hint" dir="rtl">اختار واضغط Add — تقدر تتابع أكتر من Plot / Zone / Floor في نفس الوقت. أي تعديل هنا بيتحفظ في التراكر، والقايمة نفسها محفوظة فيه.</span>
       <div class="wip-acts">
         <div class="wip-view" id="wipView"><button type="button" data-v="grid" onclick="wipSetView('grid')" title="جدولين جنب بعض">&#9638; Grid</button><button type="button" data-v="list" onclick="wipSetView('list')" title="جدول تحت جدول">&#9776; List</button></div>
+        <button class="btn bNav" onclick="wipTeamOpen()" title="مين شغال ومين فاضي">&#128119; Engineers</button>
         <button class="btn bp" onclick="genWipPdf()">&#8998; PDF</button>
         <button class="btn" style="background:#C0392B;color:#fff" onclick="wipClearAll()">&#128465; Clear All</button>
       </div>
@@ -735,6 +764,14 @@ User 2:
   </div>
   <div id="wipSetup"></div>
   <div id="wipBody"></div>
+</div>
+<!-- engineers: who is working / who is free -->
+<div id="wipTeam" onclick="if(event.target===this)wipTeamClose()">
+  <div class="tm-box">
+    <div class="tm-top"><h2>&#128119; Engineers</h2><small dir="rtl">شغال = عنده لوحات حالتها IN PROGRESS (في كل المشاريع) — غير كده فاضي ومتاح</small><button type="button" class="tm-x" onclick="wipTeamClose()">&#10005;</button></div>
+    <div class="tm-add" dir="rtl"><input type="text" id="wipTeamNew" dir="auto" placeholder="اسم مهندس جديد…" autocomplete="off" maxlength="80" onkeydown="if(event.key==='Enter'){event.preventDefault();wipTeamAdd();}"/><button type="button" class="btn bt" onclick="wipTeamAdd()">+ إضافة مهندس</button><span>لو مهندس شغال معاكم ومش متسجل في التراكر، ضيفه هنا.</span></div>
+    <div id="wipTeamBody"></div>
+  </div>
 </div>
 </div>
 
@@ -1038,7 +1075,7 @@ async function appInit(){
 }
 
 function showLoginScreen(){
-  wipEngClose(true);
+  wipEngClose(true); wipTeamClose();
   document.getElementById('vLogin').style.display='flex';
   document.getElementById('vProject').style.display='none';
   var lb=document.getElementById('lBtn'); lb.disabled=false; lb.textContent='Sign In';
@@ -1102,7 +1139,7 @@ async function loadApp(){
 }
 
 function showProjectSelector(){
-  wipEngClose(true);
+  wipEngClose(true); wipTeamClose();
   document.getElementById('appShell').style.display='none';
   var ps = document.getElementById('vProject');
   ps.style.display='flex';
@@ -1226,7 +1263,7 @@ function setupRealtime(){
   realtimeSub = setInterval(async function(){
     if(importBusy) return;   // don't refresh the table in the middle of an Excel import
     var proj = currentProject || 'WADI_YAMM';
-    wipPollWatch();
+    wipPollWatch(); wipTeamPoll();
     var ep = dataEpoch;
     var {data, error} = await supabase.from('drawings').select('*').eq('project_id', proj).order('num',{ascending:true,nullsFirst:false});
     if(error){ setSyncStatus('off'); return; }
@@ -1388,7 +1425,7 @@ function show(id){
   document.getElementById(id).style.display='block';
   document.getElementById('tabList').classList.toggle('active',id==='vList');
   document.getElementById('tabWip').classList.toggle('active',id==='vWip');
-  if(id!=='vWip') wipEngClose(true);
+  if(id!=='vWip'){ wipEngClose(true); wipTeamClose(); }
   window.scrollTo(0,0);
 }
 function goList(){ show('vList'); editId=null; render(); }
@@ -2664,7 +2701,10 @@ function wipStatus(d){ return wn(d.status).toUpperCase()||'NOT STARTED'; }
 
 // days between today and the target date
 function wipDays(d){
-  if(wipStatus(d)==='DELIVERED') return {t:'Delivered',s:'Delivered',c:'done'};
+  var st=wipStatus(d);
+  if(st==='DELIVERED') return {t:'Delivered',s:'Delivered',c:'done'};    // sent to the client
+  if(st==='RECEIVED') return {t:'Received',s:'Received',c:'recv'};       // engineer handed it in — never "late"
+
   var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(toInputDate(d.target_date)||'');
   if(!m) return {t:'-',s:'-',c:'none'};
   var now=new Date(), t0=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
@@ -2678,7 +2718,7 @@ function wipDays(d){
 function wipTargetHtml(d){
   var dy=wipDays(d), m=/^\d{4}-(\d{2})-(\d{2})/.exec(toInputDate(d.target_date)||'');
   if(dy.c==='none') return '<span class="wip-d none">+ date</span>';
-  var dt=(m&&dy.c!=='done'&&!dy.today)?m[2]+'/'+m[1]+' · ':'';
+  var dt=(m&&dy.c!=='done'&&dy.c!=='recv'&&!dy.today)?m[2]+'/'+m[1]+' · ':'';
   return '<span class="wip-d '+dy.c+'">'+dt+dy.s+'</span>';
 }
 function wipTargetTip(d){ return d.target_date?'Target: '+fd(d.target_date)+' — اضغط للتعديل':'اضغط لتحديد التاريخ المتوقع'; }
@@ -2731,8 +2771,9 @@ function wipSignature(secs){
   }).join('|');
 }
 function wipCountTxt(rows){
-  var done=0; rows.forEach(function(d){ if(wipStatus(d)==='DELIVERED') done++; });
-  return rows.length+' drawing'+(rows.length!==1?'s':'')+' · '+done+' delivered';
+  var done=0, recv=0;
+  rows.forEach(function(d){ var st=wipStatus(d); if(st==='DELIVERED') done++; else if(st==='RECEIVED') recv++; });
+  return rows.length+' drawing'+(rows.length!==1?'s':'')+' · '+recv+' received · '+done+' delivered';
 }
 
 // ── render ──
@@ -2850,6 +2891,7 @@ function wipEditing(){
 // called whenever `drws` was replaced with fresh tracker data
 function wipOnData(){
   if(!wipVisible()) return;
+  if(wipTeamOn) wipTeamRender();
   var secs=wipSections();
   if(wipSignature(secs)===wipSig){ wipSync(); wipChips(secs); }
   else if(wipEditing()) wipStale=true;      // don't pull the table from under a cell being typed in
@@ -3168,8 +3210,113 @@ function wipInit(){
     if(!wipPop||wipPop.el.contains(e.target)||wipPop.btn.contains(e.target)) return;
     wipEngClose();
   });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&wipPop) wipEngClose(); });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape') return;
+    if(wipPop) wipEngClose(); else if(wipTeamOn) wipTeamClose();
+  });
   window.addEventListener('resize',function(){ if(wipPop) wipEngClose(); });
+}
+
+// ══════════════════════════════════════════
+//  ENGINEERS: who is working, who is free
+// ══════════════════════════════════════════
+// Working = has at least one drawing with status IN PROGRESS (in any project). Everyone else is available.
+var wipTeamOn=false;
+var wipTeamOther=[];     // IN PROGRESS drawings of the other projects
+
+async function wipTeamLoad(){
+  try{
+    var res=await supabase.from('drawings').select('*').eq('status','IN PROGRESS');
+    if(!res.error) wipTeamOther=(res.data||[]).filter(function(d){ return wn(d.project_id)&&wn(d.project_id)!==wipProj(); });
+  }catch(e){}
+}
+function wipTeamData(){
+  var all={}, busy={};
+  function key(n){ return normalize(n).toLowerCase(); }
+  function reg(n){ n=wn(n); if(n&&n.indexOf(',')<0&&!all[key(n)]) all[key(n)]=n; }
+  engNames.forEach(reg);
+  function take(d,proj){
+    var list=wipEngList(d.by_eng);
+    list.forEach(reg);
+    if(wipStatus(d)!=='IN PROGRESS') return;
+    list.forEach(function(n){ (busy[key(n)]=busy[key(n)]||[]).push({d:d,proj:proj}); });
+  }
+  drws.forEach(function(d){ take(d,wipProj()); });
+  wipTeamOther.forEach(function(d){ take(d,wn(d.project_id)); });
+  var cmp=function(a,b){ return a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}); };
+  var working=[], free=[];
+  Object.keys(all).forEach(function(k){
+    if(!busy[k]){ free.push(all[k]); return; }
+    // what he has, grouped by location + type
+    var g={}, groups=[];
+    busy[k].forEach(function(it){
+      var gk=it.proj+'\u0001'+wipLoc(it.d)+'\u0001'+wn(it.d.type).toUpperCase();
+      if(!g[gk]){ g[gk]={proj:it.proj,loc:wipLoc(it.d)||'-',type:wn(it.d.type)||'No Type',rank:wipTypeRank(it.d.type),rows:[]}; groups.push(g[gk]); }
+      g[gk].rows.push(it.d);
+    });
+    groups.sort(function(a,b){ return (a.proj===wipProj()?0:1)-(b.proj===wipProj()?0:1)||cmp(a.loc,b.loc)||a.rank-b.rank||cmp(a.type,b.type); });
+    groups.forEach(function(x){ x.rows.sort(function(a,b){ return cmp(drwNo(a.name),drwNo(b.name)); }); });
+    working.push({name:all[k],count:busy[k].length,groups:groups});
+  });
+  working.sort(function(a,b){ return b.count-a.count||cmp(a.name,b.name); });
+  free.sort(cmp);
+  return {working:working,free:free};
+}
+function wipTeamRender(){
+  var box=wipEl('wipTeamBody'); if(!box) return;
+  var t=wipTeamData(), h='';
+  h+='<div class="tm-col"><div class="tm-h busy">&#128736; شغالين دلوقتي <span>'+t.working.length+'</span></div>';
+  if(!t.working.length) h+='<p class="tm-none">مفيش حد عنده لوحات IN PROGRESS.</p>';
+  t.working.forEach(function(e){
+    h+='<div class="tm-card"><div class="tm-name">'+escHtml(e.name)+'<span>'+e.count+' in progress</span></div>';
+    e.groups.forEach(function(g){
+      var late=0, next=null;
+      g.rows.forEach(function(d){
+        var dy=wipDays(d);
+        if(dy.c==='late') late++;
+        if(d.target_date&&(!next||toInputDate(d.target_date)<toInputDate(next.target_date))) next=d;
+      });
+      var other=g.proj!==wipProj(), pl=(PROJECT_CONFIG[g.proj]||{}).label||g.proj;
+      h+='<div class="tm-g"><div class="tm-gh">'+(other?'<i>'+escHtml(pl)+'</i> ':'')+'<b>'+escHtml(g.loc)+'</b> · '+escHtml(g.type)+' <span class="tm-n">'+g.rows.length+'</span>'
+        +(late?' <span class="wip-d late">'+late+' late</span>':(next?' '+wipTargetHtml(next):''))+'</div><div class="tm-nos">';
+      g.rows.forEach(function(d){
+        h+='<span title="'+escHtml(wn(d.name)+(wn(d.content)?' — '+wn(d.content):''))+'">'+escHtml(drwNo(d.name))+'</span>';
+      });
+      h+='</div></div>';
+    });
+    h+='</div>';
+  });
+  h+='</div><div class="tm-col"><div class="tm-h free">&#9989; فاضيين ومتاحين <span>'+t.free.length+'</span></div>';
+  if(!t.free.length) h+='<p class="tm-none">كل المهندسين المسجلين معاهم شغل.</p>';
+  else h+='<div class="tm-free">'+t.free.map(function(n){ return '<span>'+escHtml(n)+'</span>'; }).join('')+'</div>';
+  h+='</div>';
+  box.innerHTML=h;
+}
+function wipTeamOpen(){
+  wipEngClose(true);
+  wipTeamOn=true;
+  wipEl('wipTeam').style.display='flex';
+  wipTeamRender();
+  Promise.all([wipTeamLoad(),fetchEngineers()]).then(function(){ if(wipTeamOn) wipTeamRender(); });
+}
+function wipTeamClose(){ wipTeamOn=false; var m=wipEl('wipTeam'); if(m) m.style.display='none'; }
+function wipTeamPoll(){ if(wipTeamOn) wipTeamLoad().then(function(){ if(wipTeamOn) wipTeamRender(); }); }
+// an engineer who has never been on a drawing yet: register him here so he shows up as available
+async function wipTeamAdd(){
+  var inp=wipEl('wipTeamNew'), name=normalize(inp.value);
+  if(!name){ inp.focus(); return; }
+  if(name.indexOf(',')>=0){ showToast('الاسم مينفعش يكون فيه فاصلة ( , )',true); return; }
+  var t=wipTeamData(), lower=name.toLowerCase();
+  if(t.free.concat(t.working.map(function(e){return e.name;})).some(function(n){ return normalize(n).toLowerCase()===lower; })){ showToast('المهندس ده موجود بالفعل',true); return; }
+  engNames.push(name); inp.value=''; wipTeamRender();
+  var res;
+  try{ res=await supabase.from('engineers').insert({name:name}).select().single(); }
+  catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+  if(res.error&&!/duplicate|unique|23505/i.test(res.error.message||'')){
+    engNames=engNames.filter(function(n){ return n!==name; });
+    if(wipTeamOn) wipTeamRender();
+    showToast('خطأ — المهندس ماتضافش: '+res.error.message,true);
+  } else showToast('✓ '+name+' اتضاف لقايمة المهندسين');
 }
 
 // ── PDF (same header, signature and stamp as the other reports) ──
@@ -3180,7 +3327,7 @@ function genWipPdf(){
   var now=new Date(), ds=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
   var cols=[cfg.col1+' / '+cfg.col2+' / Floor','DWG No.','Content','Status','Engineer','Target Date'];
   var colg='<colgroup>'+[20,9,29,12,14,16].map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>';
-  var dayFg={ok:'#1E8449',soon:'#9A7D0A',late:'#C0392B',done:'#1A3A5C',none:'#7F8C8D'};
+  var dayFg={ok:'#1E8449',soon:'#9A7D0A',late:'#C0392B',done:'#1A3A5C',recv:'#D35400',none:'#7F8C8D'};
   var body='', total=0;
   secs.forEach(function(s){
     total+=s.rows.length;
@@ -3200,7 +3347,7 @@ function genWipPdf(){
           +'<td class="wrap" style="color:#555">'+escHtml(wn(d.content)||'-')+'</td>'
           +'<td><span style="white-space:nowrap;padding:1px 5px;border-radius:6px;font-size:7px;font-weight:700;background:'+sc.bg+';color:'+sc.fg+'">'+escHtml(st)+'</span></td>'
           +'<td class="wrap" style="font-weight:600">'+escHtml(wipEngList(d.by_eng).join(', ')||'-')+'</td>'
-          +'<td style="white-space:nowrap">'+(dy.c==='none'?'-':(d.target_date&&dy.c!=='done'?fd(d.target_date)+' · ':'')+'<span style="font-weight:700;color:'+dayFg[dy.c]+'">'+dy.t+'</span>')+'</td></tr>';
+          +'<td style="white-space:nowrap">'+(dy.c==='none'?'-':(d.target_date&&dy.c!=='done'&&dy.c!=='recv'?fd(d.target_date)+' · ':'')+'<span style="font-weight:700;color:'+dayFg[dy.c]+'">'+dy.t+'</span>')+'</td></tr>';
       });
       body+='</tbody></table>';
     });
