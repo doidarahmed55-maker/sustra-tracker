@@ -240,7 +240,7 @@ input:disabled{opacity:.4;cursor:not-allowed}
 .wip-t-h button:hover{background:#E1E6E6;color:#2D3748}
 .wip-tw{overflow-x:auto;border:1px solid #E8F0EF;border-radius:6px}
 .wip-tbl{table-layout:fixed;min-width:860px}
-.wip-tbl col.wc1{width:15%}.wip-tbl col.wc2{width:8%}.wip-tbl col.wc3{width:27%}.wip-tbl col.wc4{width:16%}.wip-tbl col.wc5{width:14%}.wip-tbl col.wc6{width:17%}.wip-tbl col.wc7{width:3%}
+.wip-tbl col.wc1{width:17%}.wip-tbl col.wc2{width:8%}.wip-tbl col.wc3{width:25%}.wip-tbl col.wc4{width:16%}.wip-tbl col.wc5{width:14%}.wip-tbl col.wc6{width:17%}.wip-tbl col.wc7{width:3%}
 .wip-tbl thead{position:static}
 .wip-tbl th{background:var(--c);overflow:hidden;text-overflow:ellipsis;padding:5px 6px}
 .wip-tbl td{padding:1px 3px}
@@ -486,6 +486,7 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .eng-sg button:hover,.eng-sg button.hi{background:#E8F5F3}
 .eng-sg button.sg-new{direction:rtl;justify-content:flex-start;gap:5px;color:#1A5276;font-size:11px;border-top:1px solid #EEF2F2;border-radius:0 0 5px 5px;margin-top:3px}
 .eng-sg button.sg-new:hover,.eng-sg button.sg-new.hi{background:#EBF3FA}
+.wip-sn{display:inline-block;min-width:24px;margin-right:6px;padding:1px 4px;border-radius:4px;background:#EEF4F3;color:var(--c,#0D5C52);font-weight:800;font-size:10px;text-align:center}
 </style>
 </head>
 <body>
@@ -831,6 +832,12 @@ User 2:
       </div>
     </div>
     <div class="fg"><div class="f s4"><label>Notes</label><input id="fNotes" placeholder="Optional"/></div></div>
+    <div class="sl">Task Dates <span dir="rtl" style="font-weight:400;text-transform:none;letter-spacing:0;color:#7F8C8D;font-size:10px">— بتتسجل لوحدها مع الـ Status (بدأ / استلمت من المهندس)، وتقدر تعدّلها من هنا</span></div>
+    <div class="fg">
+      <div class="f"><label>Start</label><input type="date" id="fStart"/></div>
+      <div class="f"><label>Target</label><input type="date" id="fTarget"/></div>
+      <div class="f"><label>Received from engineer</label><input type="date" id="fRecv"/></div>
+    </div>
     <div class="sl">Comment Rounds</div>
     <div class="rblk"><div class="rbhdr" onclick="togRnd(1)"><h3>Round 1</h3><span id="a1">&#9660;</span></div>
       <div id="rb1" class="rbbody" style="display:block">
@@ -1604,7 +1611,7 @@ var COLS=[
   {k:'type',lb:'Type',always:false},
   {k:'name',lb:'Board Name',always:true},
   {k:'content',lb:'Content',always:false},
-  {k:'del',lb:'Delivery',always:false},
+  {k:'del',lb:'Status',always:false},
   {k:'by_eng',lb:'By',always:false},
   {k:'r1',lb:'Round 1',always:false},
   {k:'r2',lb:'Round 2',always:false},
@@ -1737,6 +1744,9 @@ function goEdit(id){
   document.getElementById('fName').value   = d.name   || '';
   document.getElementById('fContent').value= d.content|| '';
   document.getElementById('fDel').value    = toInputDate(d.del);
+  document.getElementById('fStart').value  = wipIso(d.start_date);
+  document.getElementById('fTarget').value = wipIso(d.target_date);
+  document.getElementById('fRecv').value   = wipIso(d.received_date);
   document.getElementById('fStatus').value = d.status||'NOT STARTED';
   document.getElementById('fBy').value     = d.by_eng || '';
   setTimeout(refreshEngDatalist, 50);
@@ -1837,8 +1847,10 @@ function renderRegister(){
 //  FORM HELPERS
 // ══════════════════════════════════════════
 function clearF(){
-  var ids=['fNum','fPlot','fZone','fLevel','fName','fContent','fLink','fDel','fBy','fNotes',
+  var ids=['fNum','fPlot','fZone','fLevel','fName','fContent','fLink','fDel','fBy','fNotes','fStart','fTarget','fRecv',
            'fR1r','fR1p','fR2r','fR2p','fR3r','fR3p'];
+  document.getElementById('fTarget').disabled=wipTargetCol!==true;
+  document.getElementById('fStart').disabled=document.getElementById('fRecv').disabled=wipDatesCol!==true;
   for(var i=0;i<ids.length;i++) document.getElementById(ids[i]).value='';
   document.getElementById('fType').value='';
   if(document.getElementById('fStatus')) document.getElementById('fStatus').value='NOT STARTED';
@@ -1937,6 +1949,9 @@ async function saveDrw(){
     r3nc: document.getElementById('fR3nc').checked,
     updated_at: new Date().toISOString()
   };
+  // the task dates typed in the form (only the ones the tracker stores)
+  if(wipTargetCol===true) rec.target_date=document.getElementById('fTarget').value||null;
+  if(wipDatesCol===true){ rec.start_date=document.getElementById('fStart').value||null; rec.received_date=document.getElementById('fRecv').value||null; }
   if(!_old||wipStatus(_old)!==rec.status) wipStamp(_old||{},rec);   // start / received dates follow the status
 
   var btn=document.getElementById('saveBtn');
@@ -2223,7 +2238,7 @@ function buildTbl(subset,showPaid,sc){
   if(!sc||sc.type)    th+='<th class="gp">Type</th>';
   th+='<th class="gs">Board Name</th>';
   if(!sc||sc.content) th+='<th class="gp">Content</th>';
-  if(!sc||sc.del)     th+='<th class="gs">Delivery</th>';
+  if(!sc||sc.del)     th+='<th class="gs">Status</th>';
   if(!sc||sc.by_eng)  th+='<th class="gp">By</th>';
   if(!sc||sc.r1)      th+='<th class="g1">R1 Recv</th><th class="g1">R1 Reply</th><th class="g1">R1 Status</th>';
   if(!sc||sc.r2)      th+='<th class="g2">R2 Recv</th><th class="g2">R2 Reply</th><th class="g2">R2 Status</th>';
@@ -2401,7 +2416,7 @@ function doXlsReport(){
   html+='<body style="direction:ltr"><table style="direction:ltr">';
   html+='<tr><td colspan="'+NC+'" style="background:#2D3748;color:#fff;font-weight:700;font-size:14px;padding:10px">SUSTRA Drawing Tracker — '+ds+'</td></tr>';
   html+='<tr><th class="gi">#</th><th class="gi">Plot</th><th class="gi">Zone</th><th class="gi">Level</th><th class="gi">Type</th>';
-  html+='<th class="gi">Board Name</th><th class="gi">Content</th><th class="gi">Delivery</th><th class="gi">By</th>';
+  html+='<th class="gi">Board Name</th><th class="gi">Content</th><th class="gi">Status</th><th class="gi">By</th>';
   html+='<th class="gr1" colspan="3">Round 1</th><th class="gr2" colspan="3">Round 2</th><th class="gr3" colspan="3">Round 3</th>';
   html+='<th class="gp">Paid</th><th class="gi">Notes</th></tr>';
   html+='<tr><th class="gi">&nbsp;</th><th class="gi">&nbsp;</th><th class="gi">&nbsp;</th><th class="gi">&nbsp;</th><th class="gi">&nbsp;</th>';
@@ -2413,7 +2428,7 @@ function doXlsReport(){
   for(var i=0;i<s.length;i++){
     var d=s[i],rc=i%2===0?'even':'odd';
     var s1=rs2(d.r1r,d.r1p,d.r1nc),s2=rs2(d.r2r,d.r2p,d.r2nc),s3=rs2(d.r3r,d.r3p,d.r3nc),p=pv2(d.paid);
-    var delTxt=d.ns?'Not Sent Yet':(fd(d.del)||'-');
+    var delTxt=d.status||'NOT STARTED';       // Excel Report: the Status, like the page and the PDFs
     html+='<tr class="'+rc+'"><td class="num">'+(i+1)+'</td><td class="bld">'+(d.plot||'-')+'</td><td>'+(d.zone||'-')+'</td><td>'+(d.level||'-')+'</td><td>'+(d.type||'-')+'</td>';
     html+='<td class="bld" style="min-width:140px">'+(d.name||'-')+'</td><td style="min-width:120px;color:#555">'+(d.content||'-')+'</td>';
     html+='<td>'+delTxt+'</td><td class="bld">'+(d.by_eng||'-')+'</td>';
@@ -3130,7 +3145,7 @@ function wipRowHtml(d){
   var opts=WIP_STATUSES.slice(); if(opts.indexOf(st)<0) opts.push(st);
   var h='<tr data-id="'+escHtml(d.id)+'">';
   // Plot + Zone + Floor in one short code; the type is the card's own title
-  h+='<td class="ro" style="font-weight:600" title="'+escHtml([wn(d.plot),wn(d.zone),wn(d.level)].filter(Boolean).join(' › '))+'">'+escHtml(wipLoc(d)||'-')+'</td>';
+  h+='<td class="ro" style="font-weight:600" title="'+escHtml([wn(d.plot),wn(d.zone),wn(d.level)].filter(Boolean).join(' › '))+'"><span class="wip-sn" title="رقم اللوحة في التراكر (#)">'+(d.num||'-')+'</span>'+escHtml(wipLoc(d)||'-')+'</td>';
   h+='<td><input class="wip-in wip-name" data-f="name" value="'+escHtml(drwNo(d.name))+'" title="'+escHtml(wn(d.name))+'" autocomplete="off" spellcheck="false"/></td>';
   h+='<td><input class="wip-in" data-f="content" value="'+escHtml(wn(d.content))+'" title="'+escHtml(wn(d.content))+'" placeholder="+ content" autocomplete="off"/></td>';
   h+='<td><select class="wip-in wip-st" data-f="status" style="background:'+sc.bg+';color:'+sc.fg+'">';
@@ -3222,6 +3237,7 @@ function wipChips(secs){
 // ── light refresh: the same rows are on screen, only their values changed ──
 function wipPaintRow(tr,d,force){
   var a=force?null:document.activeElement, el, st, sc;
+  el=tr.querySelector('.wip-sn'); if(el) el.textContent=d.num||'-';      // the tracker number can change (re-numbering after a delete)
   el=tr.querySelector('.wip-name');
   if(el){ if(el!==a){ el.value=drwNo(d.name); el.classList.remove('open'); } el.title=wn(d.name); }
   el=tr.querySelector('[data-f="content"]'); if(el){ if(el!==a) el.value=wn(d.content); el.title=wn(d.content); }
@@ -4027,7 +4043,7 @@ function genWipPdf(){
       t.rows.forEach(function(d,i){
         var stt=wipStatus(d), sc=wipStColor(stt), dy=wipDates(d);
         body+='<tr style="background:'+(i%2===0?'#fff':'#F4F9F8')+'">'
-          +'<td style="font-weight:600">'+escHtml(wipLoc(d)||'-')+'</td>'
+          +'<td style="font-weight:600"><span style="display:inline-block;min-width:18px;margin-right:5px;color:#0D5C52;font-weight:700">'+(d.num||'-')+'</span>'+escHtml(wipLoc(d)||'-')+'</td>'
           +'<td style="font-weight:700;color:#0D5C52">'+escHtml(drwNo(d.name))+'</td>'
           +'<td class="wrap" style="color:#555">'+escHtml(wn(d.content)||'-')+'</td>'
           +'<td><span style="padding:1px 5px;border-radius:6px;font-size:7px;font-weight:700;background:'+sc.bg+';color:'+sc.fg+'">'+escHtml(stt)+'</span></td>'
