@@ -486,7 +486,16 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .eng-sg button:hover,.eng-sg button.hi{background:#E8F5F3}
 .eng-sg button.sg-new{direction:rtl;justify-content:flex-start;gap:5px;color:#1A5276;font-size:11px;border-top:1px solid #EEF2F2;border-radius:0 0 5px 5px;margin-top:3px}
 .eng-sg button.sg-new:hover,.eng-sg button.sg-new.hi{background:#EBF3FA}
-.wip-sn{display:inline-block;min-width:24px;margin-right:6px;padding:1px 4px;border-radius:4px;background:#EEF4F3;color:var(--c,#0D5C52);font-weight:800;font-size:10px;text-align:center}
+.wip-sn{display:inline-flex;align-items:center;gap:3px;min-width:34px;margin-right:6px;padding:2px 5px 2px 3px;border-radius:4px;background:#EEF4F3;color:var(--c,#0D5C52);font-weight:800;font-size:10px;cursor:grab;user-select:none;-webkit-user-select:none}
+.wip-sn::before{content:"\22EE\22EE";font-size:9px;letter-spacing:-3px;margin-right:3px;color:#9AA5B4;font-weight:400}
+.wip-sn:hover{background:var(--c,#0D5C52);color:#fff}
+.wip-sn:hover::before{color:#fff}
+.wip-sn:active{cursor:grabbing}
+.wip-tbl tr.dragging td{opacity:.35}
+.wip-tbl tr.drop-a td{box-shadow:inset 0 3px 0 var(--c,#0D5C52)}
+.wip-tbl tr.drop-b td{box-shadow:inset 0 -3px 0 var(--c,#0D5C52)}
+#wipMenu .mv{display:flex;gap:4px;border-bottom:1px solid #EEF2F2;padding-bottom:4px;margin-bottom:3px}
+#wipMenu .mv button{flex:1;text-align:center;font-size:11px;padding:7px 4px}
 </style>
 </head>
 <body>
@@ -3140,12 +3149,12 @@ function wipHead(){
   return head+'</colgroup><thead><tr><th>'+escHtml(cfg.col1+' / '+cfg.col2+' / Floor')+'</th><th>DWG No.</th>'
     +'<th>Content</th><th>Status</th><th>Engineer</th><th>Start → Target</th><th class="wip-mh" aria-label="options"></th></tr></thead>';
 }
-function wipRowHtml(d){
+function wipRowHtml(d,i){
   var st=wipStatus(d), sc=wipStColor(st);
   var opts=WIP_STATUSES.slice(); if(opts.indexOf(st)<0) opts.push(st);
   var h='<tr data-id="'+escHtml(d.id)+'">';
   // Plot + Zone + Floor in one short code; the type is the card's own title
-  h+='<td class="ro" style="font-weight:600" title="'+escHtml([wn(d.plot),wn(d.zone),wn(d.level)].filter(Boolean).join(' › '))+'"><span class="wip-sn" title="رقم اللوحة في التراكر (#)">'+(d.num||'-')+'</span>'+escHtml(wipLoc(d)||'-')+'</td>';
+  h+='<td class="ro" style="font-weight:600" title="'+escHtml([wn(d.plot),wn(d.zone),wn(d.level)].filter(Boolean).join(' › '))+'"><span class="wip-sn" draggable="true" title="اسحب لفوق أو لتحت عشان تغيّر ترتيب اللوحة">'+((i||0)+1)+'</span>'+escHtml(wipLoc(d)||'-')+'</td>';
   h+='<td><input class="wip-in wip-name" data-f="name" value="'+escHtml(drwNo(d.name))+'" title="'+escHtml(wn(d.name))+'" autocomplete="off" spellcheck="false"/></td>';
   h+='<td><input class="wip-in" data-f="content" value="'+escHtml(wn(d.content))+'" title="'+escHtml(wn(d.content))+'" placeholder="+ content" autocomplete="off"/></td>';
   h+='<td><select class="wip-in wip-st" data-f="status" style="background:'+sc.bg+';color:'+sc.fg+'">';
@@ -3237,7 +3246,7 @@ function wipChips(secs){
 // ── light refresh: the same rows are on screen, only their values changed ──
 function wipPaintRow(tr,d,force){
   var a=force?null:document.activeElement, el, st, sc;
-  el=tr.querySelector('.wip-sn'); if(el) el.textContent=d.num||'-';      // the tracker number can change (re-numbering after a delete)
+  el=tr.querySelector('.wip-sn'); if(el) el.textContent=tr.sectionRowIndex+1;      // plain 1, 2, 3 … down the table
   el=tr.querySelector('.wip-name');
   if(el){ if(el!==a){ el.value=drwNo(d.name); el.classList.remove('open'); } el.title=wn(d.name); }
   el=tr.querySelector('[data-f="content"]'); if(el){ if(el!==a) el.value=wn(d.content); el.title=wn(d.content); }
@@ -3278,7 +3287,7 @@ function wipSync(secs){
   wipSummary(secs);
 }
 function wipEditing(){
-  if(wipPop||wipDp||wipMn) return true;
+  if(wipPop||wipDp||wipMn||wipDrag||wipOrdering) return true;
   var a=document.activeElement, b=wipEl('wipBody');
   return !!(a&&b&&b.contains(a)&&a.tagName==='INPUT');
 }
@@ -4043,7 +4052,7 @@ function genWipPdf(){
       t.rows.forEach(function(d,i){
         var stt=wipStatus(d), sc=wipStColor(stt), dy=wipDates(d);
         body+='<tr style="background:'+(i%2===0?'#fff':'#F4F9F8')+'">'
-          +'<td style="font-weight:600"><span style="display:inline-block;min-width:18px;margin-right:5px;color:#0D5C52;font-weight:700">'+(d.num||'-')+'</span>'+escHtml(wipLoc(d)||'-')+'</td>'
+          +'<td style="font-weight:600"><span style="display:inline-block;min-width:18px;margin-right:5px;color:#0D5C52;font-weight:700">'+(i+1)+'</span>'+escHtml(wipLoc(d)||'-')+'</td>'
           +'<td style="font-weight:700;color:#0D5C52">'+escHtml(drwNo(d.name))+'</td>'
           +'<td class="wrap" style="color:#555">'+escHtml(wn(d.content)||'-')+'</td>'
           +'<td><span style="padding:1px 5px;border-radius:6px;font-size:7px;font-weight:700;background:'+sc.bg+';color:'+sc.fg+'">'+escHtml(stt)+'</span></td>'
@@ -4088,6 +4097,7 @@ function wipInit(){
     var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
     if(f==='status') wipCommit(el);
   });
+  wipDragInit(b);
   b.addEventListener('keydown',function(e){
     var el=e.target; if(el.tagName!=='INPUT') return;
     el._fresh=false;
@@ -4566,7 +4576,8 @@ async function wipDelete(id){
 function wipMenuOpen(btn,id){
   wipMenuClose(); wipEngClose(true); wipDateClose(true);
   var el=document.createElement('div'); el.id='wipMenu';
-  el.innerHTML='<button type="button" data-a="edit">&#9998; افتح اللوحة كاملة<small>كل البيانات: النوع، الدور، اللينك، الكومنتات…</small></button>'
+  el.innerHTML='<div class="mv"><button type="button" data-a="up">&#9650; حرّك لفوق</button><button type="button" data-a="down">&#9660; حرّك لتحت</button></div>'
+    +'<button type="button" data-a="edit">&#9998; افتح اللوحة كاملة<small>كل البيانات: النوع، الدور، اللينك، الكومنتات…</small></button>'
     +'<button type="button" data-a="dup">&#10697; كرّر اللوحة<small>سطر جديد بنفس المحتوى والمهندس، برقم اللوحة اللي بعده</small></button>'
     +'<button type="button" data-a="del" class="dz">&#128465; امسح اللوحة</button>';
   document.body.appendChild(el);
@@ -4577,7 +4588,8 @@ function wipMenuOpen(btn,id){
     var b=e.target.closest?e.target.closest('button[data-a]'):null; if(!b||!wipMn) return;
     var a=b.getAttribute('data-a'), did=wipMn.id, tr=wipTr(did), sec=tr?tr.closest('.wip-sec'):null, k=sec?sec.getAttribute('data-k'):null;
     wipMenuClose();
-    if(a==='edit') goEdit(did);
+    if(a==='up'||a==='down') wipMove(did,a==='up'?-1:1);
+    else if(a==='edit') goEdit(did);
     else if(a==='dup'){ if(k!==null) wipAddRow(k,wipOpen[k],did); }
     else wipDelete(did);
   });
@@ -4674,6 +4686,100 @@ function wipHiddenHtml(s){
   return '<span>أنواع مخفية:</span>'+s.hidden.map(function(t){
     return '<button type="button" class="zh" data-t="'+escHtml(t.tk)+'" title="اضغط عشان يرجع يظهر">'+escHtml(t.type||'No Type')+' <i>'+t.rows.length+'</i> <b>&#8617; اظهر</b></button>';
   }).join('');
+}
+
+// ══════════════════════════════════════════
+//  ORDER OF THE DRAWINGS in a type table — drag a line up / down (or use the ⋮ menu)
+// ══════════════════════════════════════════
+// The order is the tracker's own numbering: the lines of the table keep the same set of tracker numbers and
+// share them out again in the new order, so every browser, the register and the print-outs follow.
+var wipDrag=null;          // {id, tr, body, over, after} while a line is being dragged
+var wipOrdering=false;     // a new order is being saved
+function wipDragMarks(){ if(!wipDrag) return; Array.prototype.forEach.call(wipDrag.body.children,function(x){ x.classList.remove('drop-a','drop-b'); }); }
+function wipDragEnd(){
+  if(!wipDrag) return;
+  wipDragMarks(); wipDrag.tr.classList.remove('dragging');
+  wipDrag=null;
+  setTimeout(wipTick,0);
+}
+function wipDragInit(b){
+  b.addEventListener('dragstart',function(e){
+    var h=e.target&&e.target.closest?e.target.closest('.wip-sn'):null, tr=h?h.closest('tr[data-id]'):null;
+    if(!tr){ return; }
+    if(wipOrdering){ e.preventDefault(); return; }
+    var a=document.activeElement; if(a&&a.blur&&b.contains(a)) a.blur();
+    wipEngClose(true); wipDateClose(true); wipMenuClose();
+    wipDrag={id:tr.getAttribute('data-id'),tr:tr,body:tr.parentNode,over:null,after:false};
+    tr.classList.add('dragging');
+    try{ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',wipDrag.id); if(e.dataTransfer.setDragImage) e.dataTransfer.setDragImage(tr,14,12); }catch(x){}
+  });
+  b.addEventListener('dragover',function(e){
+    if(!wipDrag) return;
+    var tr=e.target&&e.target.closest?e.target.closest('tr[data-id]'):null;
+    if(!tr||tr.parentNode!==wipDrag.body) return;            // only inside its own table
+    e.preventDefault(); try{ e.dataTransfer.dropEffect='move'; }catch(x){}
+    var rc=tr.getBoundingClientRect(), after=e.clientY>rc.top+rc.height/2;
+    if(wipDrag.over!==tr||wipDrag.after!==after){
+      wipDragMarks(); wipDrag.over=tr; wipDrag.after=after;
+      if(tr!==wipDrag.tr) tr.classList.add(after?'drop-b':'drop-a');
+    }
+  });
+  b.addEventListener('drop',function(e){
+    if(!wipDrag) return;
+    e.preventDefault();
+    var d=wipDrag, sec=d.tr.closest('.wip-sec'), key=sec?sec.getAttribute('data-k'):null;
+    wipDragEnd();
+    if(!d.over||d.over===d.tr||key===null) return;
+    var ids=Array.prototype.map.call(d.body.children,function(x){ return x.getAttribute('data-id'); }).filter(function(x){ return x!==d.id; });
+    var at=ids.indexOf(d.over.getAttribute('data-id'))+(d.after?1:0);
+    ids.splice(at,0,d.id);
+    wipReorder(key,ids);
+  });
+  b.addEventListener('dragend',wipDragEnd);
+}
+// one step up / down (the ⋮ menu — also the way to do it on a touch screen)
+function wipMove(id,dir){
+  var tr=wipTr(id), sec=tr?tr.closest('.wip-sec'):null, key=sec?sec.getAttribute('data-k'):null; if(key===null) return;
+  var ids=Array.prototype.map.call(tr.parentNode.children,function(x){ return x.getAttribute('data-id'); }), i=ids.indexOf(String(id)), j=i+dir;
+  if(j<0||j>=ids.length){ showToast(dir<0?'ده أول سطر في الجدول':'ده آخر سطر في الجدول'); return; }
+  ids.splice(i,1); ids.splice(j,0,String(id));
+  wipReorder(key,ids,id);
+}
+// save a new order of the open table of a Plot / Zone / Floor (ids = its lines, top to bottom)
+async function wipReorder(key,ids,keepId){
+  if(wipOrdering) return;
+  var s=wipSecOf(key), t=s?wipOpenTable(s):null; if(!t) return;
+  var by={}; t.rows.forEach(function(d){ by[String(d.id)]=d; });
+  if(ids.length!==t.rows.length||ids.some(function(x){ return !by[x]; })){ renderWip(); return; }      // the table changed meanwhile
+  wipOrdering=true;
+  var nums=t.rows.map(function(d){ return d.num; }), uniq={};
+  // every line needs its own tracker number to trade places with
+  if(nums.some(function(n){ var bad=!n||uniq[n]; uniq[n]=1; return bad; })){ try{ await renum(); }catch(e){} nums=t.rows.map(function(d){ return d.num; }); }
+  nums.sort(function(a,b){ return a-b; });
+  var ch=[];
+  ids.forEach(function(x,i){ var d=by[x]; if(d.num!==nums[i]) ch.push({d:d,from:d.num,to:nums[i]}); });
+  if(!ch.length){ wipOrdering=false; return; }
+  dataEpoch++; wipPending++;
+  ch.forEach(function(c){ c.d.num=c.to; });
+  renderWip(); wipRegister();
+  setSyncStatus('loading');
+  var failed=0, now=new Date().toISOString();
+  for(var i=0;i<ch.length;i+=8){
+    await Promise.all(ch.slice(i,i+8).map(function(c){
+      return supabase.from('drawings').update({num:c.to,updated_at:now}).eq('id',c.d.id).then(function(res){ if(res.error||!res.data||!res.data.length) failed++; },function(){ failed++; });
+    }));
+  }
+  wipPending--; dataEpoch++;
+  if(failed){
+    // some numbers were written and some were not: take the truth back from the tracker
+    ch.forEach(function(c){ c.d.num=c.from; });
+    try{ await fetchDrawings(); await renum(); }catch(e){}
+    showToast('خطأ — الترتيب الجديد ماتحفظش، جرّب تاني',true);
+  } else { setSyncStatus('on'); showToast('✓ الترتيب اتحفظ'); }
+  wipOrdering=false;
+  wipRegister(); renderWip(); wipTeamRender(); wipDashRender();
+  if(typeof engOnData==='function') engOnData();
+  if(keepId!==undefined){ var tr=wipTr(keepId); if(tr&&tr.scrollIntoView) tr.scrollIntoView({block:'nearest'}); }
 }
 
 // ══════════════════════════════════════════
