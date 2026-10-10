@@ -46,7 +46,7 @@ body{font-family:Arial,sans-serif;background:#F0F4F3;color:#1C2526}
 .setup-err{color:#C0392B;font-size:11px;font-weight:600;margin-top:8px;min-height:16px}
 
 /* ── HEADER ── */
-#vList,#vForm,#vPdf,#vEng,#vPlot,#vUpd,#vDrwList,#vWip{display:none}
+#vList,#vForm,#vPdf,#vEng,#vPlot,#vUpd,#vDrwList{display:none}
 .hdr{background:#2D3748;display:flex;align-items:center;gap:12px;padding:10px 20px;flex-wrap:wrap}
 .hdr-logos{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
 .hdr-logos img.sl{height:44px;width:44px;object-fit:contain;border-radius:5px;background:#fff;padding:2px}
@@ -171,22 +171,21 @@ input:disabled{opacity:.4;cursor:not-allowed}
 /* ── CONFIG BANNER ── */
 #configBanner{background:#7D6608;color:#fff;padding:10px 20px;font-size:11px;font-weight:600;display:none;align-items:center;gap:10px}
 
-/* ── TABS ── */
-.tabs{background:#fff;border-bottom:1px solid #D5E5E2;padding:0 20px;display:flex;gap:4px;flex-wrap:wrap}
-.tab{background:none;border:none;border-bottom:3px solid transparent;padding:11px 16px 9px;font-size:12px;font-weight:700;color:#7F8C8D;cursor:pointer;font-family:inherit;white-space:nowrap}
-.tab:hover{color:#2D3748}
-.tab.active{color:#0D5C52;border-bottom-color:#1A7A6E}
-.tab-n{display:inline-block;background:#1A7A6E;color:#fff;border-radius:9px;padding:1px 7px;font-size:10px;margin-left:5px}
+/* ── SECTION NAV (one page: follow-up → engineers → dashboards → register) ── */
+.snav{background:#fff;border-bottom:1px solid #D5E5E2;padding:0 20px;display:flex;gap:4px;flex-wrap:wrap;position:sticky;top:0;z-index:50}
+.snav button{background:none;border:none;border-bottom:3px solid transparent;padding:10px 14px 8px;font-size:12px;font-weight:700;color:#7F8C8D;cursor:pointer;font-family:inherit;white-space:nowrap}
+.snav button:hover{color:#0D5C52;border-bottom-color:#1A7A6E}
+.psec{scroll-margin-top:50px;margin-bottom:26px}
+.psec-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 2px 10px}
+.psec-h h2{font-size:15px;font-weight:800;color:#2D3748;margin:0}
+.psec-h small{font-size:10px;color:#7F8C8D}
+.psec-h .sp{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 
 /* ── WORK IN PROGRESS ── */
-.wip-top{background:#fff;border-radius:8px;margin-bottom:18px}
+.wip-top{background:#fff;border-radius:8px;margin-bottom:14px}
 .wip-top .chdr{border-radius:8px 8px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .wip-hint{font-size:10px;color:#9AA5B4}
-.wip-acts{margin-left:auto;display:flex;gap:6px;align-items:center}
-.wip-view{display:flex;border:1.5px solid rgba(255,255,255,.25);border-radius:6px;overflow:hidden;margin-right:4px}
-.wip-view button{background:transparent;color:#9AA5B4;border:none;padding:6px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
-.wip-view button:hover{color:#fff}
-.wip-view button.on{background:#1A7A6E;color:#fff}
+.wip-acts{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .wip-bar{display:flex;gap:11px;align-items:flex-end;flex-wrap:wrap;padding:14px 16px}
 .wip-bar .f{flex:1;min-width:150px;max-width:280px}
 .wip-chips{display:flex;gap:7px;flex-wrap:wrap;padding:0 16px 14px}
@@ -196,25 +195,52 @@ input:disabled{opacity:.4;cursor:not-allowed}
 .wip-chip .n.zero{background:#FADBD8;color:#C0392B}
 .wip-chip button{border:none;background:#FADBD8;color:#C0392B;border-radius:4px;width:20px;height:20px;cursor:pointer;font-size:11px;font-weight:700;line-height:1;font-family:inherit}
 .wip-chip button:hover{background:#C0392B;color:#fff}
-.wip-empty{background:#fff;border-radius:8px;padding:44px 20px;text-align:center;color:#9AA5B4;font-size:12px;line-height:1.9}
-.wip-sec{background:#fff;border-radius:8px;margin-bottom:18px;border-left:6px solid var(--c);overflow:hidden}
-.wip-sec-h{background:var(--c);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700}
-.wip-sec-h .sep{opacity:.5;font-weight:400}
-.wip-cnt{margin-left:auto;font-size:10px;font-weight:600;opacity:.9}
-.wip-tabs{padding:4px 2px 10px}
-.wip-grid .wip-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
-.wip-grid .wip-t:only-child{grid-column:1/-1}
-@media(max-width:1150px){.wip-grid .wip-tabs{grid-template-columns:minmax(0,1fr)}}
-.wip-t{padding:8px 12px 2px}
+.wip-sum{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 14px}
+.wip-sum:empty{display:none}
+.sum-t{border-radius:8px;padding:7px 14px;min-width:96px;display:flex;flex-direction:column;gap:1px}
+.sum-t b{font-size:20px;font-weight:800;line-height:1.1}
+.sum-t span{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
+.sum-t.tot{background:#2D3748;color:#fff}
+.wip-empty{background:#fff;border-radius:8px;padding:34px 20px;text-align:center;color:#9AA5B4;font-size:12px;line-height:1.9}
+
+/* one followed Plot / Zone / Floor */
+.wip-sec{background:#fff;border-radius:8px;margin-bottom:14px;border-left:6px solid var(--c);overflow:hidden}
+.wip-sec-h{background:var(--c);color:#fff;padding:9px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;font-weight:800;letter-spacing:.2px}
+.wip-cnt{margin-left:auto;font-size:10px;font-weight:600;opacity:.92}
+.wip-pct{background:rgba(255,255,255,.18);border-radius:10px;padding:2px 9px;font-size:11px;font-weight:800}
+
+/* one card per type */
+.zc-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;padding:12px 14px}
+.zc{text-align:left;background:#FAFCFC;border:1.5px solid #E1EAE8;border-radius:10px;padding:10px 12px;cursor:pointer;font-family:inherit;color:#1C2526;display:flex;flex-direction:column;gap:7px}
+.zc:hover{border-color:var(--c);background:#fff}
+.zc.on{border-color:var(--c);background:#fff;box-shadow:0 0 0 2px var(--c) inset}
+.zc-h{display:flex;align-items:baseline;gap:7px}
+.zc-h b{font-size:12px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:#2D3748}
+.zc-h i{font-style:normal;font-size:10px;color:#7F8C8D}
+.zc-h em{margin-left:auto;font-style:normal;font-size:20px;font-weight:800;color:#2D3748;line-height:1}
+.zc-h em small{font-size:11px;font-weight:700;color:#7F8C8D}
+/* progress track: delivered · received · in progress · hold · (rest = not started) */
+.zc-bar{display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden;background:#fff}
+.zc-bar span{min-width:3px}
+.zc-bar .g-done{background:#1E8449}.zc-bar .g-recv{background:#D35400}.zc-bar .g-prog{background:#B7950B}.zc-bar .g-hold{background:#C0392B}.zc-bar .g-none{background:#E1E6E6}
+.zc-st{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;font-size:10px;color:#52514E}
+.zc-st span{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.zc-st span b{margin-left:auto;font-weight:800;color:#1C2526}
+.zc-st i{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.zc-st .g-done{background:#1E8449}.zc-st .g-recv{background:#D35400}.zc-st .g-prog{background:#B7950B}.zc-st .g-hold{background:#C0392B}.zc-st .g-none{background:#C9D0D0}
+.zc-more{font-size:9px;color:#9AA5B4;text-align:right}
+.zc.on .zc-more{color:var(--c);font-weight:700}
+
+/* the table of the open card */
+.zc-open:empty{display:none}
+.zc-open{padding:0 14px 14px}
 .wip-t-h{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--c);margin-bottom:6px;display:flex;align-items:center;gap:7px}
 .wip-t-h span{background:var(--c);color:#fff;border-radius:9px;padding:1px 7px;font-size:10px;letter-spacing:0}
+.wip-t-h button{margin-left:auto;border:none;background:#F1F4F4;color:#7F8C8D;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;text-transform:none;letter-spacing:0}
+.wip-t-h button:hover{background:#E1E6E6;color:#2D3748}
 .wip-tw{overflow-x:auto;border:1px solid #E8F0EF;border-radius:6px}
-.wip-tbl{table-layout:fixed;min-width:700px}
-.wip-grid .wip-tbl{min-width:470px}
-.wip-tbl col.wc1{width:17%}.wip-tbl col.wc2{width:9%}.wip-tbl col.wc3{width:32%}.wip-tbl col.wc4{width:13%}.wip-tbl col.wc5{width:15%}.wip-tbl col.wc6{width:14%}
-/* Grid: the location is already in the coloured header above, so its column is dropped to give Content room */
-.wip-grid .wip-tbl col.wc1,.wip-grid .wip-tbl th:first-child,.wip-grid .wip-tbl td:first-child{display:none}
-.wip-grid .wip-tbl col.wc2{width:12%}.wip-grid .wip-tbl col.wc3{width:33%}.wip-grid .wip-tbl col.wc4{width:21%}.wip-grid .wip-tbl col.wc5{width:16%}.wip-grid .wip-tbl col.wc6{width:18%}
+.wip-tbl{table-layout:fixed;min-width:860px}
+.wip-tbl col.wc1{width:15%}.wip-tbl col.wc2{width:8%}.wip-tbl col.wc3{width:30%}.wip-tbl col.wc4{width:16%}.wip-tbl col.wc5{width:14%}.wip-tbl col.wc6{width:17%}
 .wip-tbl thead{position:static}
 .wip-tbl th{background:var(--c);overflow:hidden;text-overflow:ellipsis;padding:5px 6px}
 .wip-tbl td{padding:1px 3px}
@@ -231,45 +257,45 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .wip-eng{width:100%;min-height:24px;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:3px 4px;cursor:pointer;font-family:inherit;font-size:10px;color:#9AA5B4;white-space:normal;line-height:1.5}
 .wip-eng:hover,.wip-eng.on{border-color:#1A7A6E;background:#fff}
 .wip-eng b{display:inline-block;background:#E8F5F3;color:#0D5C52;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin:1px}
+/* dates cell: start → target · days left, all in one badge */
 .wip-dbtn{width:100%;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:5px;padding:3px 2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wip-dbtn:hover{border-color:#D5E5E2;background:#fff}
-.wip-dbtn:disabled{cursor:not-allowed;opacity:.55}
-.wip-tg input{display:none}
-.wip-tg.ed input{display:block}
-.wip-tg.ed .wip-dbtn{display:none}
+.wip-dbtn:hover,.wip-dbtn.on{border-color:#1A7A6E;background:#fff}
 .wip-d{display:inline-block;padding:2px 8px;border-radius:10px}
-.wip-d.ok{background:#D5F5E3;color:#1E8449}.wip-d.soon{background:#FEF9E7;color:#9A7D0A}.wip-d.late{background:#FADBD8;color:#C0392B}.wip-d.done{background:#EAF2FF;color:#1A3A5C}.wip-d.recv{background:#FDEBD0;color:#D35400}.wip-d.none{color:#9AA5B4;font-weight:400;padding-left:4px}
-#wipPop{position:absolute;z-index:500;background:#fff;border:1.5px solid #1A7A6E;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:8px;min-width:230px;max-height:320px;overflow-y:auto}
+.wip-d.ok{background:#D5F5E3;color:#1E8449}.wip-d.soon{background:#FEF9E7;color:#9A7D0A}.wip-d.late{background:#FADBD8;color:#C0392B}.wip-d.done{background:#EAF2FF;color:#1A3A5C}.wip-d.recv{background:#FDEBD0;color:#D35400}.wip-d.plain{background:#EEF2F2;color:#52514E}.wip-d.none{color:#9AA5B4;font-weight:400;padding-left:4px}
+
+/* pop-overs: engineer picker and dates */
+#wipPop,#wipDatePop{position:absolute;z-index:500;background:#fff;border:1.5px solid #1A7A6E;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:8px;min-width:230px;max-height:320px;overflow-y:auto}
 #wipPop label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:#2D3748;text-transform:none;letter-spacing:0;padding:6px 7px;border-radius:5px;cursor:pointer;margin:0}
 #wipPop label:hover{background:#E8F5F3}
 #wipPop input[type=checkbox]{width:14px;height:14px;accent-color:#1A7A6E;flex-shrink:0;padding:0}
 #wipPop .pop-new{display:flex;gap:6px;align-items:center;border-top:1px solid #E8F0EF;margin-top:6px;padding-top:8px}
 #wipPop .pop-new input{flex:1;min-width:0;padding:5px 8px;font-size:11px}
 #wipPop p{font-size:11px;color:#9AA5B4;padding:8px}
-#wipPop .pop-foot{margin-top:8px;text-align:right}
-.wip-setup{background:#FEF9E7;border:1.5px solid #F0DFA0;border-radius:8px;padding:14px 16px;margin-bottom:18px;font-size:12px;color:#7D6608;direction:rtl}
+.pop-foot{margin-top:8px;text-align:right}
+#wipDatePop{padding:12px;min-width:250px;max-height:none}
+#wipDatePop .dp-r{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#wipDatePop .dp-r label{width:92px;margin:0;font-size:10px}
+#wipDatePop .dp-r input{flex:1;padding:6px 8px;font-size:12px}
+#wipDatePop .dp-r small{font-size:9px;color:#9AA5B4}
+#wipDatePop .dp-n{font-size:10px;color:#7F8C8D;line-height:1.6;direction:rtl;margin-bottom:4px}
+
+.wip-setup{background:#FEF9E7;border:1.5px solid #F0DFA0;border-radius:8px;padding:14px 16px;margin-bottom:14px;font-size:12px;color:#7D6608;direction:rtl}
 .wip-setup p{margin:6px 0 10px;color:#555;line-height:1.7}
 .wip-setup pre{background:#fff;border:1px solid #F0DFA0;border-radius:6px;padding:10px;font-size:10px;line-height:1.55;color:#1A3A5C;white-space:pre-wrap;text-align:left;margin-bottom:8px}
-.wip-tbl input:disabled{cursor:not-allowed}
-#wipTeam{position:fixed;inset:0;z-index:700;background:rgba(29,37,38,.6);display:none;align-items:flex-start;justify-content:center;padding:40px 14px;overflow-y:auto}
-.tm-box{background:#F0F4F3;border-radius:10px;width:100%;max-width:1100px;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
-.tm-top{background:#2D3748;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.tm-top h2{font-size:14px;font-weight:700;margin:0}
-.tm-top small{font-size:10px;color:#9AA5B4}
-.tm-x{margin-left:auto;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:13px;font-family:inherit}
-.tm-add{background:#fff;padding:10px 16px;display:flex;gap:8px;align-items:center;border-bottom:1px solid #D5E5E2;flex-wrap:wrap}
-.tm-add input{max-width:300px;padding:7px 10px}
-.tm-add span{font-size:10px;color:#7F8C8D}
-#wipTeamBody{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:14px;padding:14px;align-items:start}
-@media(max-width:800px){#wipTeamBody{grid-template-columns:minmax(0,1fr)}}
-.tm-h{font-size:12px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:7px}
-.tm-h.busy{color:#B7950B}.tm-h.free{color:#1E8449}
-.tm-h span{background:currentColor;border-radius:9px;padding:1px 0;font-size:10px;min-width:22px;text-align:center}
-.tm-h.busy span,.tm-h.free span{-webkit-text-fill-color:#fff}
-.tm-none{font-size:11px;color:#9AA5B4;background:#fff;border-radius:8px;padding:14px}
-.tm-card{background:#fff;border-radius:8px;border-left:5px solid #B7950B;padding:10px 12px;margin-bottom:9px}
-.tm-name{font-size:13px;font-weight:800;color:#2D3748;display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.tm-name span{background:#FEF9E7;color:#B7950B;border-radius:9px;padding:1px 8px;font-size:10px;font-weight:700}
+
+/* ── ENGINEERS ── */
+.tm-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.tm-tools input{background:#fff;padding:9px 12px;font-size:13px;border-radius:8px}
+#wipTeamQ{flex:2;min-width:220px;max-width:520px}
+#wipTeamNew{flex:1;min-width:170px;max-width:260px}
+.tm-h{font-size:12px;font-weight:800;margin:4px 0 8px;display:flex;align-items:center;gap:7px;color:#2D3748}
+.tm-h span{background:#2D3748;color:#fff;border-radius:9px;padding:1px 8px;font-size:10px}
+.tm-none{font-size:11px;color:#9AA5B4;background:#fff;border-radius:8px;padding:14px;margin-bottom:10px}
+.tm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;align-items:start;margin-bottom:14px}
+.tm-card{background:#fff;border-radius:10px;border-top:4px solid #B7950B;padding:10px 12px}
+.tm-name{font-size:13px;font-weight:800;color:#2D3748;display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.tm-name span{background:#FEF9E7;color:#8A6D00;border-radius:9px;padding:1px 8px;font-size:10px;font-weight:700}
+.tm-name small{font-size:10px;font-weight:600;color:#C0392B}
 .tm-g{border-top:1px solid #E8F0EF;padding:6px 0 2px}
 .tm-gh{font-size:11px;color:#2D3748;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .tm-gh i{font-style:normal;background:#1A3A5C;color:#fff;border-radius:4px;padding:1px 6px;font-size:9px;font-weight:700}
@@ -279,26 +305,83 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .tm-dr{display:flex;gap:8px;align-items:baseline}
 .tm-dr em{font-style:normal;font-size:11px;color:#555;min-width:0}
 .tm-nos span{background:#E8F5F3;color:#0D5C52;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;cursor:default;flex-shrink:0}
-.tm-free{display:flex;flex-wrap:wrap;gap:7px}
+.tm-free{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
 .tm-free span{background:#fff;border:1.5px solid #A9DFBF;border-left:5px solid #1E8449;border-radius:6px;padding:5px 6px 5px 11px;font-size:12px;font-weight:700;color:#2D3748;display:inline-flex;align-items:center;gap:8px}
 .tm-rm{border:none;background:#F4F6F6;color:#9AA5B4;border-radius:4px;width:20px;height:20px;cursor:pointer;font-size:10px;font-weight:700;line-height:1;font-family:inherit}
 .tm-rm:hover{background:#C0392B;color:#fff}
-.tm-name small{font-size:10px;font-weight:600;color:#C0392B}
-.tm-gone{margin-top:14px}
+.tm-gone{margin-top:8px}
 .tm-gone-h{background:none;border:none;color:#7F8C8D;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;padding:4px 0}
 .tm-gone-h:hover{color:#2D3748}
 .tm-gone-l{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .tm-gone-l span{background:#F4F6F6;border:1.5px solid #E0E4E4;border-radius:6px;padding:4px 5px 4px 10px;font-size:11px;font-weight:600;color:#7F8C8D;display:inline-flex;align-items:center;gap:8px}
 .tm-back{border:none;background:#fff;color:#1A7A6E;border-radius:4px;padding:2px 7px;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit}
 .tm-back:hover{background:#1A7A6E;color:#fff}
-.tm-search{padding:12px 14px 0}
-.tm-search input{width:100%;padding:9px 12px;font-size:13px;border-radius:8px;background:#fff}
-.wip-sum{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 14px}
-.wip-sum:empty{display:none}
-.sum-t{border-radius:8px;padding:7px 14px;min-width:104px;display:flex;flex-direction:column;gap:1px}
-.sum-t b{font-size:20px;font-weight:800;line-height:1.1}
-.sum-t span{font-size:9px;font-weight:700;letter-spacing:.7px;text-transform:uppercase}
-.sum-t.tot{background:#2D3748;color:#fff}
+
+/* ── DASHBOARDS ── */
+.viz{--v-surface:#fff;--v-ink:#0B0B0B;--v-ink2:#52514E;--v-mute:#898781;--v-grid:#E1E0D9;--v-one:#1A7A6E;--v-other:#A3A19A;
+  --t1:#2a78d6;--t2:#eb6834;--t3:#1baf7a;--t4:#eda100;--t5:#e87ba4;--t6:#008300;--t7:#6250d6}
+.dash-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+@media(max-width:1000px){.dash-grid{grid-template-columns:minmax(0,1fr)}}
+.dcard{background:var(--v-surface);border-radius:10px;padding:14px 16px}
+.dcard.wide{grid-column:1/-1}
+.dcard-h{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.dcard-h h3{font-size:13px;font-weight:800;color:var(--v-ink);margin:0}
+.dcard-h p{font-size:10px;color:var(--v-mute);margin:2px 0 0;line-height:1.5}
+.dcard-h button{margin-left:auto;flex-shrink:0;border:1px solid var(--v-grid);background:#fff;color:var(--v-ink2);border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit}
+.dcard-h button:hover{border-color:var(--v-ink2)}
+.dlegend{display:flex;flex-wrap:wrap;gap:4px 12px;margin-bottom:8px;font-size:10px;color:var(--v-ink2)}
+.dlegend span{display:inline-flex;align-items:center;gap:5px}
+.dlegend i{width:10px;height:10px;border-radius:2px}
+.hb{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr);align-items:center;column-gap:10px;row-gap:6px}
+.hb-n{font-size:11px;color:var(--v-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.hb-t{display:flex;align-items:center;gap:6px;border-left:1px solid var(--v-grid);padding:2px 0;min-width:0}
+.hb-b{display:flex;gap:2px;height:14px;flex:none}
+.hb-b span{height:14px;min-width:2px;background:var(--v-one)}
+.hb-b span:last-child{border-radius:0 4px 4px 0}
+.hb-b span:hover{filter:brightness(1.12)}
+.hb-v{font-size:11px;font-weight:700;color:var(--v-ink);white-space:nowrap}
+.hb-v small{font-weight:400;color:var(--v-mute);font-size:10px}
+.dnote{font-size:10px;color:var(--v-mute);margin-top:10px;line-height:1.6;direction:rtl}
+.dempty{font-size:11px;color:var(--v-mute);padding:18px 4px;line-height:1.8;direction:rtl}
+.dtbl{font-size:11px}
+.dtbl th{background:#F4F4F1;color:var(--v-ink2);font-size:10px;padding:5px 7px}
+.dtbl td{padding:5px 7px;font-variant-numeric:tabular-nums}
+.dtbl td:first-child{font-weight:600;white-space:normal}
+#wipTip{position:fixed;z-index:900;pointer-events:none;background:#1C2526;color:#fff;border-radius:6px;padding:5px 9px;font-size:11px;line-height:1.4;max-width:280px;display:none}
+#wipTip b{font-weight:800}
+
+/* ── NEW TASK ── */
+#wipTask{position:fixed;inset:0;z-index:700;background:rgba(29,37,38,.6);display:none;align-items:flex-start;justify-content:center;padding:36px 14px;overflow-y:auto}
+.nt-box{background:#fff;border-radius:10px;width:100%;max-width:860px;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+.nt-top{background:#2D3748;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.nt-top h2{font-size:14px;font-weight:700;margin:0}
+.nt-top small{font-size:10px;color:#9AA5B4}
+.nt-x{margin-left:auto;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:13px;font-family:inherit}
+.nt-body{padding:16px}
+.nt-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+@media(max-width:700px){.nt-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.nt-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr) 28px;gap:8px;margin-bottom:6px}
+.nt-row button{border:none;background:#F4F6F6;color:#9AA5B4;border-radius:5px;cursor:pointer;font-family:inherit;font-size:11px}
+.nt-row button:hover{background:#FADBD8;color:#C0392B}
+.nt-sub{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#0D5C52;margin:14px 0 6px;display:flex;align-items:center;gap:8px}
+.nt-sub small{font-weight:400;letter-spacing:0;text-transform:none;color:#7F8C8D}
+.nt-sel{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;min-height:10px}
+.nt-sel span{background:#E8F5F3;color:#0D5C52;border-radius:6px;padding:4px 5px 4px 10px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px}
+.nt-sel button{border:none;background:#fff;color:#7F8C8D;border-radius:4px;width:18px;height:18px;cursor:pointer;font-size:10px;line-height:1;font-family:inherit}
+.nt-sug{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;margin-bottom:8px}
+.nt-sug button{text-align:left;background:#FAFCFC;border:1.5px solid #E1EAE8;border-radius:8px;padding:7px 10px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;gap:3px}
+.nt-sug button:hover{border-color:#1A7A6E;background:#fff}
+.nt-sug button.on{border-color:#1A7A6E;background:#E8F5F3}
+.nt-sug b{font-size:12px;color:#2D3748}
+.nt-sug span{font-size:10px;color:#52514E;direction:rtl;text-align:right;line-height:1.5}
+.nt-sug i{font-style:normal;display:inline-block;border-radius:8px;padding:0 6px;font-size:9px;font-weight:700;margin-right:6px;vertical-align:1px}
+.nt-sug i.free{background:#D5F5E3;color:#1E8449}.nt-sug i.busy{background:#FEF9E7;color:#8A6D00}
+.nt-add{display:flex;gap:6px;max-width:360px}
+.nt-foot{padding:12px 16px;border-top:1px solid #eee;display:flex;gap:8px;justify-content:flex-end;align-items:center;background:#FAFAFA;flex-wrap:wrap}
+.nt-foot label{margin-right:auto;text-transform:none;letter-spacing:0;font-size:11px;color:#2D3748;display:flex;align-items:center;gap:6px;cursor:pointer}
+.nt-foot label input{width:14px;height:14px;accent-color:#1A7A6E}
+/* the register is the last thing on the page: let its table use most of the screen */
+#vList .tw{max-height:72vh}
 </style>
 </head>
 <body>
@@ -505,14 +588,60 @@ User 2:
   </div>
 </div>
 <div class="tbar"></div>
-<div class="tabs">
-  <button class="tab active" id="tabList" onclick="goList()">&#128203; Drawing Register</button>
-  <button class="tab" id="tabWip" onclick="goWip()">&#128736; Work in Progress <span class="tab-n" id="tabWipN" style="display:none">0</span></button>
+<div class="snav" id="snav">
+  <button type="button" onclick="wipGo('secWip')">&#128736; Work in Progress</button>
+  <button type="button" onclick="wipGo('secTeam')">&#128119; Engineers</button>
+  <button type="button" onclick="wipGo('secDash')">&#128202; Dashboards</button>
+  <button type="button" onclick="wipGo('secReg')">&#128203; Drawing Register</button>
 </div>
 
 <!-- ── LIST VIEW ── -->
 <div id="vList">
 <div class="main">
+  <!-- ══════════ 1) WORK IN PROGRESS ══════════ -->
+  <div class="psec" id="secWip">
+    <div class="wip-top">
+      <div class="chdr">
+        <h2>&#128736; Work in Progress</h2>
+        <span class="wip-hint" dir="rtl">اختار واضغط Add عشان تتابع Plot / Zone / Floor. اضغط على مربع أي نوع عشان تفتح جدوله. أي تعديل بيتحفظ في التراكر.</span>
+        <div class="wip-acts">
+          <button class="btn bt" onclick="wipTaskOpen()">+ New Task</button>
+          <button class="btn bp" onclick="genWipPdf()">&#8998; PDF</button>
+          <button class="btn" style="background:#C0392B;color:#fff" onclick="wipClearAll()">&#128465; Clear All</button>
+        </div>
+      </div>
+      <div class="wip-bar">
+        <div class="f"><label id="wlPlot" for="wfPlot">Plot</label><select id="wfPlot" onchange="wipFillFilter()"></select></div>
+        <div class="f"><label id="wlZone" for="wfZone">Zone</label><select id="wfZone" onchange="wipFillFilter()"></select></div>
+        <div class="f"><label for="wfLevel">Floor</label><select id="wfLevel"></select></div>
+        <button class="btn bt" onclick="wipAdd()">+ Add</button>
+      </div>
+      <div class="wip-chips" id="wipChips"></div>
+      <div class="wip-sum" id="wipSum"></div>
+    </div>
+    <div id="wipSetup"></div>
+    <div id="wipBody"></div>
+  </div>
+
+  <!-- ══════════ 2) ENGINEERS ══════════ -->
+  <div class="psec" id="secTeam">
+    <div class="psec-h"><h2>&#128119; Engineers</h2><small dir="rtl">شغال = عنده لوحات حالتها IN PROGRESS (في كل المشاريع) — غير كده فاضي ومتاح</small></div>
+    <div class="tm-tools">
+      <input type="search" id="wipTeamQ" dir="auto" placeholder="&#128269; ابحث باسم المهندس…" autocomplete="off" oninput="wipTeamRender()"/>
+      <input type="text" id="wipTeamNew" dir="auto" placeholder="اسم مهندس جديد…" autocomplete="off" maxlength="80" onkeydown="if(event.key==='Enter'){event.preventDefault();wipTeamAdd();}"/>
+      <button type="button" class="btn bo" onclick="wipTeamAdd()">+ إضافة مهندس</button>
+    </div>
+    <div id="wipTeamBody"></div>
+  </div>
+
+  <!-- ══════════ 3) DASHBOARDS ══════════ -->
+  <div class="psec viz" id="secDash">
+    <div class="psec-h"><h2>&#128202; Dashboards</h2><small dir="rtl">من لوحات المشروع الحالي كله — بتتحدث لوحدها مع أي تعديل</small></div>
+    <div class="dash-grid" id="wipDash"></div>
+  </div>
+
+  <!-- ══════════ 4) DRAWING REGISTER (all drawings of the project) ══════════ -->
+  <div class="psec-h" id="secReg" style="scroll-margin-top:50px"><h2>&#128203; Drawing Register</h2><small dir="rtl">كل لوحات المشروع</small></div>
   <div class="stats">
     <div class="sc"><div class="sc-l">Total</div><div class="sc-v" id="s0">0</div></div>
     <div class="sc a"><div class="sc-l">Pending</div><div class="sc-v" id="s1">0</div></div>
@@ -585,6 +714,7 @@ User 2:
           <option value="IN PROGRESS">🟡 In Progress</option>
           <option value="RECEIVED">🟠 Received</option>
           <option value="DELIVERED">🟢 Delivered</option>
+          <option value="DELIVERED AFTER COMMENTS">🔵 Delivered After Comments</option>
           <option value="HOLD">🔴 Hold</option>
         </select>
         <div class="nc-row amber" style="margin-top:6px"><input type="checkbox" id="fNs" onchange="onNs()"/><label for="fNs">Not Sent Yet (Delivery)</label></div>
@@ -762,43 +892,42 @@ User 2:
 </div></div>
 </div>
 
-<!-- ── WORK IN PROGRESS VIEW ── -->
-<div id="vWip">
-<div class="main">
-  <div class="wip-top">
-    <div class="chdr">
-      <h2>&#128736; Work in Progress</h2>
-      <span class="wip-hint" dir="rtl">اختار واضغط Add — تقدر تتابع أكتر من Plot / Zone / Floor في نفس الوقت. أي تعديل هنا بيتحفظ في التراكر، والقايمة نفسها محفوظة فيه.</span>
-      <div class="wip-acts">
-        <div class="wip-view" id="wipView"><button type="button" data-v="grid" onclick="wipSetView('grid')" title="جدولين جنب بعض">&#9638; Grid</button><button type="button" data-v="list" onclick="wipSetView('list')" title="جدول تحت جدول">&#9776; List</button></div>
-        <button class="btn bNav" onclick="wipTeamOpen()" title="مين شغال ومين فاضي">&#128119; Engineers</button>
-        <button class="btn bp" onclick="genWipPdf()">&#8998; PDF</button>
-        <button class="btn" style="background:#C0392B;color:#fff" onclick="wipClearAll()">&#128465; Clear All</button>
+<!-- ── NEW TASK (adds drawings straight into the tracker) ── -->
+<div id="wipTask" onclick="if(event.target===this)wipTaskClose()">
+  <div class="nt-box">
+    <div class="nt-top"><h2>+ New Task</h2><small dir="rtl">مفيش خانة إجبارية — اللي مش عارفه دلوقتي سيبه فاضي وكمّله بعدين</small><button type="button" class="nt-x" onclick="wipTaskClose()">&#10005;</button></div>
+    <div class="nt-body">
+      <div class="nt-g">
+        <div class="f"><label id="ntlPlot" for="ntPlot">Plot</label><input id="ntPlot" list="ntPlots" autocomplete="off" oninput="this.value=this.value.toUpperCase()"/><datalist id="ntPlots"></datalist></div>
+        <div class="f"><label id="ntlZone" for="ntZone">Zone</label><input id="ntZone" list="ntZones" autocomplete="off" oninput="this.value=this.value.toUpperCase()"/><datalist id="ntZones"></datalist></div>
+        <div class="f"><label for="ntLevel">Level</label><input id="ntLevel" list="ntLevels" autocomplete="off" oninput="this.value=this.value.toUpperCase()"/><datalist id="ntLevels"></datalist></div>
+        <div class="f"><label for="ntType">Type</label><input id="ntType" list="ntTypes" autocomplete="off" oninput="this.value=this.value.toUpperCase();wipTaskSuggest()"/><datalist id="ntTypes"></datalist></div>
+      </div>
+      <div class="nt-sub">Drawings <small dir="rtl">كل سطر = لوحة. لو التاسك فيها أكتر من لوحة اضغط «+ لوحة كمان»</small></div>
+      <div class="nt-row" style="margin-bottom:2px"><label>Board Name</label><label>Content</label><span></span></div>
+      <div id="ntRows"></div>
+      <button type="button" class="btn bo" style="padding:4px 10px;font-size:11px" onclick="wipTaskRow()">+ لوحة كمان</button>
+
+      <div class="nt-sub">Engineer <small dir="rtl" id="ntSugNote"></small></div>
+      <div class="nt-sel" id="ntSel"></div>
+      <div class="nt-sug" id="ntSug"></div>
+      <div class="nt-add"><input id="ntEngIn" list="ntEngs" placeholder="مهندس تاني…" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();wipTaskEngAdd();}"/><datalist id="ntEngs"></datalist><button type="button" class="btn bo" style="padding:4px 10px;font-size:11px" onclick="wipTaskEngAdd()">+ Add</button></div>
+
+      <div class="nt-sub">Dates &amp; Status</div>
+      <div class="nt-g">
+        <div class="f"><label for="ntStart">Start Date</label><input type="date" id="ntStart" onchange="wipTaskAutoStatus()"/></div>
+        <div class="f"><label for="ntTarget">Target Date</label><input type="date" id="ntTarget"/></div>
+        <div class="f"><label for="ntStatus">Status</label><select id="ntStatus" onchange="this._touched=true"></select></div>
       </div>
     </div>
-    <div class="wip-bar">
-      <div class="f"><label id="wlPlot" for="wfPlot">Plot</label><select id="wfPlot" onchange="wipFillFilter()"></select></div>
-      <div class="f"><label id="wlZone" for="wfZone">Zone</label><select id="wfZone" onchange="wipFillFilter()"></select></div>
-      <div class="f"><label for="wfLevel">Floor</label><select id="wfLevel"></select></div>
-      <button class="btn bt" onclick="wipAdd()">+ Add</button>
+    <div class="nt-foot">
+      <label><input type="checkbox" id="ntFollow" checked/> تابع الـ Plot / Zone / Floor ده في Work in Progress</label>
+      <button type="button" class="btn bo" onclick="wipTaskClose()">Cancel</button>
+      <button type="button" class="btn bt" id="ntSave" onclick="wipTaskSave()">Save Task</button>
     </div>
-    <div class="wip-chips" id="wipChips"></div>
-    <div class="wip-sum" id="wipSum"></div>
-  </div>
-  <div id="wipSetup"></div>
-  <div id="wipBody"></div>
-</div>
-<!-- engineers: who is working / who is free -->
-<div id="wipTeam" onclick="if(event.target===this)wipTeamClose()">
-  <div class="tm-box">
-    <div class="tm-top"><h2>&#128119; Engineers</h2><small dir="rtl">شغال = عنده لوحات حالتها IN PROGRESS (في كل المشاريع) — غير كده فاضي ومتاح</small><button type="button" class="tm-x" onclick="wipTeamClose()">&#10005;</button></div>
-    <div class="tm-add" dir="rtl"><input type="text" id="wipTeamNew" dir="auto" placeholder="اسم مهندس جديد…" autocomplete="off" maxlength="80" onkeydown="if(event.key==='Enter'){event.preventDefault();wipTeamAdd();}"/><button type="button" class="btn bt" onclick="wipTeamAdd()">+ إضافة مهندس</button><span>لو مهندس شغال معاكم ومش متسجل، ضيفه هنا. واللي مبقاش شغال معاكم شيله من المتاحين بعلامة ✕ اللي جنب اسمه (بياناته بتفضل زي ما هي).</span></div>
-    <div class="tm-search"><input type="search" id="wipTeamQ" dir="auto" placeholder="&#128269; ابحث باسم المهندس…" autocomplete="off" oninput="wipTeamRender()"/></div>
-    <div id="wipTeamBody"></div>
   </div>
 </div>
-</div>
-
+<div id="wipTip"></div>
 </div><!-- /appShell -->
 
 <!-- TOAST -->
@@ -1099,7 +1228,7 @@ async function appInit(){
 }
 
 function showLoginScreen(){
-  wipEngClose(true); wipTeamClose();
+  wipEngClose(true); wipDateClose(true); wipTaskClose();
   document.getElementById('vLogin').style.display='flex';
   document.getElementById('vProject').style.display='none';
   var lb=document.getElementById('lBtn'); lb.disabled=false; lb.textContent='Sign In';
@@ -1163,7 +1292,7 @@ async function loadApp(){
 }
 
 function showProjectSelector(){
-  wipEngClose(true); wipTeamClose();
+  wipEngClose(true); wipDateClose(true); wipTaskClose();
   document.getElementById('appShell').style.display='none';
   var ps = document.getElementById('vProject');
   ps.style.display='flex';
@@ -1214,8 +1343,8 @@ async function selectProject(proj){
   setupRealtime();
 
   document.getElementById('loadOverlay').classList.add('hidden');
-  wipWatch=[]; wipBadge(); wipLoad();
-  show('vList'); render();
+  wipWatch=[]; wipOpen={}; wipTeamOther=[];
+  show('vList'); render(); wipEnter(true);
 }
 
 function updateColumnHeaders(cfg){
@@ -1297,7 +1426,6 @@ function setupRealtime(){
     if(data && JSON.stringify(data)!==JSON.stringify(drws)){
       drws = data;
       render();
-      wipOnData();
     }
     wipTick();
   }, 10000);
@@ -1444,15 +1572,15 @@ function showToast(msg, isErr){
 //  NAVIGATION
 // ══════════════════════════════════════════
 function show(id){
-  var all=['vList','vForm','vPdf','vEng','vPlot','vUpd','vDrwList','vInv','vWip'];
+  var all=['vList','vForm','vPdf','vEng','vPlot','vUpd','vDrwList','vInv'];
   for(var i=0;i<all.length;i++) document.getElementById(all[i]).style.display='none';
   document.getElementById(id).style.display='block';
-  document.getElementById('tabList').classList.toggle('active',id==='vList');
-  document.getElementById('tabWip').classList.toggle('active',id==='vWip');
-  if(id!=='vWip'){ wipEngClose(true); wipTeamClose(); }
+  wipEngClose(true); wipDateClose(true); if(id!=='vList') wipTaskClose();
   window.scrollTo(0,0);
 }
-function goList(){ show('vList'); editId=null; render(); }
+// section links: go to the tracker page first if another view is open
+function wipGo(id){ if(!wipVisible()) goList(); wipJump(id); }
+function goList(){ show('vList'); editId=null; render(); wipEnter(); }
 function goUpd(){  show('vUpd'); document.getElementById('impMsg').textContent=''; }
 
 // normalize: trim + collapse spaces
@@ -1513,7 +1641,8 @@ function goEdit(id){
 // ══════════════════════════════════════════
 //  RENDER
 // ══════════════════════════════════════════
-function render(){
+function render(){ renderRegister(); wipOnData(); }
+function renderRegister(){
   var s=sorted();
   var tot=s.length,pend=0,repl=0,none=0;
   for(var i=0;i<s.length;i++){
@@ -1544,8 +1673,7 @@ function render(){
     var tt=d.type?'<span class="tt">'+d.type+'</span>':'-';
     var dc=d.ns?'<span class="bdg bns">Not Sent</span>':fd(d.del);
     var st=d.status||'NOT STARTED';
-    var stColor=st==='DELIVERED'?'#1E8449':st==='IN PROGRESS'?'#B7950B':st==='RECEIVED'?'#D35400':st==='HOLD'?'#C0392B':'#7F8C8D';
-    var stBg=st==='DELIVERED'?'#D5F5E3':st==='IN PROGRESS'?'#FEF9E7':st==='RECEIVED'?'#FDEBD0':st==='HOLD'?'#FADBD8':'#EAECEE';
+    var stC=wipStColor(st), stColor=stC.fg, stBg=stC.bg;
     var stHtml='<span style="padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;background:'+stBg+';color:'+stColor+'">'+st+'</span>';
     h+='<tr>';
     h+='<td style="text-align:center;font-weight:700;color:#0D5C52">'+(d.num||i+1)+'</td>';
@@ -1650,8 +1778,9 @@ function onNc(r){
 async function saveDrw(){
   var plot=document.getElementById('fPlot').value.trim();
   var name=document.getElementById('fName').value.trim();
-  if(!plot){alert(((PROJECT_CONFIG[currentProject]||{}).col1||'Project No.')+' is required');return;}
-  if(!name){alert('Board name is required');return;}
+  var _old=editId?drws.find(function(d){return d.id===editId;}):null;
+  if(!plot&&!(_old&&!wn(_old.plot))){alert(((PROJECT_CONFIG[currentProject]||{}).col1||'Project No.')+' is required');return;}
+  if(!name&&!(_old&&!wn(_old.name))){alert('Board name is required');return;}
   var st=document.getElementById('fType').value;
   var ct=document.getElementById('fTypeC').value.trim().toUpperCase();
   var numV=parseInt(document.getElementById('fNum').value)||null;
@@ -1683,6 +1812,7 @@ async function saveDrw(){
     r3nc: document.getElementById('fR3nc').checked,
     updated_at: new Date().toISOString()
   };
+  if(!_old||wipStatus(_old)!==rec.status) wipStamp(_old||{},rec);   // start / received dates follow the status
 
   var btn=document.getElementById('saveBtn');
   btn.disabled=true; btn.textContent='Saving...';
@@ -1733,7 +1863,7 @@ async function delD(id){
 function refreshEngDatalist(){
   var box=document.getElementById('engCheckboxes'); if(!box) return;
   var current = (document.getElementById('fBy').value||'').split(',').map(function(e){return e.trim();}).filter(Boolean);
-  // engineers already on this drawing stay in the list even if they were removed from the engineers list,
+  // engineers already on this drawing stay in the list even if they are not on the engineers list,
   // otherwise ticking any box would silently drop them from the drawing
   var list=engNames.slice(), h='';
   current.forEach(function(n){ if(list.indexOf(n)<0) list.push(n); });
@@ -2091,8 +2221,9 @@ function doXlsData(){
   if(isWY){ hdr.push('Invoice'); wch.push(8); }
   hdr.push('Delivery','R3 Recv','R3 Replied','R3 Status','Notes','Drive Link');
   wch.push(13,13,13,12,30,40);
-  var hasTarget=wipTargetCol===true;
+  var hasTarget=wipTargetCol===true, hasDates=wipDatesCol===true;
   if(hasTarget){ hdr.push('Target Date'); wch.push(13); }
+  if(hasDates){ hdr.push('Start Date','Received Date'); wch.push(13,13); }
   var rows=[hdr];
   for(var i=0;i<s.length;i++){
     var d=s[i];
@@ -2106,6 +2237,7 @@ function doXlsData(){
       d.r3r?fd(d.r3r):'',d.r3p?fd(d.r3p):'',rs(d.r3r,d.r3p,d.r3nc).l,
       d.notes||'',d.link||'');
     if(hasTarget) row.push(d.target_date?fd(d.target_date):'');
+    if(hasDates) row.push(d.start_date?fd(d.start_date):'',d.received_date?fd(d.received_date):'');
     rows.push(row);
   }
   var ws=XLSX.utils.aoa_to_sheet(rows);
@@ -2220,7 +2352,9 @@ async function readXls(file){
         notes:col(['notes']),
         link:col(['drive link','link']),
         invoice:col(['invoice']),
-        target:col(['target date'])
+        target:col(['target date']),
+        start:col(['start date']),
+        received:col(['received date'])
       };
       if(C.name<0){say('الملف ده مش Excel Data من التطبيق — مفيش عمود Board Name. البيانات الحالية لم تتغير.','#C0392B');return;}
 
@@ -2248,7 +2382,7 @@ async function readXls(file){
 
       var proj=currentProject||'WADI_YAMM';
       var isWY=proj==='WADI_YAMM';
-      var STATUSES=['NOT STARTED','IN PROGRESS','RECEIVED','DELIVERED','HOLD'];
+      var STATUSES=WIP_STATUSES;
 
       // ── Current drawings of this project ──
       // If the file has no column for a field (e.g. an older Excel Data file without
@@ -2276,8 +2410,7 @@ async function readXls(file){
       for(var i=1;i<data.length;i++){
         r=data[i];
         var plotVal=txt(r,C.plot),nameVal=txt(r,C.name);
-        if(!plotVal&&!nameVal) continue;
-        if(!nameVal){say('الصف رقم '+(i+1)+' في الملف مفيهوش Board Name — صلّحه وارفع الملف تاني. البيانات الحالية لم تتغير.','#C0392B');return;}
+        if(!plotVal&&!nameVal&&!txt(r,C.zone)&&!txt(r,C.level)&&!txt(r,C.type)&&!txt(r,C.content)) continue;
         rec={
           num:parseInt(raw(r,C.num))||null,
           project_id:proj,
@@ -2303,6 +2436,10 @@ async function readXls(file){
         rec.link=C.link>=0?txt(r,C.link):keep('link','');
         if(isWY) rec.invoice=C.invoice>=0?(parseInt(raw(r,C.invoice))||0):(parseInt(keep('invoice',0))||0);
         if(wipTargetCol===true) rec.target_date=C.target>=0?parseDate(raw(r,C.target)):keep('target_date',null);
+        if(wipDatesCol===true){
+          rec.start_date=C.start>=0?parseDate(raw(r,C.start)):keep('start_date',null);
+          rec.received_date=C.received>=0?parseDate(raw(r,C.received)):keep('received_date',null);
+        }
         rec.updated_at=new Date().toISOString();
         toImport.push(rec);
       }
@@ -2535,37 +2672,52 @@ function genInvoicePdf(){
 }
 
 // ══════════════════════════════════════════
-//  WORK IN PROGRESS
+//  WORK IN PROGRESS  (top of the tracker page)
 // ══════════════════════════════════════════
-// This tab stores only a list of "watched" Plot / Zone / Floor filters, in the tracker database
+// The page keeps only a list of "watched" Plot / Zone / Floor filters, in the tracker database
 // (table wip_watch, shared by everyone on the project).
 // The rows themselves are always read from `drws` — the same data as the Drawing Register —
 // so an edit here is written straight to the tracker, and a tracker change shows up here.
-// The Target Date is its own column (drawings.target_date); Delivery and Invoice are not touched.
+// Dates have their own columns (start_date, target_date, received_date); Delivery and Invoice are not touched.
 var wipWatch=[];       // [{id, plot, zone, level}] — zone / level === null means "all"
-var wipSig='';         // structure currently on screen: sections → tables → row ids
+var wipOpen={};        // section key → type whose table is open
+var wipSig='';         // structure currently on screen: sections + the rows of the open tables
 var wipStale=false;    // structure changed while a cell was being edited → redraw when editing ends
 var wipPop=null;       // open engineer picker {id, btn, el}
-var wipTimers={};      // pending (debounced) date edits, by drawing id
+var wipDp=null;        // open dates pop-over {id, btn, el}
+var wipTimers={};      // pending (debounced) date edits, by "drawing id|field"
 var wipPending=0;      // saves in flight
 var dataEpoch=0;       // bumped on every local edit, so a poll that started earlier is not applied over it
 var WIP_ALL='*';
 var WIP_COLORS=['#1A7A6E','#1A3A5C','#6C3483','#9A6A00','#922B21','#1A5276','#4A5568','#0E6655'];
-var WIP_STATUSES=['NOT STARTED','IN PROGRESS','RECEIVED','DELIVERED','HOLD'];
+// g = how the status counts: none (not started) · prog · recv (engineer handed it in) · done (sent to the client) · hold
+var WIP_ST={
+  'NOT STARTED':{fg:'#7F8C8D',bg:'#EAECEE',g:'none'},
+  'IN PROGRESS':{fg:'#B7950B',bg:'#FEF9E7',g:'prog'},
+  'RECEIVED':{fg:'#D35400',bg:'#FDEBD0',g:'recv'},
+  'DELIVERED':{fg:'#1E8449',bg:'#D5F5E3',g:'done'},
+  'DELIVERED AFTER COMMENTS':{fg:'#1A5276',bg:'#D6EAF8',g:'done'},
+  'HOLD':{fg:'#C0392B',bg:'#FADBD8',g:'hold'}
+};
+var WIP_STATUSES=['NOT STARTED','IN PROGRESS','RECEIVED','DELIVERED','DELIVERED AFTER COMMENTS','HOLD'];
 
 function wn(v){ return String(v===null||v===undefined?'':v).trim(); }
 function wipEl(id){ return document.getElementById(id); }
 function wipCfg(){ return PROJECT_CONFIG[currentProject||'WADI_YAMM']||{col1:'Plot',col2:'Zone',label:''}; }
-function wipVisible(){ var v=wipEl('vWip'); return !!v&&v.style.display==='block'; }
+function wipVisible(){ var v=wipEl('vList'), a=wipEl('appShell'); return !!v&&v.style.display==='block'&&!!a&&a.style.display!=='none'; }
+function wipRegister(){ if(typeof renderRegister==='function') renderRegister(); }
 
-// ── watch list: saved in the tracker database (table wip_watch), one list per project ──
+// ── what the database has: the wip_watch table and the date columns ──
 var wipMode='local';      // 'db' once the wip_watch table answers; 'local' = this browser only (table not created yet)
 var wipNeedTable=false;   // wip_watch is missing → show the one-time setup box
 var wipTargetCol=null;    // does drawings.target_date exist? true / false once known
+var wipDatesCol=null;     // do drawings.start_date + received_date exist?
 var wipWatchEpoch=0;      // bumped on every change of the list, so a slower reload is not applied over it
 var WIP_SQL=[
-  "-- SUSTRA Drawing Tracker — Work in Progress (run once)",
+  "-- SUSTRA Drawing Tracker — Work in Progress (safe to run again)",
   "alter table drawings add column if not exists target_date date;",
+  "alter table drawings add column if not exists start_date date;",
+  "alter table drawings add column if not exists received_date date;",
   "",
   "create table if not exists wip_watch (",
   "  id uuid primary key default gen_random_uuid(),",
@@ -2609,16 +2761,19 @@ function wipLocalRead(){
 }
 function wipLocalWrite(){ try{localStorage.setItem(wipKey(),JSON.stringify(wipWatch));}catch(e){} }
 
-// load the list (and find out whether the database has what this tab needs)
+async function wipProbe(cols,rx){
+  try{
+    var res=await supabase.from('drawings').select(cols).limit(1);
+    if(!res.error) return true;
+    if(rx.test(res.error.message||'')) return false;
+  }catch(e){}
+  return null;   // could not tell (offline…)
+}
+// load the list (and find out whether the database has what this page needs)
 async function wipLoad(){
-  var proj=wipProj(), ep=++wipWatchEpoch, res;
-  if(wipTargetCol!==true){
-    try{
-      res=await supabase.from('drawings').select('target_date').limit(1);
-      if(!res.error) wipTargetCol=true;
-      else if(/target_date|42703/i.test(res.error.message||'')) wipTargetCol=false;
-    }catch(e){}
-  }
+  var proj=wipProj(), ep=++wipWatchEpoch, res, p;
+  if(wipTargetCol!==true){ p=await wipProbe('target_date',/target_date|42703/i); if(p!==null) wipTargetCol=p; }
+  if(wipDatesCol!==true){ p=await wipProbe('start_date,received_date',/start_date|received_date|42703/i); if(p!==null) wipDatesCol=p; }
   try{ res=await supabase.from('wip_watch').select('*').eq('project_id',proj).order('created_at',{ascending:true}); }
   catch(e){ res={error:{message:'network'}}; }
   if(ep!==wipWatchEpoch||proj!==wipProj()) return;
@@ -2638,13 +2793,8 @@ async function wipLoad(){
       }catch(e){}
     } else { try{localStorage.removeItem(wipKey());}catch(e){} }
   }
-  wipBadge();
 }
-function wipListChanged(){ if(wipMode==='local') wipLocalWrite(); wipBadge(); }
-function wipBadge(){
-  var b=wipEl('tabWipN'); if(!b) return;
-  b.textContent=wipWatch.length; b.style.display=wipWatch.length?'':'none';
-}
+function wipListChanged(){ if(wipMode==='local') wipLocalWrite(); }
 // someone else on the project may have changed the list
 async function wipPollWatch(){
   if(wipMode!=='db'||!wipVisible()) return;
@@ -2656,11 +2806,12 @@ async function wipPollWatch(){
 // one-time database setup box
 function wipSetupBox(){
   var box=wipEl('wipSetup'); if(!box) return;
-  if(!wipNeedTable&&wipTargetCol!==false){ box.innerHTML=''; return; }
+  if(!wipNeedTable&&wipTargetCol!==false&&wipDatesCol!==false){ box.innerHTML=''; return; }
   var why=[];
   if(wipNeedTable) why.push('قايمة المتابعة محفوظة على المتصفح ده بس لحد ما الجدول يتعمل');
   if(wipTargetCol===false) why.push('عمود Target Date مقفول');
-  box.innerHTML='<div class="wip-setup"><b>&#9881;&#65039; خطوة واحدة في Supabase (مرة واحدة بس)</b>'
+  if(wipDatesCol===false) why.push('تاريخ بداية التاسك وتاريخ الاستلام مش بيتسجلوا (فمعدل الإنتاج مش هيتحسب)');
+  box.innerHTML='<div class="wip-setup"><b>&#9881;&#65039; خطوة واحدة في Supabase</b>'
     +'<p>'+why.join(' — ')+'. افتح <b>SQL Editor</b> في Supabase، الصق الكود ده واضغط Run، وبعدين اضغط «تم — افحص تاني».</p>'
     +'<pre id="wipSql" dir="ltr">'+escHtml(WIP_SQL)+'</pre>'
     +'<button type="button" class="copy-btn" onclick="wipCopySql()">&#128203; نسخ الكود</button> '
@@ -2671,10 +2822,10 @@ function wipCopySql(){
   catch(e){ showToast('انسخ الكود يدوي',true); }
 }
 async function wipRecheck(){
-  wipTargetCol=null;
-  await wipLoad(); await fetchDrawings();
-  wipFillFilter(); renderWip();
-  if(!wipNeedTable&&wipTargetCol===true) showToast('✓ تمام — قايمة المتابعة بقت محفوظة في التراكر');
+  wipTargetCol=null; wipDatesCol=null;
+  await wipLoad(); await wipTeamLoad(); await fetchDrawings();
+  wipRegister(); wipRenderAll();
+  if(!wipNeedTable&&wipTargetCol===true&&wipDatesCol===true) showToast('✓ تمام — كل حاجة جاهزة في التراكر');
   else showToast('لسه — اتأكد إن الكود اشتغل من غير أخطاء',true);
 }
 
@@ -2703,8 +2854,13 @@ function wipLevelShort(l){
 function wipLoc(d){
   return [wn(d.plot).replace(/[.\s]+/g,''),wn(d.zone).replace(/[.\s]+/g,''),wipLevelShort(d.level)].filter(Boolean).join('-');
 }
+// section title: PLOT.1036 - ZONE.02 - 4TH LEVEL
+function wipTitle(s){
+  var lv=wn(s.level).toUpperCase().split(/\s+/).map(function(w){ return WIP_ORD[w]||w; }).join(' ');
+  return [s.plot,s.zone,lv].filter(Boolean).join(' - ');
+}
 
-// ── table order inside a zone: Slab → Beams → Columns → Cores → Stairs → Stair beams → the rest ──
+// ── card order inside a zone: Slab → Beams → Columns → Cores → Stairs → Stair beams → the rest ──
 function wipTypeRank(t){
   var u=wn(t).toUpperCase();
   if(!u) return 99;
@@ -2719,37 +2875,52 @@ function wipTypeRank(t){
   return 50;
 }
 
-function wipStColor(st){
-  return {
-    fg: st==='DELIVERED'?'#1E8449':st==='IN PROGRESS'?'#B7950B':st==='RECEIVED'?'#D35400':st==='HOLD'?'#C0392B':'#7F8C8D',
-    bg: st==='DELIVERED'?'#D5F5E3':st==='IN PROGRESS'?'#FEF9E7':st==='RECEIVED'?'#FDEBD0':st==='HOLD'?'#FADBD8':'#EAECEE'
-  };
-}
+function wipStColor(st){ var s=WIP_ST[st]; return s?{fg:s.fg,bg:s.bg}:{fg:'#7F8C8D',bg:'#EAECEE'}; }
+function wipGroup(st){ var s=WIP_ST[st]; return s?s.g:'none'; }
 function wipStatus(d){ return wn(d.status).toUpperCase()||'NOT STARTED'; }
 
-// days between today and the target date
-function wipDays(d){
-  var st=wipStatus(d);
-  if(st==='DELIVERED') return {t:'Delivered',s:'Delivered',c:'done'};    // sent to the client
-  if(st==='RECEIVED') return {t:'Received',s:'Received',c:'recv'};       // engineer handed it in — never "late"
-
-  var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(toInputDate(d.target_date)||'');
-  if(!m) return {t:'-',s:'-',c:'none'};
-  var now=new Date(), t0=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
-  var n=Math.round((Date.UTC(+m[1],+m[2]-1,+m[3])-t0)/86400000);
-  if(n<0) return {t:(-n)+(n===-1?' day late':' days late'),s:(-n)+'d late',c:'late'};
-  if(n===0) return {t:'Due today',s:'Today',c:'soon',today:true};
-  return {t:n+(n===1?' day left':' days left'),s:n+'d left',c:n<=2?'soon':'ok'};
+// ── dates ──
+function wipIso(v){ var s=wn(toInputDate(v)); return /^\d{4}-\d{2}-\d{2}/.test(s)?s.slice(0,10):''; }
+function wipDayNum(iso){ var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(iso||''); return m?Math.round(Date.UTC(+m[1],+m[2]-1,+m[3])/86400000):null; }
+function wipToday(){ var n=new Date(); return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'); }
+function wipShort(iso){ return iso?iso.slice(8,10)+'/'+iso.slice(5,7):''; }
+// everything about a drawing's dates in one short line:
+//   05/10 → 13/10 · 5d left      (start → target, days left)
+//   05/10 → 11/10 · Received (7d) (start → handed in, how long it took)
+function wipDates(d){
+  var st=wipStatus(d), g=wipGroup(st), s=wipIso(d.start_date), t=wipIso(d.target_date), r=wipIso(d.received_date);
+  if(g==='done'||g==='recv'){
+    // RECEIVED = the engineer handed it in; DELIVERED = sent to the client → the countdown is over, never "late"
+    var lab=g==='done'?'Delivered':'Received';
+    if(s&&r&&wipDayNum(r)>=wipDayNum(s)) return {t:wipShort(s)+' → '+wipShort(r)+' · '+lab+' ('+(wipDayNum(r)-wipDayNum(s)+1)+'d)',c:g};
+    if(r) return {t:wipShort(r)+' · '+lab,c:g};
+    return {t:lab,c:g};
+  }
+  if(!s&&!t) return {t:'+ dates',c:'none'};
+  if(!t) return {t:wipShort(s)+' → ?',c:'plain'};
+  var range=(s?wipShort(s)+' → ':'')+wipShort(t), n=wipDayNum(t)-wipDayNum(wipToday());
+  if(n<0) return {t:range+' · '+(-n)+'d late',c:'late'};
+  if(n===0) return {t:range+' · today',c:'soon'};
+  return {t:range+' · '+n+'d left',c:n<=2?'soon':'ok'};
+}
+function wipDatesHtml(d){ var x=wipDates(d); return '<span class="wip-d '+x.c+'">'+escHtml(x.t)+'</span>'; }
+function wipDatesTip(d){
+  var p=[];
+  if(d.start_date) p.push('Start '+fd(d.start_date));
+  if(d.target_date) p.push('Target '+fd(d.target_date));
+  if(d.received_date) p.push('Received '+fd(d.received_date));
+  return (p.length?p.join(' · ')+' — ':'')+'اضغط للتعديل';
+}
+// dates that follow the status by themselves
+function wipStamp(prev,patch){
+  if(wipDatesCol!==true) return;
+  var st=wn(patch.status).toUpperCase(), was=wipStatus(prev), g=wipGroup(st), today=wipToday();
+  var val=function(k){ return patch[k]!==undefined?patch[k]:prev[k]; };
+  if(st==='IN PROGRESS'&&!val('start_date')) patch.start_date=today;                 // work started today
+  if((g==='recv'||g==='done')&&!val('received_date')) patch.received_date=today;      // handed in today
+  if((g==='none'||g==='prog')&&was==='RECEIVED'&&val('received_date')) patch.received_date=null;   // RECEIVED was undone → not handed in yet
 }
 
-// the Target Date cell: date and days left together, e.g. "13/10 · 5d left"
-function wipTargetHtml(d){
-  var dy=wipDays(d), m=/^\d{4}-(\d{2})-(\d{2})/.exec(toInputDate(d.target_date)||'');
-  if(dy.c==='none') return '<span class="wip-d none">+ date</span>';
-  var dt=(m&&dy.c!=='done'&&dy.c!=='recv'&&!dy.today)?m[2]+'/'+m[1]+' · ':'';
-  return '<span class="wip-d '+dy.c+'">'+dt+dy.s+'</span>';
-}
-function wipTargetTip(d){ return d.target_date?'Target: '+fd(d.target_date)+' — اضغط للتعديل':'اضغط لتحديد التاريخ المتوقع'; }
 function wipEngList(v){ return wn(v).split(',').map(function(e){return e.trim();}).filter(Boolean); }
 function wipEngHtml(d){
   var l=wipEngList(d.by_eng);
@@ -2782,7 +2953,7 @@ function wipSections(){
     var g={}, list=[];
     s.rows.forEach(function(d){
       var t=wn(d.type), tk=t.toUpperCase();
-      if(!g[tk]){ g[tk]={type:t,rank:wipTypeRank(t),rows:[]}; list.push(g[tk]); }
+      if(!g[tk]){ g[tk]={type:t,tk:tk,rank:wipTypeRank(t),rows:[]}; list.push(g[tk]); }
       g[tk].rows.push(d);
     });
     list.forEach(function(t){ t.rows.sort(function(a,b){ return (a.num||9999)-(b.num||9999); }); });
@@ -2791,26 +2962,42 @@ function wipSections(){
   });
   return secs;
 }
+function wipOpenTable(s){
+  var tk=wipOpen[s.key]; if(tk===undefined) return null;
+  for(var i=0;i<s.tables.length;i++){ if(s.tables[i].tk===tk) return s.tables[i]; }
+  return null;
+}
 function wipSignature(secs){
   return secs.map(function(s){
-    return s.key+'#'+s.zi+'{'+s.tables.map(function(t){
-      return t.type+'['+t.rows.map(function(d){return d.id;}).join(',')+']';
-    }).join('')+'}';
+    var t=wipOpenTable(s);
+    return s.key+'#'+s.zi+'{'+(t?t.tk+'['+t.rows.map(function(d){return d.id;}).join(',')+']':'')+'}';
   }).join('|');
 }
+// counts by status group, and how much of it is finished (received + delivered)
+function wipStats(rows){
+  var o={total:rows.length,none:0,prog:0,recv:0,done:0,hold:0};
+  rows.forEach(function(d){ o[wipGroup(wipStatus(d))]++; });
+  o.pct=o.total?Math.round((o.recv+o.done)*100/o.total):0;
+  return o;
+}
 function wipCountTxt(rows){
-  var done=0, recv=0;
-  rows.forEach(function(d){ var st=wipStatus(d); if(st==='DELIVERED') done++; else if(st==='RECEIVED') recv++; });
-  return rows.length+' drawing'+(rows.length!==1?'s':'')+' · '+recv+' received · '+done+' delivered';
+  var st=wipStats(rows);
+  return st.total+' drawing'+(st.total!==1?'s':'')+' · '+st.recv+' received · '+st.done+' delivered';
 }
 
 // ── render ──
 var WIP_NCOL=6;
+function wipHead(){
+  var cfg=wipCfg(), head='<colgroup>', ci;
+  for(ci=1;ci<=WIP_NCOL;ci++) head+='<col class="wc'+ci+'"/>';
+  return head+'</colgroup><thead><tr><th>'+escHtml(cfg.col1+' / '+cfg.col2+' / Floor')+'</th><th>DWG No.</th>'
+    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Start → Target</th></tr></thead>';
+}
 function wipRowHtml(d){
-  var st=wipStatus(d), sc=wipStColor(st), dy=wipDays(d);
+  var st=wipStatus(d), sc=wipStColor(st);
   var opts=WIP_STATUSES.slice(); if(opts.indexOf(st)<0) opts.push(st);
   var h='<tr data-id="'+escHtml(d.id)+'">';
-  // Plot + Zone + Floor in one short code; the type is the table's own title
+  // Plot + Zone + Floor in one short code; the type is the card's own title
   h+='<td class="ro" style="font-weight:600" title="'+escHtml([wn(d.plot),wn(d.zone),wn(d.level)].filter(Boolean).join(' › '))+'">'+escHtml(wipLoc(d)||'-')+'</td>';
   h+='<td><input class="wip-in wip-name" data-f="name" value="'+escHtml(drwNo(d.name))+'" title="'+escHtml(wn(d.name))+'" autocomplete="off" spellcheck="false"/></td>';
   h+='<td><input class="wip-in" data-f="content" value="'+escHtml(wn(d.content))+'" title="'+escHtml(wn(d.content))+'" placeholder="+ content" autocomplete="off"/></td>';
@@ -2818,14 +3005,30 @@ function wipRowHtml(d){
   opts.forEach(function(o){ h+='<option value="'+escHtml(o)+'"'+(o===st?' selected':'')+'>'+escHtml(o)+'</option>'; });
   h+='</select></td>';
   h+='<td><button type="button" class="wip-eng" data-f="by_eng">'+wipEngHtml(d)+'</button></td>';
-  h+='<td class="wip-tg"><button type="button" class="wip-dbtn"'+(wipTargetCol===true?' title="'+escHtml(wipTargetTip(d))+'"':' disabled title="محتاج خطوة الإعداد اللي فوق"')+'>'+wipTargetHtml(d)+'</button>'
-    +'<input type="date" class="wip-in" data-f="target_date" value="'+escHtml(toInputDate(d.target_date))+'"/></td>';
-
+  h+='<td><button type="button" class="wip-dbtn" title="'+escHtml(wipDatesTip(d))+'">'+wipDatesHtml(d)+'</button></td>';
   return h+'</tr>';
 }
-
+// one card per type: how many drawings, where they stand, and how much is finished
+function wipCardsHtml(s){
+  var open=wipOpen[s.key];
+  return s.tables.map(function(t){
+    var st=wipStats(t.rows), on=open===t.tk;
+    var seg=function(k){ return st[k]?'<span class="g-'+k+'" style="flex:'+st[k]+' 1 0"></span>':''; };
+    var line=function(k,label){ return '<span><i class="g-'+k+'"></i>'+label+'<b>'+st[k]+'</b></span>'; };
+    return '<button type="button" class="zc'+(on?' on':'')+'" data-t="'+escHtml(t.tk)+'" aria-expanded="'+(on?'true':'false')+'">'
+      +'<div class="zc-h"><b>'+escHtml(t.type||'No Type')+'</b><i>'+st.total+' drawing'+(st.total!==1?'s':'')+'</i><em>'+st.pct+'<small>%</small></em></div>'
+      +'<div class="zc-bar">'+seg('done')+seg('recv')+seg('prog')+seg('hold')+seg('none')+'</div>'
+      +'<div class="zc-st">'+line('none','Not started')+line('prog','In progress')+line('recv','Received')+line('done','Delivered')+(st.hold?line('hold','Hold'):'')+'</div>'
+      +'<div class="zc-more">'+(on?'&#9652; اقفل الجدول':'&#9662; افتح الجدول')+'</div></button>';
+  }).join('');
+}
+function wipOpenHtml(s){
+  var t=wipOpenTable(s); if(!t) return '';
+  return '<div class="wip-t-h">'+escHtml(t.type||'No Type')+' <span>'+t.rows.length+'</span><button type="button" class="zc-close">&#10005; اقفل</button></div>'
+    +'<div class="wip-tw"><table class="wip-tbl">'+wipHead()+'<tbody>'+t.rows.map(wipRowHtml).join('')+'</tbody></table></div>';
+}
 function renderWip(){
-  wipEngClose(true);
+  wipEngClose(true); wipDateClose(true);
   var secs=wipSections(), cfg=wipCfg(), body=wipEl('wipBody'), h='';
   wipSig=wipSignature(secs); wipStale=false;
   wipChips(secs); wipSummary(secs); wipSetupBox();
@@ -2837,28 +3040,19 @@ function renderWip(){
     body.innerHTML='<div class="wip-empty">مفيش لوحات في التراكر مطابقة للي اخترته دلوقتي.<br/>أول ما تتضاف لوحات بنفس البيانات هتظهر هنا لوحدها.</div>';
     return;
   }
-  var head='<colgroup>', ci;
-  for(ci=1;ci<=WIP_NCOL;ci++) head+='<col class="wc'+ci+'"/>';
-  head+='</colgroup>'
-    +'<thead><tr><th>'+escHtml(cfg.col1+' / '+cfg.col2+' / Floor')+'</th><th>DWG No.</th>'
-    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Target Date</th></tr></thead>';
   secs.forEach(function(s){
-    h+='<div class="wip-sec" style="--c:'+s.color+'">';
-    h+='<div class="wip-sec-h"><span>'+escHtml(s.plot)+'</span><span class="sep">›</span><span>'+escHtml(s.zone||'-')+'</span><span class="sep">›</span><span>'+escHtml(s.level||'-')+'</span>';
-    h+='<span class="wip-cnt">'+wipCountTxt(s.rows)+'</span></div><div class="wip-tabs">';
-    s.tables.forEach(function(t){
-      h+='<div class="wip-t"><div class="wip-t-h">'+escHtml(t.type||'No Type')+' <span>'+t.rows.length+'</span></div>';
-      h+='<div class="wip-tw"><table class="wip-tbl">'+head+'<tbody>'+t.rows.map(wipRowHtml).join('')+'</tbody></table></div></div>';
-    });
-    h+='</div></div>';
+    var st=wipStats(s.rows);
+    h+='<div class="wip-sec" data-k="'+escHtml(s.key)+'" style="--c:'+s.color+'">';
+    h+='<div class="wip-sec-h"><span class="wip-ttl">'+escHtml(wipTitle(s))+'</span><span class="wip-cnt">'+wipCountTxt(s.rows)+'</span><span class="wip-pct">'+st.pct+'%</span></div>';
+    h+='<div class="zc-cards">'+wipCardsHtml(s)+'</div><div class="zc-open">'+wipOpenHtml(s)+'</div></div>';
   });
   body.innerHTML=h;
 }
 
-// ── status summary of everything being followed in this tab ──
+// ── status summary of everything being followed ──
 function wipSummary(secs){
   var box=wipEl('wipSum'); if(!box) return;
-  var order=['IN PROGRESS','NOT STARTED','HOLD','RECEIVED','DELIVERED'], n={}, total=0, other=0, seen={};
+  var order=['IN PROGRESS','NOT STARTED','HOLD','RECEIVED','DELIVERED','DELIVERED AFTER COMMENTS'], n={}, total=0, other=0, seen={};
   order.forEach(function(k){ n[k]=0; });
   secs.forEach(function(s){ s.rows.forEach(function(d){
     if(seen[d.id]) return; seen[d.id]=1; total++;
@@ -2868,7 +3062,7 @@ function wipSummary(secs){
   var h='<div class="sum-t tot"><b>'+total+'</b><span>Total</span></div>';
   order.forEach(function(k){
     var c=wipStColor(k);
-    h+='<div class="sum-t" data-st="'+k+'" style="background:'+c.bg+';color:'+c.fg+'"><b>'+n[k]+'</b><span>'+k+'</span></div>';
+    h+='<div class="sum-t" data-st="'+k+'" style="background:'+c.bg+';color:'+c.fg+'"><b>'+n[k]+'</b><span>'+(k==='DELIVERED AFTER COMMENTS'?'Delivered after comments':k)+'</span></div>';
   });
   if(other) h+='<div class="sum-t" style="background:#EAECEE;color:#7F8C8D"><b>'+other+'</b><span>Other</span></div>';
   box.innerHTML=h;
@@ -2893,7 +3087,7 @@ function wipChips(secs){
 
 // ── light refresh: the same rows are on screen, only their values changed ──
 function wipPaintRow(tr,d,force){
-  var a=force?null:document.activeElement, el, st, sc, dy;
+  var a=force?null:document.activeElement, el, st, sc;
   el=tr.querySelector('.wip-name');
   if(el){ if(el!==a){ el.value=drwNo(d.name); el.classList.remove('open'); } el.title=wn(d.name); }
   el=tr.querySelector('[data-f="content"]'); if(el){ if(el!==a) el.value=wn(d.content); el.title=wn(d.content); }
@@ -2907,46 +3101,65 @@ function wipPaintRow(tr,d,force){
     sc=wipStColor(el.value); el.style.background=sc.bg; el.style.color=sc.fg;
   }
   el=tr.querySelector('.wip-eng'); if(el) el.innerHTML=wipEngHtml(d);
-  el=tr.querySelector('[data-f="target_date"]'); if(el&&el!==a&&!wipTimers[d.id]) el.value=toInputDate(d.target_date);
-  el=tr.querySelector('.wip-dbtn');
-  if(el){ el.innerHTML=wipTargetHtml(d); if(!el.disabled) el.title=wipTargetTip(d); }
+  el=tr.querySelector('.wip-dbtn'); if(el){ el.innerHTML=wipDatesHtml(d); el.title=wipDatesTip(d); }
 }
 function wipTr(id){
   var trs=wipEl('wipBody').querySelectorAll('tr[data-id]');
   for(var i=0;i<trs.length;i++){ if(trs[i].getAttribute('data-id')===String(id)) return trs[i]; }
   return null;
 }
-function wipSync(){
-  var map={}, body=wipEl('wipBody');
+// same structure on screen: repaint the open rows, the cards and the counters
+function wipSync(secs){
+  secs=secs||wipSections();
+  var map={}, byKey={}, body=wipEl('wipBody');
   drws.forEach(function(d){ map[d.id]=d; });
+  secs.forEach(function(s){ byKey[s.key]=s; });
   Array.prototype.forEach.call(body.querySelectorAll('tr[data-id]'),function(tr){
     var d=map[tr.getAttribute('data-id')]; if(d) wipPaintRow(tr,d);
   });
-  Array.prototype.forEach.call(body.querySelectorAll('.wip-sec'),function(sec){
-    var rows=[];
-    Array.prototype.forEach.call(sec.querySelectorAll('tr[data-id]'),function(tr){ var d=map[tr.getAttribute('data-id')]; if(d) rows.push(d); });
-    var c=sec.querySelector('.wip-cnt'); if(c) c.textContent=wipCountTxt(rows);
+  Array.prototype.forEach.call(body.querySelectorAll('.wip-sec'),function(el){
+    var s=byKey[el.getAttribute('data-k')]; if(!s) return;
+    var st=wipStats(s.rows), c;
+    c=el.querySelector('.zc-cards'); if(c) c.innerHTML=wipCardsHtml(s);
+    c=el.querySelector('.wip-cnt'); if(c) c.textContent=wipCountTxt(s.rows);
+    c=el.querySelector('.wip-pct'); if(c) c.textContent=st.pct+'%';
   });
-  wipSummary(wipSections());
+  wipSummary(secs);
 }
 function wipEditing(){
-  if(wipPop) return true;
-  for(var k in wipTimers){ if(wipTimers[k]) return true; }
+  if(wipPop||wipDp) return true;
   var a=document.activeElement, b=wipEl('wipBody');
-  return !!(a&&b&&b.contains(a)&&a.tagName==='INPUT'&&a.type!=='date');
+  return !!(a&&b&&b.contains(a)&&a.tagName==='INPUT');
 }
-// called whenever `drws` was replaced with fresh tracker data
+// called whenever `drws` changed (fresh tracker data, or a save)
 function wipOnData(){
   if(!wipVisible()) return;
-  if(wipTeamOn) wipTeamRender();
   var secs=wipSections();
-  if(wipSignature(secs)===wipSig){ wipSync(); wipChips(secs); }   // wipSync also refreshes the status summary
+  if(wipSignature(secs)===wipSig){ wipSync(secs); wipChips(secs); }
   else if(wipEditing()) wipStale=true;      // don't pull the table from under a cell being typed in
   else renderWip();
   var a=document.activeElement;
   if(!a||['wfPlot','wfZone','wfLevel'].indexOf(a.id)<0) wipFillFilter();
+  wipTeamRender(); wipDashRender();
+  if(wipTaskOn) wipTaskSuggest();
 }
 function wipTick(){ if(wipStale&&wipVisible()&&!wipEditing()) renderWip(); }
+function wipRenderAll(){
+  if(!wipVisible()) return;
+  wipFillFilter();
+  if(wipEditing()) wipStale=true; else renderWip();
+  wipTeamRender(); wipDashRender();
+}
+// the tracker page was opened (or came back from another view): draw now, then refresh in the background
+var wipLastLoad=0;
+function wipEnter(force){
+  wipRenderAll();
+  var now=Date.now();
+  if(!force&&now-wipLastLoad<5000) return;
+  wipLastLoad=now;
+  Promise.all([wipLoad(),wipTeamLoad()]).then(function(){ wipRenderAll(); });
+}
+function wipJump(id){ var el=wipEl(id); if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'start'}); }
 
 // ── filter bar ──
 function wipSortVals(o){ return Object.keys(o).sort(function(a,b){ return a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}); }); }
@@ -2970,12 +3183,9 @@ function wipFillFilter(){
   sz.disabled=sl.disabled=!p;
 }
 var wipBusy=false;   // one change of the list at a time
-async function wipAdd(){
-  var p=wipEl('wfPlot').value, z=wipEl('wfZone').value, l=wipEl('wfLevel').value;
-  if(!p){ showToast('اختار '+wipCfg().col1+' الأول',true); return; }
-  var w={plot:p,zone:z===WIP_ALL?null:z,level:l===WIP_ALL?null:l};
-  if(wipWatch.some(function(x){return wipSame(x,w);})){ showToast('موجود بالفعل في المتابعة',true); return; }
-  if(wipBusy) return;
+// add one Plot / Zone / Floor to the watch list; returns '' or an error text
+async function wipFollow(w){
+  if(wipWatch.some(function(x){return wipSame(x,w);})) return 'dup';
   if(wipMode==='db'){
     wipBusy=true; wipWatchEpoch++;
     var res;
@@ -2983,14 +3193,23 @@ async function wipAdd(){
     catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
     wipBusy=false; wipWatchEpoch++;
     if(res.error){
-      if(/duplicate|unique|23505/i.test(res.error.message||'')){ await wipLoad(); renderWip(); showToast('موجود بالفعل في المتابعة',true); }
-      else showToast('خطأ — ماتضافش: '+res.error.message,true);
-      return;
+      if(/duplicate|unique|23505/i.test(res.error.message||'')){ await wipLoad(); return 'dup'; }
+      return res.error.message||'error';
     }
     w=wipFromRow(res.data);
-    if(wipWatch.some(function(x){return x.id===w.id||wipSame(x,w);})){ renderWip(); return; }
+    if(wipWatch.some(function(x){return x.id===w.id||wipSame(x,w);})) return '';
   }
-  wipWatch.push(w); wipListChanged(); renderWip();
+  wipWatch.push(w); wipListChanged();
+  return '';
+}
+async function wipAdd(){
+  var p=wipEl('wfPlot').value, z=wipEl('wfZone').value, l=wipEl('wfLevel').value;
+  if(!p){ showToast('اختار '+wipCfg().col1+' الأول',true); return; }
+  if(wipBusy) return;
+  var err=await wipFollow({plot:p,zone:z===WIP_ALL?null:z,level:l===WIP_ALL?null:l});
+  renderWip();
+  if(err==='dup') showToast('موجود بالفعل في المتابعة',true);
+  else if(err) showToast('خطأ — ماتضافش: '+err,true);
 }
 async function wipRemove(i){
   var w=wipWatch[i]; if(!w||wipBusy) return;
@@ -3007,7 +3226,7 @@ async function wipRemove(i){
 async function wipClearAll(){
   if(!wipWatch.length){ showToast('مفيش حاجة في المتابعة'); return; }
   if(wipBusy) return;
-  if(!confirm('هتشيل كل جداول المتابعة ('+wipWatch.length+') — بيانات التراكر نفسها مش هتتأثر. متأكد؟')) return;
+  if(!confirm('هتشيل كل اللي بتتابعه من فوق ('+wipWatch.length+') — بيانات التراكر نفسها مش هتتأثر. متأكد؟')) return;
   if(wipMode==='db'){
     wipBusy=true; wipWatchEpoch++;
     var res;
@@ -3016,17 +3235,8 @@ async function wipClearAll(){
     wipBusy=false; wipWatchEpoch++;
     if(res.error){ showToast('خطأ — ماتمسحتش: '+res.error.message,true); return; }
   }
-  wipWatch=[]; wipListChanged(); renderWip();
-  showToast('✓ تم مسح جداول المتابعة');
-}
-
-function goWip(){
-  show('vWip'); wipFillFilter(); renderWip();
-  Promise.all([wipLoad(),fetchDrawings()]).then(function(){
-    if(!wipVisible()) return;
-    wipFillFilter();
-    if(wipEditing()) wipStale=true; else renderWip();
-  });
+  wipWatch=[]; wipOpen={}; wipListChanged(); renderWip();
+  showToast('✓ تم مسح المتابعة');
 }
 
 // ── editing ──
@@ -3045,46 +3255,26 @@ function wipDateOk(v){
   var m=/^(\d{4})-\d{2}-\d{2}$/.exec(v);
   return !!m&&+m[1]>=2000&&+m[1]<=2100;
 }
-function wipCommit(el,fromBlur){
+function wipCommit(el){
   var r=wipRow(el); if(!r) return;
   var d=r.d, f=el.getAttribute('data-f'), v, patch=null;
   if(f==='name'){
     if(!el.classList.contains('open')) return;     // the cell is showing the short number, not the name
     v=el.value.trim();
-    if(!v) showToast('اسم اللوحة مينفعش يكون فاضي',true);
+    if(!v){ if(wn(d.name)) showToast('اسم اللوحة مينفعش يتمسح',true); }
     else if(v!==wn(d.name)) patch={name:v};
   } else if(f==='content'){
     v=el.value.trim(); if(v!==wn(d.content)) patch={content:v};
   } else if(f==='status'){
     v=el.value; if(v!==wipStatus(d)) patch={status:v};
-  } else if(f==='target_date'){
-    if(wipTimers[d.id]){ clearTimeout(wipTimers[d.id]); delete wipTimers[d.id]; }
-    if(wipTargetCol!==true) return;
-    v=el.value;
-    if(!v){
-      if(el.validity&&el.validity.badInput) el.value=toInputDate(d.target_date);   // half-typed date → keep the old one
-      else if(fromBlur&&d.target_date) patch={target_date:null};
-    }
-    else if(wipDateOk(v)){ if(v!==toInputDate(d.target_date)) patch={target_date:v}; }
-    else if(fromBlur) el.value=toInputDate(d.target_date);
   }
   if(patch) wipSave(d.id,patch);
-}
-function wipDateSoon(el){
-  var r=wipRow(el); if(!r) return;
-  var id=r.d.id;
-  if(wipTimers[id]){ clearTimeout(wipTimers[id]); delete wipTimers[id]; }
-  if(!el.value) return;                       // an empty date is only saved when you leave the cell
-  wipTimers[id]=setTimeout(function(){
-    delete wipTimers[id];
-    if(document.body.contains(el)) wipCommit(el,false);
-    wipTick();
-  },700);
 }
 
 // write one edit to the tracker (Supabase) and keep the local copy in step
 async function wipSave(id,patch){
   var idx=drws.findIndex(function(x){return x.id===id;}); if(idx<0) return;
+  if(patch.status!==undefined&&wn(patch.status).toUpperCase()!==wipStatus(drws[idx])) wipStamp(drws[idx],patch);
   var before={}, k;
   for(k in patch) before[k]=drws[idx][k];
   Object.assign(drws[idx],patch);
@@ -3111,12 +3301,20 @@ async function wipSave(id,patch){
     tr=wipTr(id);
     if(tr&&idx>=0) wipPaintRow(tr,drws[idx],!!err);
     wipSync();
+    wipRegister(); wipTeamRender(); wipDashRender();
   }
 }
 
 // ── engineer picker ──
+function wipPlace(pop,btn){
+  var rc=btn.getBoundingClientRect(), vw=document.documentElement.clientWidth;
+  pop.style.left=Math.max(8,Math.min(rc.left,vw-pop.offsetWidth-8))+window.pageXOffset+'px';
+  var top=rc.bottom+3;
+  if(top+pop.offsetHeight+8>window.innerHeight&&rc.top-pop.offsetHeight-3>0) top=rc.top-pop.offsetHeight-3;
+  pop.style.top=top+window.pageYOffset+'px';
+}
 function wipEngOpen(btn,id){
-  wipEngClose(true);
+  wipEngClose(true); wipDateClose(true);
   var d=drws.find(function(x){return x.id===id;}); if(!d) return;
   var cur=wipEngList(d.by_eng), names=[];
   engNames.forEach(function(n){ n=wn(n); if(n&&n.indexOf(',')<0&&names.indexOf(n)<0) names.push(n); });
@@ -3130,11 +3328,7 @@ function wipEngOpen(btn,id){
   h+='<div class="pop-foot"><button type="button" class="btn bt" style="padding:4px 12px;font-size:11px">Done</button></div>';
   pop.innerHTML=h;
   document.body.appendChild(pop);
-  var rc=btn.getBoundingClientRect(), vw=document.documentElement.clientWidth;
-  pop.style.left=Math.max(8,Math.min(rc.left,vw-pop.offsetWidth-8))+window.pageXOffset+'px';
-  var top=rc.bottom+3;
-  if(top+pop.offsetHeight+8>window.innerHeight&&rc.top-pop.offsetHeight-3>0) top=rc.top-pop.offsetHeight-3;
-  pop.style.top=top+window.pageYOffset+'px';
+  wipPlace(pop,btn);
   btn.classList.add('on');
   wipPop={id:id,btn:btn,el:pop};
   pop.addEventListener('change',function(e){
@@ -3154,22 +3348,31 @@ function wipEngOpen(btn,id){
   pop.querySelector('.pop-new button').addEventListener('click',addNew);
   ni.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); addNew(); } });
 }
-// a typed name: tick it for this drawing and add it to the tracker's engineer list
-async function wipEngAdd(btn,id,name){
-  var d=drws.find(function(x){return x.id===id;}); if(!d) return;
+// make sure a name is in the tracker's engineers list; returns the name as it is stored
+function wipEngKnown(name){
   var known=null;
   engNames.forEach(function(n){ if(known===null&&normalize(n).toLowerCase()===name.toLowerCase()) known=wn(n); });
-  var isNew=known===null;
-  if(isNew) engNames.push(name); else name=known;      // already in the list (maybe typed in another case) → use that one
-  var cur=wipEngList(d.by_eng);
-  if(cur.indexOf(name)<0){ cur.push(name); wipSave(id,{by_eng:cur.join(',')}); }
-  wipEngOpen(btn,id);                                  // redraw the list with the name ticked
-  var f=document.querySelector('#wipPop .pop-new input'); if(f) f.focus();
-  if(!isNew) return;
+  return known;
+}
+async function wipEngRegister(name){
+  if(wipEngKnown(name)!==null) return '';
+  engNames.push(name);
   var res;
   try{ res=await supabase.from('engineers').insert({name:name}).select().single(); }
   catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
-  if(res.error&&!/duplicate|unique|23505/i.test(res.error.message||'')) showToast('الاسم اتسجل على اللوحة، بس ماتضافش لقايمة المهندسين: '+res.error.message,true);
+  return res.error&&!/duplicate|unique|23505/i.test(res.error.message||'')?(res.error.message||'error'):'';
+}
+// a typed name: tick it for this drawing and add it to the tracker's engineer list
+async function wipEngAdd(btn,id,name){
+  var d=drws.find(function(x){return x.id===id;}); if(!d) return;
+  var known=wipEngKnown(name), isNew=known===null;
+  if(!isNew) name=known;                               // already in the list (maybe typed in another case) → use that one
+  var cur=wipEngList(d.by_eng);
+  var reg=isNew?wipEngRegister(name):null;
+  if(cur.indexOf(name)<0){ cur.push(name); wipSave(id,{by_eng:cur.join(',')}); }
+  wipEngOpen(btn,id);                                  // redraw the list with the name ticked
+  var f=document.querySelector('#wipPop .pop-new input'); if(f) f.focus();
+  if(reg){ var err=await reg; if(err) showToast('الاسم اتسجل على اللوحة، بس ماتضافش لقايمة المهندسين: '+err,true); }
 }
 function wipEngClose(silent){
   if(!wipPop) return;
@@ -3179,97 +3382,55 @@ function wipEngClose(silent){
   if(!silent) setTimeout(wipTick,0);
 }
 
-// ── Grid (two tables side by side) / List (one under the other) — remembered per browser ──
-var wipView='grid';
-function wipViewApply(){
-  var b=wipEl('wipBody'); if(b) b.classList.toggle('wip-grid',wipView==='grid');
-  Array.prototype.forEach.call(document.querySelectorAll('#wipView button'),function(x){ x.classList.toggle('on',x.getAttribute('data-v')===wipView); });
+// ── dates pop-over: start · target · received ──
+function wipDateOpen(btn,id){
+  wipDateClose(true); wipEngClose(true);
+  var d=drws.find(function(x){return x.id===id;}); if(!d) return;
+  var pop=document.createElement('div');
+  pop.id='wipDatePop';
+  var row=function(f,label,ok,hint){
+    return '<div class="dp-r"><label>'+label+'</label><input type="date" data-f="'+f+'" value="'+escHtml(wipIso(d[f]))+'"'+(ok?'':' disabled title="محتاج خطوة الإعداد اللي فوق"')+'/></div>'+(hint?'<div class="dp-n">'+hint+'</div>':'');
+  };
+  pop.innerHTML=row('start_date','Start',wipDatesCol===true,'')
+    +row('target_date','Target',wipTargetCol===true,'')
+    +row('received_date','Received',wipDatesCol===true,'تاريخ الاستلام بيتسجل لوحده أول ما الحالة تبقى RECEIVED، وتاريخ البداية أول ما تبقى IN PROGRESS. تقدر تعدّلهم من هنا.')
+    +'<div class="pop-foot"><button type="button" class="btn bt" style="padding:4px 12px;font-size:11px">Done</button></div>';
+  document.body.appendChild(pop);
+  wipPlace(pop,btn);
+  btn.classList.add('on');
+  wipDp={id:id,btn:btn,el:pop};
+  pop.addEventListener('change',function(e){
+    var el=e.target; if(el.type!=='date') return;
+    var key=id+'|'+el.getAttribute('data-f');
+    if(wipTimers[key]){ clearTimeout(wipTimers[key]); delete wipTimers[key]; }
+    if(!el.value) return;                              // an empty date is saved when you leave the field
+    wipTimers[key]=setTimeout(function(){ delete wipTimers[key]; wipDateCommit(id,el,false); },700);   // typing: wait until it settles
+  });
+  pop.addEventListener('focusout',function(e){ if(e.target.type==='date') wipDateCommit(id,e.target,true); });
+  pop.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.type==='date'){ e.preventDefault(); e.target.blur(); } });
+  pop.querySelector('.pop-foot button').addEventListener('click',function(){ wipDateClose(); });
 }
-function wipSetView(v){
-  wipView=v==='list'?'list':'grid';
-  try{localStorage.setItem('sustra_wip_view',wipView);}catch(e){}
-  wipEngClose(true); wipViewApply();
+function wipDateCommit(id,el,leaving){
+  var f=el.getAttribute('data-f'), key=id+'|'+f;
+  if(wipTimers[key]){ clearTimeout(wipTimers[key]); delete wipTimers[key]; }
+  if(el.disabled) return;
+  var d=drws.find(function(x){return x.id===id;}); if(!d) return;
+  var v=el.value, cur=wipIso(d[f]), patch={};
+  if(!v){
+    if(el.validity&&el.validity.badInput){ if(leaving) el.value=cur; }     // half-typed date → keep the old one
+    else if(leaving&&cur){ patch[f]=null; wipSave(id,patch); }
+    return;
+  }
+  if(!wipDateOk(v)){ if(leaving) el.value=cur; return; }
+  if(v!==cur){ patch[f]=v; wipSave(id,patch); }
 }
-
-function wipInit(){
-  var b=wipEl('wipBody'); if(!b||b._wip) return; b._wip=1;
-  try{ var sv=localStorage.getItem('sustra_wip_view'); if(sv==='grid'||sv==='list') wipView=sv; }catch(e){}
-  wipViewApply();
-  b.addEventListener('focusin',function(e){
-    var el=e.target;
-    if(el.classList&&el.classList.contains('wip-name')){
-      var r=wipRow(el); if(!r) return;
-      el.value=wn(r.d.name); el.classList.add('open');     // show the full name while editing
-      el._fresh=true; wipSelNo(el);
-    }
-  });
-  // a click puts the caret where you clicked — re-select the number once the click has finished
-  b.addEventListener('mouseup',function(e){
-    var el=e.target;
-    if(el.classList&&el.classList.contains('wip-name')&&el._fresh){ el._fresh=false; wipSelNo(el); }
-  });
-  b.addEventListener('focusout',function(e){
-    var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
-    if(f==='name'||f==='content'||f==='target_date') wipCommit(el,true);
-    if(f==='name'){
-      var r=wipRow(el);
-      el.classList.remove('open');
-      if(r){ el.value=drwNo(r.d.name); el.title=wn(r.d.name); }
-    }
-    if(f==='target_date'){ var td=el.closest('td'); if(td) td.classList.remove('ed'); }   // back to the compact view
-    setTimeout(wipTick,0);
-  });
-  b.addEventListener('change',function(e){
-    var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
-    if(f==='status') wipCommit(el,false);
-    else if(f==='target_date'){
-      if(el._keys) wipDateSoon(el);   // typed: wait until the typing settles
-      else el.blur();                 // picked from the calendar: save and close straight away
-    }
-  });
-  b.addEventListener('keydown',function(e){
-    var el=e.target; if(el.tagName!=='INPUT') return;
-    el._fresh=false; el._keys=true;
-    if(e.key==='Enter'){ e.preventDefault(); el.blur(); }
-    else if(e.key==='Escape'){
-      var r=wipRow(el), f=el.getAttribute('data-f');
-      if(r){
-        if(f==='target_date'&&wipTimers[r.d.id]){ clearTimeout(wipTimers[r.d.id]); delete wipTimers[r.d.id]; }
-        el.value=f==='name'?wn(r.d.name):f==='content'?wn(r.d.content):toInputDate(r.d.target_date);
-      }
-      el.blur();
-    }
-  });
-  b.addEventListener('click',function(e){
-    var db=e.target.closest?e.target.closest('.wip-dbtn'):null;
-    if(db){
-      if(db.disabled) return;
-      var cell=db.parentNode, inp=cell.querySelector('input[data-f="target_date"]');
-      cell.classList.add('ed'); inp._keys=false; inp.focus();
-      try{ if(inp.showPicker) inp.showPicker(); }catch(x){}
-      return;
-    }
-    var btn=e.target.closest?e.target.closest('.wip-eng'):null; if(!btn) return;
-    var r=wipRow(btn); if(!r) return;
-    if(wipPop&&wipPop.btn===btn) wipEngClose(); else wipEngOpen(btn,r.d.id);
-  });
-  document.addEventListener('mousedown',function(e){
-    if(!wipPop||wipPop.el.contains(e.target)||wipPop.btn.contains(e.target)) return;
-    wipEngClose();
-  });
-  document.addEventListener('keydown',function(e){
-    if(e.key!=='Escape') return;
-    if(wipPop) wipEngClose(); else if(wipTeamOn) wipTeamClose();
-  });
-  window.addEventListener('resize',function(){ if(wipPop) wipEngClose(); });
-  var tb=wipEl('wipTeamBody');
-  if(tb) tb.addEventListener('click',function(e){
-    var x=e.target.closest?e.target.closest('.tm-rm,.tm-back,.tm-gone-h'):null;
-    if(!x) return;
-    if(x.classList.contains('tm-rm')) wipTeamRemove(x.getAttribute('data-n'));
-    else if(x.classList.contains('tm-back')) wipTeamRestore(x.getAttribute('data-n'));
-    else { wipTeamOffOpen=!wipTeamOffOpen; wipTeamRender(); }
-  });
+function wipDateClose(silent){
+  if(!wipDp) return;
+  var p=wipDp; wipDp=null;
+  Array.prototype.forEach.call(p.el.querySelectorAll('input[type=date]'),function(el){ wipDateCommit(p.id,el,true); });   // nothing typed is lost
+  if(p.el.parentNode) p.el.parentNode.removeChild(p.el);
+  p.btn.classList.remove('on');
+  if(!silent) setTimeout(wipTick,0);
 }
 
 // ══════════════════════════════════════════
@@ -3278,14 +3439,14 @@ function wipInit(){
 // Working   = has at least one drawing with status IN PROGRESS (in any project).
 // Available = every other engineer the tracker knows (the engineers list + every name found on a drawing),
 //             except the ones marked "no longer with us" with ✕.
-// That ✕ list is state of this panel only: it is kept in wip_watch under its own key, and nothing
+// That ✕ list is state of this section only: it is kept in wip_watch under its own key, and nothing
 // about the engineer (his drawings, counts, reports, the pick lists) is changed.
 var WIP_OFF_KEY='__ENGINEERS_OFF__';
 var wipTeamOff=[];       // [{id, name}] — engineers marked "no longer with us" (id = its row in wip_watch)
 var wipTeamOffDb=false;  // true when that list is stored in the tracker (false = this browser only)
 var wipTeamOffOpen=false;
-var wipTeamOn=false;
 var wipTeamOther=[];     // IN PROGRESS drawings of the other projects
+var wipTeamTicks=0;
 
 function wipOffKey(n){ return normalize(n).toLowerCase(); }
 function wipOffLocal(){ try{ var a=JSON.parse(localStorage.getItem('sustra_wip_engoff')||'[]'); return Array.isArray(a)?a.filter(function(x){return typeof x==='string'&&x;}):[]; }catch(e){ return []; } }
@@ -3345,7 +3506,7 @@ function wipTeamData(){
     });
     groups.sort(function(a,b){ return (a.proj===wipProj()?0:1)-(b.proj===wipProj()?0:1)||cmp(a.loc,b.loc)||a.rank-b.rank||cmp(a.type,b.type); });
     groups.forEach(function(x){ x.rows.sort(function(a,b){ return cmp(drwNo(a.name),drwNo(b.name)); }); });
-    working.push({name:all[k],count:busy[k].length,groups:groups});
+    working.push({name:all[k],key:k,count:busy[k].length,groups:groups});
   });
   working.sort(function(a,b){ return b.count-a.count||cmp(a.name,b.name); });
   free.sort(cmp);
@@ -3354,7 +3515,7 @@ function wipTeamData(){
   return {working:working,free:free,gone:gone,off:off};
 }
 function wipTeamRender(){
-  var box=wipEl('wipTeamBody'); if(!box) return;
+  var box=wipEl('wipTeamBody'); if(!box||!wipVisible()) return;
   var t=wipTeamData(), h='';
   // search box: show only the engineers whose name matches what was typed
   var qi=wipEl('wipTeamQ'), q=qi?normalize(qi.value).toLowerCase():'', q2=q.replace(/[\s.]+/g,'');
@@ -3364,20 +3525,20 @@ function wipTeamRender(){
     t.free=t.free.filter(hit); t.gone=t.gone.filter(hit);
   }
   var showGone=wipTeamOffOpen||(!!q&&t.gone.length>0);
-  h+='<div class="tm-col"><div class="tm-h busy">&#128736; شغالين دلوقتي <span>'+t.working.length+'</span></div>';
+  h+='<div class="tm-h">&#128736; شغالين دلوقتي <span>'+t.working.length+'</span></div>';
   if(!t.working.length) h+='<p class="tm-none">'+(q?'مفيش مهندس شغال بالاسم ده.':'مفيش حد عنده لوحات IN PROGRESS.')+'</p>';
+  else h+='<div class="tm-grid">';
   t.working.forEach(function(e){
-    h+='<div class="tm-card"><div class="tm-name">'+escHtml(e.name)+'<span>'+e.count+' in progress</span>'+(t.off[normalize(e.name).toLowerCase()]?'<small>متشال من المتاحين — بس لسه معاه شغل</small>':'')+'</div>';
+    h+='<div class="tm-card"><div class="tm-name">'+escHtml(e.name)+'<span>'+e.count+' in progress</span>'+(t.off[e.key]?'<small>متشال من المتاحين — بس لسه معاه شغل</small>':'')+'</div>';
     e.groups.forEach(function(g){
       var late=0, next=null;
       g.rows.forEach(function(d){
-        var dy=wipDays(d);
-        if(dy.c==='late') late++;
-        if(d.target_date&&(!next||toInputDate(d.target_date)<toInputDate(next.target_date))) next=d;
+        if(wipDates(d).c==='late') late++;
+        if(d.target_date&&(!next||wipIso(d.target_date)<wipIso(next.target_date))) next=d;
       });
       var other=g.proj!==wipProj(), pl=(PROJECT_CONFIG[g.proj]||{}).label||g.proj;
       h+='<div class="tm-g"><div class="tm-gh">'+(other?'<i>'+escHtml(pl)+'</i> ':'')+'<b>'+escHtml(g.loc)+'</b> · '+escHtml(g.type)+' <span class="tm-n">'+g.rows.length+'</span>'
-        +(late?' <span class="wip-d late">'+late+' late</span>':(next?' '+wipTargetHtml(next):''))+'</div><div class="tm-nos">';
+        +(late?' <span class="wip-d late">'+late+' late</span>':(next?' '+wipDatesHtml(next):''))+'</div><div class="tm-nos">';
       g.rows.forEach(function(d){
         // drawing number + what the drawing is (its Content)
         h+='<div class="tm-dr"><span title="'+escHtml(wn(d.name))+'">'+escHtml(drwNo(d.name))+'</span>'+(wn(d.content)?'<em>'+escHtml(wn(d.content))+'</em>':'')+'</div>';
@@ -3386,7 +3547,8 @@ function wipTeamRender(){
     });
     h+='</div>';
   });
-  h+='</div><div class="tm-col"><div class="tm-h free">&#9989; فاضيين ومتاحين <span>'+t.free.length+'</span></div>';
+  if(t.working.length) h+='</div>';
+  h+='<div class="tm-h">&#9989; فاضيين ومتاحين <span>'+t.free.length+'</span></div>';
   if(!t.free.length) h+='<p class="tm-none">'+(q?'مفيش مهندس فاضي بالاسم ده.':'مفيش حد فاضي دلوقتي — كل المهندسين معاهم شغل.')+'</p>';
   else h+='<div class="tm-free">'+t.free.map(function(n){
     return '<span>'+escHtml(n)+'<button type="button" class="tm-rm" data-n="'+escHtml(n)+'" title="مبقاش شغال معانا — شيله من المتاحين">&#10005;</button></span>';
@@ -3398,19 +3560,13 @@ function wipTeamRender(){
     }).join('')+'</div>';
     h+='</div>';
   }
-  h+='</div>';
   box.innerHTML=h;
 }
-function wipTeamOpen(){
-  wipEngClose(true);
-  wipTeamOn=true;
-  wipEl('wipTeam').style.display='flex';
-  var qi=wipEl('wipTeamQ'); if(qi){ qi.value=''; setTimeout(function(){ if(wipTeamOn) qi.focus(); },50); }
-  wipTeamRender();
-  Promise.all([wipTeamLoad(),fetchEngineers()]).then(function(){ if(wipTeamOn) wipTeamRender(); });
+// refreshed every third tick (≈ 30 s): work in the other project and the ✕ list
+function wipTeamPoll(){
+  if(!wipVisible()||(++wipTeamTicks%3)) return;
+  wipTeamLoad().then(function(){ wipTeamRender(); if(wipTaskOn) wipTaskSuggest(); });
 }
-function wipTeamClose(){ wipTeamOn=false; var m=wipEl('wipTeam'); if(m) m.style.display='none'; }
-function wipTeamPoll(){ if(wipTeamOn) wipTeamLoad().then(function(){ if(wipTeamOn) wipTeamRender(); }); }
 // someone who no longer works with us: hide him from "available". Nothing else about him changes.
 async function wipTeamRemove(name){
   if(wipOffHas(name)) return;
@@ -3420,14 +3576,14 @@ async function wipTeamRemove(name){
     try{ res=await supabase.from('wip_watch').insert({project_id:WIP_OFF_KEY,plot:name,created_by:wipMe()}).select().single(); }
     catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
     if(res.error){
-      if(/duplicate|unique|23505/i.test(res.error.message||'')){ await wipOffLoad(); if(wipTeamOn) wipTeamRender(); }   // someone else just did it
+      if(/duplicate|unique|23505/i.test(res.error.message||'')){ await wipOffLoad(); wipTeamRender(); }   // someone else just did it
       else showToast('خطأ — ماتشالش: '+res.error.message,true);
       return;
     }
     id=res.data&&res.data.id||null;
   }
   wipTeamOff.push({id:id,name:name}); wipOffStore();
-  if(wipTeamOn) wipTeamRender();
+  wipTeamRender();
   showToast('✓ '+name+' اتشال من المتاحين — لوحاته وبياناته زي ما هي');
 }
 async function wipTeamRestore(name){
@@ -3443,7 +3599,7 @@ async function wipTeamRestore(name){
     }
   }
   wipTeamOff=wipTeamOff.filter(function(o){ return wipOffKey(o.name)!==k; }); wipOffStore();
-  if(wipTeamOn) wipTeamRender();
+  wipTeamRender();
   showToast('✓ '+name+' رجع للمتاحين');
 }
 // an engineer who has never been on a drawing yet: register him here so he shows up as available
@@ -3454,15 +3610,244 @@ async function wipTeamAdd(){
   var t=wipTeamData(), lower=name.toLowerCase();
   if(t.off[lower]){ inp.value=''; wipTeamRestore(t.off[lower]); return; }
   if(t.free.concat(t.working.map(function(e){return e.name;})).some(function(n){ return normalize(n).toLowerCase()===lower; })){ showToast('المهندس ده موجود بالفعل',true); return; }
-  engNames.push(name); inp.value=''; wipTeamRender();
-  var res;
-  try{ res=await supabase.from('engineers').insert({name:name}).select().single(); }
-  catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
-  if(res.error&&!/duplicate|unique|23505/i.test(res.error.message||'')){
+  inp.value='';
+  var p=wipEngRegister(name); wipTeamRender();
+  var err=await p;
+  if(err){
     engNames=engNames.filter(function(n){ return n!==name; });
-    if(wipTeamOn) wipTeamRender();
-    showToast('خطأ — المهندس ماتضافش: '+res.error.message,true);
+    wipTeamRender();
+    showToast('خطأ — المهندس ماتضافش: '+err,true);
   } else showToast('✓ '+name+' اتضاف لقايمة المهندسين');
+}
+
+// ══════════════════════════════════════════
+//  DASHBOARDS  (all drawings of the current project)
+// ══════════════════════════════════════════
+// A drawing shared by several engineers counts as an equal share for each (the Engineer report does the same).
+// "Completed" = RECEIVED or DELIVERED (the engineer's work on it is done).
+// Production rate = completed drawings that have both a start date and a received date ÷ the days those tasks covered.
+var WIP_TYPES=['SLAB','BEAMS','COLUMNS','CORES','STAIR','STAIR BEAMS','WALLS'];   // fixed colour slot per type; the rest is "Other"
+var wipDashTbl={};      // chart id → show as table
+function wipTypeSlot(t){ var r=wipTypeRank(t); return r>=1&&r<=7?r:0; }
+function wipFmt(n){ return Math.abs(n-Math.round(n))<0.05?String(Math.round(n)):n.toFixed(1); }
+function wipDashData(){
+  var map={}, list=[];
+  function get(n){
+    var k=normalize(n).toLowerCase();
+    if(!map[k]){ map[k]={key:k,name:wn(n),total:0,done:0,prog:0,types:[0,0,0,0,0,0,0,0],rateN:0,days:{},nDays:0,rate:null}; list.push(map[k]); }
+    return map[k];
+  }
+  drws.forEach(function(d){
+    var eng=wipEngList(d.by_eng); if(!eng.length) return;
+    var sh=1/eng.length, g=wipGroup(wipStatus(d)), slot=wipTypeSlot(d.type), fin=g==='recv'||g==='done';
+    var a=wipDayNum(wipIso(d.start_date)), b=wipDayNum(wipIso(d.received_date));
+    var dated=fin&&a!==null&&b!==null&&b>=a&&b-a<=730;
+    eng.forEach(function(n){
+      var e=get(n); e.total+=sh;
+      if(g==='prog') e.prog+=sh;
+      if(fin){ e.done+=sh; e.types[slot]+=sh; }
+      if(dated){ e.rateN+=sh; for(var x=a;x<=b;x++) e.days[x]=1; }     // overlapping tasks share their days
+    });
+  });
+  list.forEach(function(e){ e.nDays=Object.keys(e.days).length; e.rate=e.nDays?e.rateN/e.nDays:null; });
+  return {map:map,list:list};
+}
+function wipDashRender(){
+  var box=wipEl('wipDash'); if(!box||!wipVisible()) return;
+  var D=wipDashData();
+  var cmp=function(a,b){ return a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}); };
+  var prod=D.list.filter(function(e){ return e.done>0||e.prog>0; }).sort(function(a,b){ return b.done-a.done||b.prog-a.prog||cmp(a,b); });
+  var rated=D.list.filter(function(e){ return e.rate!==null; }).sort(function(a,b){ return b.rate-a.rate||cmp(a,b); });
+  var card=function(id,title,sub,body,wide){
+    return '<div class="dcard'+(wide?' wide':'')+'" data-c="'+id+'"><div class="dcard-h"><div><h3>'+title+'</h3><p dir="rtl">'+sub+'</p></div>'
+      +'<button type="button" class="dtog" data-c="'+id+'">'+(wipDashTbl[id]?'&#128202; Chart':'&#9638; Table')+'</button></div>'+body+'</div>';
+  };
+  var row=function(name,bar,val,lab){
+    return '<div class="hb-n" title="'+escHtml(name)+'">'+escHtml(name)+'</div><div class="hb-t" style="--lab:'+(lab||70)+'px">'+bar+'<span class="hb-v">'+val+'</span></div>';
+  };
+  var w=function(v,max){ return 'width:calc((100% - var(--lab)) * '+(max?Math.max(v/max,0):0).toFixed(4)+')'; };
+  var empty=function(t){ return '<div class="dempty">'+t+'</div>'; };
+  var h='', body, max;
+
+  // 1) drawings each engineer has completed
+  max=prod.reduce(function(m,e){ return Math.max(m,e.done); },0);
+  if(!prod.length) body=empty('لسه مفيش لوحات متسجل عليها مهندسين في المشروع ده.');
+  else if(wipDashTbl.a) body='<table class="dtbl"><thead><tr><th>Engineer</th><th>Completed</th><th>In progress</th><th>All assigned</th></tr></thead><tbody>'
+    +prod.map(function(e){ return '<tr><td>'+escHtml(e.name)+'</td><td>'+wipFmt(e.done)+'</td><td>'+wipFmt(e.prog)+'</td><td>'+wipFmt(e.total)+'</td></tr>'; }).join('')+'</tbody></table>';
+  else body='<div class="hb">'+prod.map(function(e){
+    return row(e.name,'<div class="hb-b" style="'+w(e.done,max)+'"><span style="flex:1" data-tip="'+escHtml(e.name+' — '+wipFmt(e.done)+' completed · '+wipFmt(e.prog)+' in progress · '+wipFmt(e.total)+' assigned')+'"></span></div>',
+      wipFmt(e.done)+(e.prog?' <small>+'+wipFmt(e.prog)+' in progress</small>':''),130);
+  }).join('')+'</div>';
+  h+=card('a','Drawings completed per engineer','كل مهندس خلّص كام لوحة في المشروع لحد دلوقتي (RECEIVED أو DELIVERED)',body);
+
+  // 2) the same output split by type
+  var used=[0,0,0,0,0,0,0,0];
+  prod.forEach(function(e){ e.types.forEach(function(v,i){ used[i]+=v; }); });
+  var order=[1,2,3,4,5,6,7,0].filter(function(i){ return used[i]>0; });
+  var tname=function(i){ return i?WIP_TYPES[i-1]:'OTHER'; }, tcol=function(i){ return i?'var(--t'+i+')':'var(--v-other)'; };
+  var withOut=prod.filter(function(e){ return e.done>0; });
+  if(!withOut.length) body=empty('لسه مفيش لوحات خلصت (RECEIVED أو DELIVERED) عشان تتقسم على الأنواع.');
+  else if(wipDashTbl.b) body='<table class="dtbl"><thead><tr><th>Engineer</th>'+order.map(function(i){ return '<th>'+tname(i)+'</th>'; }).join('')+'<th>Total</th></tr></thead><tbody>'
+    +withOut.map(function(e){ return '<tr><td>'+escHtml(e.name)+'</td>'+order.map(function(i){ return '<td>'+(e.types[i]?wipFmt(e.types[i]):'-')+'</td>'; }).join('')+'<td><b>'+wipFmt(e.done)+'</b></td></tr>'; }).join('')+'</tbody></table>';
+  else body='<div class="dlegend">'+order.map(function(i){ return '<span><i style="background:'+tcol(i)+'"></i>'+tname(i)+'</span>'; }).join('')+'</div>'
+    +'<div class="hb">'+withOut.map(function(e){
+      var segs=order.filter(function(i){ return e.types[i]>0; }).map(function(i){
+        return '<span style="flex:'+e.types[i].toFixed(3)+' 1 0;background:'+tcol(i)+'" data-tip="'+escHtml(e.name+' — '+tname(i)+': '+wipFmt(e.types[i]))+'"></span>';
+      }).join('');
+      return row(e.name,'<div class="hb-b" style="'+w(e.done,max)+'">'+segs+'</div>',wipFmt(e.done),50);
+    }).join('')+'</div>';
+  h+=card('b','Completed drawings by type','كل مهندس اشتغل في أنهي أنواع، وإنتاجه في كل نوع قد إيه',body);
+
+  // 3) production rate
+  max=rated.reduce(function(m,e){ return Math.max(m,e.rate); },0);
+  if(wipDatesCol===false) body=empty('معدل الإنتاج محتاج تاريخ بداية وتاريخ استلام لكل تاسك، ودول لسه مش متفعّلين في التراكر — شغّل كود الإعداد اللي فوق الصفحة.');
+  else if(!rated.length) body=empty('لسه مفيش لوحات ليها تاريخ بداية وتاريخ استلام.<br/>المعدل هيبدأ يتحسب لوحده: تاريخ البداية بيتسجل أول ما اللوحة تبقى IN PROGRESS، وتاريخ الاستلام أول ما تبقى RECEIVED.');
+  else if(wipDashTbl.c) body='<table class="dtbl"><thead><tr><th>Engineer</th><th>Per day</th><th>Per week</th><th>Drawings</th><th>Days</th></tr></thead><tbody>'
+    +rated.map(function(e){ return '<tr><td>'+escHtml(e.name)+'</td><td><b>'+e.rate.toFixed(2)+'</b></td><td>'+(e.rate*7).toFixed(1)+'</td><td>'+wipFmt(e.rateN)+'</td><td>'+e.nDays+'</td></tr>'; }).join('')+'</tbody></table>';
+  else body='<div class="hb">'+rated.map(function(e){
+    return row(e.name,'<div class="hb-b" style="'+w(e.rate,max)+'"><span style="flex:1" data-tip="'+escHtml(e.name+' — '+wipFmt(e.rateN)+' drawings in '+e.nDays+' day'+(e.nDays!==1?'s':''))+'"></span></div>',
+      e.rate.toFixed(2)+' <small>/day · '+(e.rate*7).toFixed(1)+' /week</small>',150);
+  }).join('')+'</div>';
+  if(rated.length) body+='<div class="dnote">المعدل = عدد اللوحات اللي المهندس سلّمها ÷ عدد الأيام من بداية التاسك لحد الاستلام (اليومين داخلين). بيتحسب من اللوحات اللي ليها التاريخين بس، والتاسكات اللي ماشية مع بعض في نفس الأيام بتتحسب أيامها مرة واحدة.</div>';
+  h+=card('c','Production rate per engineer','متوسط اللوحات في اليوم وفي الأسبوع — بيتحدث مع كل تاسك تتسلم',body,true);
+  box.innerHTML=h;
+}
+
+// ══════════════════════════════════════════
+//  NEW TASK  (adds drawings straight into the tracker, nothing is mandatory)
+// ══════════════════════════════════════════
+var wipTaskOn=false;
+var wipTaskSel=[];       // engineers chosen for the task
+function wipTaskFill(id,vals){
+  var el=wipEl(id); if(!el) return;
+  el.innerHTML='';
+  vals.forEach(function(v){ var o=document.createElement('option'); o.value=v; el.appendChild(o); });
+}
+function wipTaskRow(name,content){
+  var box=wipEl('ntRows'), r=document.createElement('div');
+  r.className='nt-row';
+  r.innerHTML='<input class="nt-name" placeholder="REH-MD01-MDU-ST-OCC-1036-SD-000000-00" autocomplete="off"/><input class="nt-content" placeholder="e.g. main bottom rft in (X) direction" autocomplete="off"/><button type="button" title="شيل السطر">&#10005;</button>';
+  r.querySelector('.nt-name').value=name||''; r.querySelector('.nt-content').value=content||'';
+  r.querySelector('button').addEventListener('click',function(){ if(box.children.length>1) box.removeChild(r); else { r.querySelector('.nt-name').value=''; r.querySelector('.nt-content').value=''; } });
+  box.appendChild(r);
+  return r;
+}
+function wipTaskOpen(){
+  wipEngClose(true); wipDateClose(true);
+  var cfg=wipCfg(), uniq=function(f){ var o={}; drws.forEach(function(d){ var v=wn(d[f]); if(v) o[v]=1; }); return wipSortVals(o); };
+  wipEl('ntlPlot').textContent=cfg.col1; wipEl('ntlZone').textContent=cfg.col2;
+  wipTaskFill('ntPlots',uniq('plot')); wipTaskFill('ntZones',uniq('zone')); wipTaskFill('ntLevels',uniq('level'));
+  var types={}; ['SLAB','BEAMS','COLUMNS','CORES','STAIR','STAIR BEAMS','WALLS','RAMP','FOUNDATION'].concat(uniq('type')).forEach(function(t){ types[t.toUpperCase()]=1; });
+  wipTaskFill('ntTypes',Object.keys(types));
+  // start from what is selected in the follow-up filter, if anything
+  var fp=wipEl('wfPlot').value, fz=wipEl('wfZone').value, fl=wipEl('wfLevel').value;
+  wipEl('ntPlot').value=fp||''; wipEl('ntZone').value=fp&&fz!==WIP_ALL?fz:''; wipEl('ntLevel').value=fp&&fl!==WIP_ALL?fl:'';
+  wipEl('ntType').value=''; wipEl('ntStart').value=''; wipEl('ntTarget').value=''; wipEl('ntEngIn').value='';
+  wipEl('ntStart').disabled=wipDatesCol!==true; wipEl('ntTarget').disabled=wipTargetCol!==true;
+  var ss=wipEl('ntStatus'); ss.innerHTML=''; WIP_STATUSES.forEach(function(s){ ss.appendChild(new Option(s,s)); }); ss.value='NOT STARTED'; ss._touched=false;
+  wipEl('ntFollow').checked=true;
+  wipEl('ntRows').innerHTML=''; wipTaskRow();
+  wipTaskSel=[];
+  wipTaskOn=true;
+  wipEl('wipTask').style.display='flex';
+  wipTaskSuggest();
+  setTimeout(function(){ if(wipTaskOn) wipEl(fp?'ntType':'ntPlot').focus(); },50);
+}
+function wipTaskClose(){ wipTaskOn=false; var m=wipEl('wipTask'); if(m) m.style.display='none'; }
+// a start date of today or earlier means the work has started — unless the status was picked by hand
+function wipTaskAutoStatus(){
+  var ss=wipEl('ntStatus'), v=wipEl('ntStart').value;
+  if(ss._touched) return;
+  ss.value=v&&wipDateOk(v)&&v<=wipToday()?'IN PROGRESS':'NOT STARTED';
+}
+// who could take this task: free people first, then the most experienced in this type, then the fastest
+function wipTaskCandidates(type){
+  var D=wipDashData(), T=wipTeamData(), slot=wn(type)?wipTypeSlot(type):-1, load={}, out=[];
+  T.working.forEach(function(e){ load[e.key]=e.count; });
+  T.free.concat(T.working.map(function(e){ return e.name; })).forEach(function(n){
+    var k=normalize(n).toLowerCase(); if(T.off[k]) return;            // no longer with us
+    var s=D.map[k];
+    out.push({name:n,key:k,load:load[k]||0,exp:s?(slot>=0?s.types[slot]:s.done):0,rate:s?s.rate:null});
+  });
+  out.sort(function(a,b){
+    return (a.load?1:0)-(b.load?1:0)||b.exp-a.exp||(b.rate||0)-(a.rate||0)||a.load-b.load||a.name.localeCompare(b.name);
+  });
+  return out;
+}
+function wipTaskSuggest(){
+  if(!wipTaskOn) return;
+  var type=wn(wipEl('ntType').value).toUpperCase(), all=wipTaskCandidates(type), top=all.slice(0,6);
+  var what=type?(wipTypeSlot(type)?WIP_TYPES[wipTypeSlot(type)-1]:'OTHER'):'';
+  wipEl('ntSugNote').textContent=all.length?'مقترحين بالترتيب: الفاضي الأول، بعده الأكتر شغل في النوع ده، بعده الأسرع':'';
+  wipEl('ntSug').innerHTML=top.map(function(c){
+    var bits=[];
+    bits.push(c.exp?('عمل '+wipFmt(c.exp)+' '+(what||'لوحة')):('لسه ماعملش '+(what||'لوحات')));
+    if(c.rate!==null) bits.push(c.rate.toFixed(2)+' لوحة/يوم');
+    return '<button type="button" data-n="'+escHtml(c.name)+'" class="'+(wipTaskSel.indexOf(c.name)>=0?'on':'')+'"><b>'+escHtml(c.name)+'</b>'
+      +'<span><i class="'+(c.load?'busy':'free')+'">'+(c.load?'معاه '+c.load+' شغال فيها':'فاضي')+'</i>'+escHtml(bits.join(' · '))+'</span></button>';
+  }).join('');
+  wipTaskFill('ntEngs',all.map(function(c){ return c.name; }));
+  wipEl('ntSel').innerHTML=wipTaskSel.map(function(n){
+    return '<span>'+escHtml(n)+'<button type="button" data-n="'+escHtml(n)+'" title="شيل">&#10005;</button></span>';
+  }).join('');
+}
+function wipTaskToggle(name){
+  var i=wipTaskSel.indexOf(name);
+  if(i>=0) wipTaskSel.splice(i,1); else wipTaskSel.push(name);
+  wipTaskSuggest();
+}
+function wipTaskEngAdd(){
+  var inp=wipEl('ntEngIn'), v=normalize(inp.value);
+  if(!v){ inp.focus(); return; }
+  if(v.indexOf(',')>=0){ showToast('الاسم مينفعش يكون فيه فاصلة ( , )',true); return; }
+  var known=wipEngKnown(v); if(known!==null) v=known;
+  else { var c=wipTaskCandidates('').filter(function(x){ return x.key===v.toLowerCase(); })[0]; if(c) v=c.name; }
+  if(wipTaskSel.indexOf(v)<0) wipTaskSel.push(v);
+  inp.value=''; wipTaskSuggest();
+}
+async function wipTaskSave(){
+  var val=function(id){ return wn(wipEl(id).value); };
+  var plot=val('ntPlot'), zone=val('ntZone'), level=val('ntLevel'), type=val('ntType').toUpperCase();
+  var start=val('ntStart'), target=val('ntTarget'), status=wipEl('ntStatus').value||'NOT STARTED';
+  if(wn(wipEl('ntEngIn').value)) wipTaskEngAdd();        // a name typed but not added yet still counts
+  var rows=[];
+  Array.prototype.forEach.call(wipEl('ntRows').children,function(r){
+    var n=wn(r.querySelector('.nt-name').value), c=wn(r.querySelector('.nt-content').value);
+    if(n||c) rows.push({name:n,content:c});
+  });
+  if(!rows.length&&!plot&&!zone&&!level&&!type&&!wipTaskSel.length&&!start&&!target){ showToast('اكتب أي حاجة عن التاسك الأول',true); return; }
+  if((start&&!wipDateOk(start))||(target&&!wipDateOk(target))){ showToast('في تاريخ مش مكتوب صح',true); return; }
+  if(!rows.length) rows.push({name:'',content:''});
+  var proj=wipProj(), now=new Date().toISOString(), n0=drws.length;
+  var recs=rows.map(function(r,i){
+    var rec={num:n0+1+i,project_id:proj,plot:plot,zone:zone,level:level,type:type,name:r.name,content:r.content,
+      status:status,ns:false,by_eng:wipTaskSel.join(','),paid:'unpaid',notes:'',link:'',updated_at:now};
+    if(wipTargetCol===true) rec.target_date=target||null;
+    if(wipDatesCol===true){ rec.start_date=start||null; rec.received_date=null; wipStamp({},rec); }
+    return rec;
+  });
+  var btn=wipEl('ntSave'); btn.disabled=true; btn.textContent='Saving...';
+  var res;
+  dataEpoch++; wipPending++;
+  try{ res=await supabase.from('drawings').insertMany(recs); }
+  catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+  wipPending--; dataEpoch++;
+  btn.disabled=false; btn.textContent='Save Task';
+  if(res.error){ showToast('خطأ — التاسك ماتسجلتش: '+res.error.message,true); return; }
+  (res.data||[]).forEach(function(d){ if(!drws.some(function(x){ return x.id===d.id; })) drws.push(d); });
+  try{ await renum(); }catch(e){}
+  // engineers typed here for the first time join the tracker's engineers list
+  var sel=wipTaskSel.slice();
+  for(var i=0;i<sel.length;i++){ if(wipEngKnown(sel[i])===null) await wipEngRegister(sel[i]); }
+  // follow its Plot / Zone / Floor and open its card, so the new rows are on screen
+  if(wipEl('ntFollow').checked&&plot){
+    var probe={plot:plot,zone:zone,level:level};
+    if(!wipWatch.some(function(w){ return wipMatch(w,probe); })) await wipFollow(probe);
+    wipOpen[plot+'\u0001'+zone+'\u0001'+level]=type;
+  }
+  wipTaskClose();
+  wipRegister(); wipRenderAll();
+  showToast('✓ اتسجل في التراكر — '+recs.length+' لوحة');
 }
 
 // ── PDF (same header, signature and stamp as the other reports) ──
@@ -3471,29 +3856,30 @@ function genWipPdf(){
   if(!secs.length){ alert('No drawings in Work in Progress'); return; }
   var sL=wipEl('sLogo').src;
   var now=new Date(), ds=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
-  var cols=[cfg.col1+' / '+cfg.col2+' / Floor','DWG No.','Content','Status','Engineer','Target Date'];
-  var colg='<colgroup>'+[20,9,29,12,14,16].map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>';
-  var dayFg={ok:'#1E8449',soon:'#9A7D0A',late:'#C0392B',done:'#1A3A5C',recv:'#D35400',none:'#7F8C8D'};
+  var cols=[cfg.col1+' / '+cfg.col2+' / Floor','DWG No.','Content','Status','Engineer','Start → Target'];
+  var colg='<colgroup>'+[18,8,27,14,13,20].map(function(w){return '<col style="width:'+w+'%"/>';}).join('')+'</colgroup>';
+  var dayFg={ok:'#1E8449',soon:'#9A7D0A',late:'#C0392B',done:'#1A3A5C',recv:'#D35400',plain:'#52514E',none:'#7F8C8D'};
   var body='', total=0;
   secs.forEach(function(s){
+    var st=wipStats(s.rows);
     total+=s.rows.length;
     body+='<div class="sec" style="padding-bottom:0">';
     body+='<div style="background:'+s.color+';color:#fff;font-size:10px;font-weight:700;padding:6px 10px;border-radius:3px;page-break-after:avoid">'
-      +escHtml(s.plot)+' &nbsp;›&nbsp; '+escHtml(s.zone||'-')+' &nbsp;›&nbsp; '+escHtml(s.level||'-')
-      +'<span style="float:right;font-size:8px;font-weight:600">'+wipCountTxt(s.rows)+'</span></div>';
+      +escHtml(wipTitle(s))+'<span style="float:right;font-size:8px;font-weight:600">'+wipCountTxt(s.rows)+' · '+st.pct+'%</span></div>';
     s.tables.forEach(function(t){
+      var ts=wipStats(t.rows);
       body+='<div style="font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:'+s.color+';margin:8px 0 3px;page-break-after:avoid">'
-        +escHtml(t.type||'No Type')+' ('+t.rows.length+')</div>';
+        +escHtml(t.type||'No Type')+' ('+t.rows.length+') <span style="font-weight:600;color:#52514E;letter-spacing:0;text-transform:none">— '+ts.pct+'% · not started '+ts.none+' · in progress '+ts.prog+' · received '+ts.recv+' · delivered '+ts.done+(ts.hold?' · hold '+ts.hold:'')+'</span></div>';
       body+='<table style="table-layout:fixed">'+colg+'<thead><tr>'+cols.map(function(c){return '<th style="background:'+s.color+';text-align:left">'+escHtml(c)+'</th>';}).join('')+'</tr></thead><tbody>';
       t.rows.forEach(function(d,i){
-        var st=wipStatus(d), sc=wipStColor(st), dy=wipDays(d);
+        var stt=wipStatus(d), sc=wipStColor(stt), dy=wipDates(d);
         body+='<tr style="background:'+(i%2===0?'#fff':'#F4F9F8')+'">'
           +'<td style="font-weight:600">'+escHtml(wipLoc(d)||'-')+'</td>'
           +'<td style="font-weight:700;color:#0D5C52">'+escHtml(drwNo(d.name))+'</td>'
           +'<td class="wrap" style="color:#555">'+escHtml(wn(d.content)||'-')+'</td>'
-          +'<td><span style="white-space:nowrap;padding:1px 5px;border-radius:6px;font-size:7px;font-weight:700;background:'+sc.bg+';color:'+sc.fg+'">'+escHtml(st)+'</span></td>'
+          +'<td><span style="padding:1px 5px;border-radius:6px;font-size:7px;font-weight:700;background:'+sc.bg+';color:'+sc.fg+'">'+escHtml(stt)+'</span></td>'
           +'<td class="wrap" style="font-weight:600">'+escHtml(wipEngList(d.by_eng).join(', ')||'-')+'</td>'
-          +'<td style="white-space:nowrap">'+(dy.c==='none'?'-':(d.target_date&&dy.c!=='done'&&dy.c!=='recv'?fd(d.target_date)+' · ':'')+'<span style="font-weight:700;color:'+dayFg[dy.c]+'">'+dy.t+'</span>')+'</td></tr>';
+          +'<td style="white-space:nowrap;font-weight:700;color:'+dayFg[dy.c]+'">'+(dy.c==='none'?'-':escHtml(dy.t))+'</td></tr>';
       });
       body+='</tbody></table>';
     });
@@ -3501,6 +3887,103 @@ function genWipPdf(){
   });
   body+='<div class="sec" style="padding-top:8px"><div style="background:#2D3748;color:#fff;font-weight:700;text-align:center;font-size:9px;padding:5px">TOTAL: '+total+' DRAWINGS · WORK IN PROGRESS · SUSTRA · '+escHtml(cfg.label)+'</div></div>';
   openWin(sL,'',ds,'Work in Progress Report — '+cfg.label,body);
+}
+
+function wipInit(){
+  var b=wipEl('wipBody'); if(!b||b._wip) return; b._wip=1;
+  b.addEventListener('focusin',function(e){
+    var el=e.target;
+    if(el.classList&&el.classList.contains('wip-name')){
+      var r=wipRow(el); if(!r) return;
+      el.value=wn(r.d.name); el.classList.add('open');     // show the full name while editing
+      el._fresh=true; wipSelNo(el);
+    }
+  });
+  // a click puts the caret where you clicked — re-select the number once the click has finished
+  b.addEventListener('mouseup',function(e){
+    var el=e.target;
+    if(el.classList&&el.classList.contains('wip-name')&&el._fresh){ el._fresh=false; wipSelNo(el); }
+  });
+  b.addEventListener('focusout',function(e){
+    var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
+    if(f==='name'||f==='content') wipCommit(el);
+    if(f==='name'){
+      var r=wipRow(el);
+      el.classList.remove('open');
+      if(r){ el.value=drwNo(r.d.name); el.title=wn(r.d.name); }
+    }
+    setTimeout(wipTick,0);
+  });
+  b.addEventListener('change',function(e){
+    var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
+    if(f==='status') wipCommit(el);
+  });
+  b.addEventListener('keydown',function(e){
+    var el=e.target; if(el.tagName!=='INPUT') return;
+    el._fresh=false;
+    if(e.key==='Enter'){ e.preventDefault(); el.blur(); }
+    else if(e.key==='Escape'){
+      var r=wipRow(el), f=el.getAttribute('data-f');
+      if(r) el.value=f==='name'?wn(r.d.name):wn(r.d.content);
+      el.blur();
+    }
+  });
+  b.addEventListener('click',function(e){
+    var t=e.target, x;
+    if(!t.closest) return;
+    // a type card: open / close its table
+    x=t.closest('.zc,.zc-close');
+    if(x){
+      var sec=x.closest('.wip-sec'), k=sec?sec.getAttribute('data-k'):null; if(k===null) return;
+      if(x.classList.contains('zc-close')||wipOpen[k]===x.getAttribute('data-t')) delete wipOpen[k];
+      else wipOpen[k]=x.getAttribute('data-t');
+      renderWip();
+      return;
+    }
+    x=t.closest('.wip-dbtn');
+    if(x){ var r1=wipRow(x); if(!r1) return; if(wipDp&&wipDp.btn===x) wipDateClose(); else wipDateOpen(x,r1.d.id); return; }
+    x=t.closest('.wip-eng');
+    if(x){ var r2=wipRow(x); if(!r2) return; if(wipPop&&wipPop.btn===x) wipEngClose(); else wipEngOpen(x,r2.d.id); }
+  });
+  document.addEventListener('mousedown',function(e){
+    if(wipPop&&!wipPop.el.contains(e.target)&&!wipPop.btn.contains(e.target)) wipEngClose();
+    if(wipDp&&!wipDp.el.contains(e.target)&&!wipDp.btn.contains(e.target)) wipDateClose();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape') return;
+    if(wipPop) wipEngClose(); else if(wipDp) wipDateClose(); else if(wipTaskOn) wipTaskClose();
+  });
+  window.addEventListener('resize',function(){ if(wipPop) wipEngClose(); if(wipDp) wipDateClose(); });
+  var tb=wipEl('wipTeamBody');
+  if(tb) tb.addEventListener('click',function(e){
+    var x=e.target.closest?e.target.closest('.tm-rm,.tm-back,.tm-gone-h'):null;
+    if(!x) return;
+    if(x.classList.contains('tm-rm')) wipTeamRemove(x.getAttribute('data-n'));
+    else if(x.classList.contains('tm-back')) wipTeamRestore(x.getAttribute('data-n'));
+    else { wipTeamOffOpen=!wipTeamOffOpen; wipTeamRender(); }
+  });
+  // dashboards: chart ↔ table, and the hover read-out
+  var db=wipEl('wipDash'), tip=wipEl('wipTip');
+  if(db){
+    db.addEventListener('click',function(e){
+      var x=e.target.closest?e.target.closest('.dtog'):null; if(!x) return;
+      var c=x.getAttribute('data-c'); wipDashTbl[c]=!wipDashTbl[c]; wipDashRender();
+    });
+    db.addEventListener('pointermove',function(e){
+      var x=e.target.closest?e.target.closest('[data-tip]'):null;
+      if(!x||!tip){ if(tip) tip.style.display='none'; return; }
+      tip.textContent=x.getAttribute('data-tip');
+      tip.style.display='block';
+      var w=tip.offsetWidth, vw=document.documentElement.clientWidth;
+      tip.style.left=Math.max(6,Math.min(e.clientX+12,vw-w-6))+'px';
+      tip.style.top=(e.clientY+14)+'px';
+    });
+    db.addEventListener('pointerleave',function(){ if(tip) tip.style.display='none'; });
+  }
+  // new task: pick / drop engineers
+  var sg=wipEl('ntSug'), sl=wipEl('ntSel');
+  if(sg) sg.addEventListener('click',function(e){ var x=e.target.closest?e.target.closest('button[data-n]'):null; if(x) wipTaskToggle(x.getAttribute('data-n')); });
+  if(sl) sl.addEventListener('click',function(e){ var x=e.target.closest?e.target.closest('button[data-n]'):null; if(x) wipTaskToggle(x.getAttribute('data-n')); });
 }
 
 window.addEventListener('load',wipInit);
