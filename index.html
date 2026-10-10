@@ -382,6 +382,18 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .nt-foot label input{width:14px;height:14px;accent-color:#1A7A6E}
 /* the register is the last thing on the page: let its table use most of the screen */
 #vList .tw{max-height:72vh}
+/* ── ENGINEER STATEMENT (Engineer Report) ── */
+#engSum{background:#F4F9F8;border:1.5px solid #D5E5E2;border-radius:8px;padding:12px 14px;margin-bottom:12px;direction:rtl}
+.es-none{font-size:11px;color:#9AA5B4}
+.es-rg{font-size:11px;font-weight:700;color:#1A5276;margin-bottom:8px;direction:ltr;text-align:right}
+.es-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:5px 0;border-bottom:1px solid #E8F0EF;font-size:12px}
+.es-row b{color:#2D3748;direction:ltr}
+.es-n{color:#52514E;font-size:11px}
+.es-warn{font-size:11px;color:#9A6A00;background:#FEF9E7;border-radius:6px;padding:7px 10px;margin-top:8px;line-height:1.7}
+.es-act{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12px;font-weight:700;color:#2D3748}
+.es-q{margin-top:8px}.es-q .btn{font-size:11px;padding:5px 10px}
+.es-row b,.es-row .bdg,.es-act .btn{direction:ltr;unicode-bidi:isolate}
+#engSum .es-n span{unicode-bidi:isolate}
 </style>
 </head>
 <body>
@@ -776,9 +788,24 @@ User 2:
       <div class="f"><label>Level</label><select id="efLevel"><option value="">All</option></select></div>
       <div class="f"><label>Type</label><select id="efType"><option value="">All</option></select></div>
     </div>
+    <div class="psect">Statement range <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#7F8C8D">— اختياري: من أول لوحة رقم كام، أو من أول تاريخ كام</span></div>
+    <div class="fg" style="margin-bottom:12px">
+      <div class="f"><label>From DWG #</label><input type="number" id="efNumFrom" min="1" placeholder="1"/></div>
+      <div class="f"><label>To DWG #</label><input type="number" id="efNumTo" min="1" placeholder="آخر لوحة"/></div>
+      <div class="f"><label>From Date</label><input type="date" id="efDateFrom"/></div>
+      <div class="f"><label>To Date</label><input type="date" id="efDateTo"/></div>
+      <div class="f s2"><label>Date used</label><select id="efDateBy">
+        <option value="received_date">Received — يوم ما استلمت اللوحة من المهندس</option>
+        <option value="start_date">Start — بداية التاسك</option>
+        <option value="target_date">Target — التاريخ المتوقع</option>
+        <option value="del">Delivery — التاريخ اللي في فورم اللوحة</option>
+      </select></div>
+    </div>
     <div class="psect">Select engineer(s):</div>
     <div class="eng-grid" id="engGrid"></div>
     <button class="btn bt" style="font-size:11px;padding:5px 10px;margin-bottom:12px" onclick="engAll()">Select All</button>
+    <div class="psect">Statement:</div>
+    <div id="engSum"></div>
     <div class="pdiv"></div>
     <div class="psect">Show columns:</div>
     <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px">
@@ -1641,7 +1668,7 @@ function goEdit(id){
 // ══════════════════════════════════════════
 //  RENDER
 // ══════════════════════════════════════════
-function render(){ renderRegister(); wipOnData(); }
+function render(){ renderRegister(); wipOnData(); engOnData(); }
 function renderRegister(){
   var s=sorted();
   var tot=s.length,pend=0,repl=0,none=0;
@@ -1963,15 +1990,17 @@ async function goEng(){
   fillSel('efPlot',Object.keys(plots));fillSel('efZone',Object.keys(zones));
   fillSel('efLevel',Object.keys(levels));fillSel('efType',Object.keys(types));
   ['efPlot','efZone','efLevel','efType'].forEach(function(id){document.getElementById(id).onchange=buildEngCards;});
+  engRangeInit();
   buildEngCards(); show('vEng');
 }
 
 function buildEngCards(){
   var fp=document.getElementById('efPlot').value,fz=document.getElementById('efZone').value,
       fl=document.getElementById('efLevel').value,ft=document.getElementById('efType').value;
+  var rg=engRange();
   var filtered=drws.filter(function(d){
     return (!fp||(d.plot||'')===fp)&&(!fz||(d.zone||'')===fz)&&
-           (!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft);
+           (!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft)&&engRangeOk(d,rg);
   });
   var engs={};
   filtered.forEach(function(d){
@@ -1981,15 +2010,18 @@ function buildEngCards(){
     engsInDwg.forEach(function(e){engs[e]=(engs[e]||0)+share;});
   });
   var eg=document.getElementById('engGrid'),eh='',keys=Object.keys(engs);
-  selEngs={};
+  // changing a filter keeps the engineers that were already selected
+  var keepSel=selEngs; selEngs={};
+  keys.forEach(function(e){ if(keepSel[e]) selEngs[e]=true; });
   for(var k=0;k<keys.length;k++){
     var e=keys[k];
     var init=e.replace(/Eng\./i,'').trim().split(' ').map(function(w){return w[0]||'';}).join('').toUpperCase().slice(0,2)||'?';
-    eh+='<div class="eng-card" id="ec'+k+'" data-eng="'+e.replace(/"/g,'&quot;')+'" onclick="togEng(this)">';
+    eh+='<div class="eng-card'+(selEngs[e]?' active':'')+'" id="ec'+k+'" data-eng="'+e.replace(/"/g,'&quot;')+'" onclick="togEng(this)">';
     eh+='<div class="eng-av">'+init+'</div>';
     eh+='<div><div class="eng-nm">'+e+'</div><div class="eng-cn">'+engs[e]+' drawing'+(engs[e]>1?'s':'')+'</div></div></div>';
   }
   eg.innerHTML=eh||'<p style="font-size:11px;color:#aaa;padding:10px">No engineers match filters.</p>';
+  engSummary();
 }
 
 async function goPlot(){
@@ -2020,8 +2052,8 @@ function colAll(){for(var c=0;c<COLS.length;c++){selCols[COLS[c].k]=true;var cb=
 function colNone(){for(var c=0;c<COLS.length;c++){if(COLS[c].always)continue;delete selCols[COLS[c].k];var cb=document.getElementById('cc-'+COLS[c].k);if(cb)cb.checked=false;}}
 function rowAll(){var s=sorted();for(var i=0;i<s.length;i++){selRows[i]=true;document.getElementById('rc-'+i).checked=true;document.getElementById('sr-'+i).classList.add('active');}}
 function rowNone(){var s=sorted();for(var i=0;i<s.length;i++){delete selRows[i];document.getElementById('rc-'+i).checked=false;document.getElementById('sr-'+i).classList.remove('active');}}
-function togEng(el){var e=el.getAttribute('data-eng');if(selEngs[e]){delete selEngs[e];el.classList.remove('active');}else{selEngs[e]=true;el.classList.add('active');}}
-function engAll(){var cards=document.querySelectorAll('.eng-card');for(var i=0;i<cards.length;i++){var e=cards[i].getAttribute('data-eng');selEngs[e]=true;cards[i].classList.add('active');}}
+function togEng(el){var e=el.getAttribute('data-eng');if(selEngs[e]){delete selEngs[e];el.classList.remove('active');}else{selEngs[e]=true;el.classList.add('active');}engSummary();}
+function engAll(){var cards=document.querySelectorAll('.eng-card');for(var i=0;i<cards.length;i++){var e=cards[i].getAttribute('data-eng');selEngs[e]=true;cards[i].classList.add('active');}engSummary();}
 
 // ── PDF GENERATION ──
 
@@ -2108,7 +2140,7 @@ function buildTbl(subset,showPaid,sc){
     var dc=d.ns?'<span style="font-weight:700;color:#7D6608">Not Sent</span>':fd(d.del);
     var bg=i%2===0?'#F4F9F8':'#fff';
     rows+='<tr style="background:'+bg+'">';
-    if(!sc||sc.num)     rows+='<td style="text-align:center;font-weight:700;color:#0D5C52">'+(i+1)+'</td>';
+    if(!sc||sc.num)     rows+='<td style="text-align:center;font-weight:700;color:#0D5C52">'+(sc&&sc.realNum&&d.num?d.num:i+1)+'</td>';
     rows+='<td style="font-weight:600">'+(d.plot||'-')+'</td>';
     if(!sc||sc.zone)    rows+='<td>'+(d.zone||'-')+'</td>';
     if(!sc||sc.level)   rows+='<td>'+(d.level||'-')+'</td>';
@@ -2157,6 +2189,7 @@ function genEngPdf(){
   var sL=document.getElementById('sLogo').src;
   var now=new Date(),ds=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
   var sc={num:true,plot:true,zone:true,level:true,type:true,name:true,by_eng:false};
+  sc.realNum=true;      // the statement shows the tracker's drawing numbers, so the next one can start "from # …"
   sc.content=showContent;
   sc.del=showDel;
   if(showComments){sc.r1=true;sc.r2=true;}else{sc.r1=false;sc.r2=false;}
@@ -2166,18 +2199,16 @@ function genEngPdf(){
   var body='';
   for(var k=0;k<keys.length;k++){
     var eng=keys[k];
-    var sub=sorted().filter(function(d){
-      var engsInD=(d.by_eng||'Unassigned').split(',').map(function(e){return e.trim();}).filter(Boolean);
-      if(!engsInD.length) engsInD=['Unassigned'];
-      return engsInD.indexOf(eng)>=0&&(!fp||(d.plot||'')===fp)&&(!fz||(d.zone||'')===fz)&&(!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft);
-    });
+    var sub=engSubset(eng);
     if(!sub.length) continue;
+    var pc=engPaidCount(sub), rgTxt=engRangeText();
     var totalShare=sub.reduce(function(acc,d){
       var engsInD=(d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean);
       return acc+(engsInD.length>0?1/engsInD.length:1);
     },0);
     var shareStr=Number.isInteger(totalShare)?totalShare:totalShare.toFixed(2);
-    body+='<div class="sec"><div class="sec-title">'+eng+'<span class="sec-badge">'+shareStr+' / '+sub.length+' drawings</span></div>'+buildTbl(sub,showPaid,sc)+'</div>';
+    body+='<div class="sec"><div class="sec-title">'+escHtml(eng)+'<span class="sec-badge">'+shareStr+' / '+sub.length+' drawings</span>'
+      +'<span style="float:right;font-size:8px;font-weight:600;color:#52514E">'+(rgTxt?escHtml(rgTxt)+' &nbsp;|&nbsp; ':'')+'Unpaid '+pc.unpaid+' · 50% '+pc.half+' · Paid '+pc.paid+'</span></div>'+buildTbl(sub,showPaid,sc)+'</div>';
   }
   if(!body){alert('No drawings match filters');return;}
   openWin(sL,'',ds,'Engineer Drawing Report',body);
@@ -3987,6 +4018,133 @@ function wipInit(){
 }
 
 window.addEventListener('load',wipInit);
+
+// ══════════════════════════════════════════
+//  ENGINEER STATEMENT  (Engineer Report: a range of drawings, and their payment)
+// ══════════════════════════════════════════
+// The report can be limited to "from drawing # …" and / or "from date …", and the drawings it
+// lists can be marked Paid / 50% / Unpaid in one go. Payment is the drawing's own Paid field.
+var ENG_DATES={received_date:'Received',start_date:'Start',target_date:'Target',del:'Delivery'};
+function engRange(){
+  var num=function(id){ var v=parseInt(wipEl(id).value,10); return isNaN(v)?null:v; };
+  var dt=function(id){ var v=wipEl(id).value; return wipDateOk(v)?v:''; };
+  return {n1:num('efNumFrom'),n2:num('efNumTo'),d1:dt('efDateFrom'),d2:dt('efDateTo'),by:wipEl('efDateBy').value||'received_date'};
+}
+function engRangeOk(d,r,skipDate){
+  var n=d.num||0;
+  if(r.n1!==null&&n<r.n1) return false;
+  if(r.n2!==null&&n>r.n2) return false;
+  if(!skipDate&&(r.d1||r.d2)){
+    var v=wipIso(d[r.by]);
+    if(!v) return false;                       // no such date on the drawing → it cannot be placed in a date range
+    if(r.d1&&v<r.d1) return false;
+    if(r.d2&&v>r.d2) return false;
+  }
+  return true;
+}
+function engHas(d,eng){
+  var list=(d.by_eng||'Unassigned').split(',').map(function(e){return e.trim();}).filter(Boolean);
+  if(!list.length) list=['Unassigned'];
+  return list.indexOf(eng)>=0;
+}
+function engBase(d){
+  var fp=wipEl('efPlot').value, fz=wipEl('efZone').value, fl=wipEl('efLevel').value, ft=wipEl('efType').value;
+  return (!fp||(d.plot||'')===fp)&&(!fz||(d.zone||'')===fz)&&(!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft);
+}
+// the drawings of one engineer that the report will list
+function engSubset(eng){
+  var r=engRange();
+  return sorted().filter(function(d){ return engHas(d,eng)&&engBase(d)&&engRangeOk(d,r); });
+}
+function engRangeText(){
+  var r=engRange(), p=[];
+  if(r.n1!==null||r.n2!==null) p.push('DWG # '+(r.n1!==null?r.n1:'1')+' → '+(r.n2!==null?r.n2:'last'));
+  if(r.d1||r.d2) p.push(ENG_DATES[r.by]+' date '+(r.d1?'from '+fd(r.d1):'')+(r.d1&&r.d2?' ':'')+(r.d2?'to '+fd(r.d2):''));
+  return p.join(' · ');
+}
+function engPaidCount(sub){
+  var c={unpaid:0,half:0,paid:0};
+  sub.forEach(function(d){ c[d.paid==='paid'?'paid':d.paid==='half'?'half':'unpaid']++; });
+  return c;
+}
+function engShare(sub){
+  var t=sub.reduce(function(acc,d){
+    var n=(d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean).length;
+    return acc+(n>0?1/n:1);
+  },0);
+  return Number.isInteger(t)?String(t):t.toFixed(2);
+}
+function engRangeInit(){
+  ['efNumFrom','efNumTo','efDateFrom','efDateTo'].forEach(function(id){ var el=wipEl(id); el.value=''; el.oninput=buildEngCards; });
+  var by=wipEl('efDateBy'); by.onchange=buildEngCards;
+  // dates that the tracker does not store yet cannot be used
+  Array.prototype.forEach.call(by.options,function(o){
+    o.disabled=(o.value==='target_date'&&wipTargetCol!==true)||((o.value==='received_date'||o.value==='start_date')&&wipDatesCol!==true);
+  });
+  by.value=wipDatesCol===true?'received_date':'del';
+}
+// what the statement of the selected engineer(s) contains, and the buttons to mark it paid
+function engSummary(){
+  var box=wipEl('engSum'); if(!box) return;
+  var keys=Object.keys(selEngs), r=engRange(), h='', all={}, noDate=0;
+  if(!keys.length){ box.innerHTML='<p class="es-none">اختار مهندس من فوق عشان تشوف مستخلصه.</p>'; return; }
+  keys.forEach(function(eng){
+    var sub=engSubset(eng), c=engPaidCount(sub);
+    sub.forEach(function(d){ all[d.id]=d; });
+    if(r.d1||r.d2) noDate+=sorted().filter(function(d){ return engHas(d,eng)&&engBase(d)&&engRangeOk(d,r,true)&&!wipIso(d[r.by]); }).length;
+    h+='<div class="es-row"><b>'+escHtml(eng)+'</b>';
+    if(!sub.length){ h+='<span class="es-n">مفيش لوحات في المدى ده</span></div>'; return; }
+    h+='<span class="es-n">'+sub.length+' لوحة · نصيبه '+engShare(sub)+' · <span dir="ltr"># '+(sub[0].num||'-')+' → # '+(sub[sub.length-1].num||'-')+'</span></span>'
+      +'<span class="bdg bup">Unpaid '+c.unpaid+'</span><span class="bdg bhf">50% '+c.half+'</span><span class="bdg bpd">Paid '+c.paid+'</span></div>';
+  });
+  if(keys.length===1&&r.n1===null){
+    var first=null;
+    sorted().some(function(d){ if(engHas(d,keys[0])&&engBase(d)&&d.paid!=='paid'&&d.num){ first=d.num; return true; } return false; });
+    if(first&&first>1) h+='<div class="es-q"><button type="button" class="btn bo" onclick="engFrom('+first+')">ابدأ من أول لوحة لسه متدفعتش بالكامل <span dir="ltr">(# '+first+')</span></button></div>';
+  }
+  var n=Object.keys(all).length, rt=engRangeText();
+  if(rt) h='<div class="es-rg">'+escHtml(rt)+'</div>'+h;
+  if(noDate) h+='<p class="es-warn">'+noDate+' لوحة ملهاش تاريخ '+ENG_DATES[r.by]+'، فمش داخلة في المدى ده. لو عايزها، استخدم رقم اللوحة بدل التاريخ.</p>';
+  if(n) h+='<div class="es-act"><span>حالة الدفع للـ '+n+' لوحة دي:</span>'
+    +'<button type="button" class="btn" style="background:#1E8449;color:#fff" onclick="engMarkPaid(\'paid\')">&#10003; 100% Paid</button>'
+    +'<button type="button" class="btn" style="background:#D35400;color:#fff" onclick="engMarkPaid(\'half\')">50% Paid</button>'
+    +'<button type="button" class="btn" style="background:#C0392B;color:#fff" onclick="engMarkPaid(\'unpaid\')">Unpaid</button></div>';
+  box.innerHTML=h;
+}
+// a change that arrives from the tracker while the report is open (someone else marked a drawing paid)
+function engOnData(){ var v=wipEl('vEng'); if(v&&v.offsetParent!==null&&!engMarking) engSummary(); }
+function engFrom(n){ wipEl('efNumFrom').value=n; buildEngCards(); }
+var engMarking=false;
+async function engMarkPaid(val){
+  if(engMarking) return;
+  var keys=Object.keys(selEngs), all={}, shared=0;
+  keys.forEach(function(eng){ engSubset(eng).forEach(function(d){ all[d.id]=d; }); });
+  var list=Object.keys(all).map(function(k){ return all[k]; }).filter(function(d){ return (d.paid||'unpaid')!==val; });
+  var label='\u2066'+pv(val).l+'\u2069', total=Object.keys(all).length;
+  if(!total){ showToast('مفيش لوحات في المستخلص ده',true); return; }
+  if(!list.length){ showToast('كل اللوحات دي حالتها '+label+' بالفعل'); return; }
+  list.forEach(function(d){ if((d.by_eng||'').split(',').filter(function(e){return e.trim();}).length>1) shared++; });
+  var msg='هتتغير حالة الدفع لـ '+list.length+' لوحة ('+keys.join('، ')+') وتبقى «'+label+'».'
+    +(shared?'\n\n'+shared+' منهم لوحات مشتركة مع مهندسين تانيين — حالة الدفع واحدة للوحة، فهتتغير عندهم كمان.':'')+'\n\nمتأكد؟';
+  if(!confirm(msg)) return;
+  engMarking=true; dataEpoch++; wipPending++;
+  setSyncStatus('loading');
+  var failed=0, now=new Date().toISOString();
+  for(var i=0;i<list.length;i+=8){
+    await Promise.all(list.slice(i,i+8).map(function(d){
+      return supabase.from('drawings').update({paid:val,updated_at:now}).eq('id',d.id).then(function(res){
+        if(res.error||!res.data||!res.data.length){ failed++; return; }
+        d.paid=val; if(res.data[0].updated_at) d.updated_at=res.data[0].updated_at;
+      },function(){ failed++; });
+    }));
+  }
+  wipPending--; dataEpoch++; engMarking=false;
+  setSyncStatus(failed?'off':'on');
+  render();                                    // the register and the follow-up show the new payment state too
+  buildEngCards();
+  if(failed) showToast('خطأ — '+failed+' لوحة ماتغيرتش، جرّب تاني',true);
+  else showToast('✓ '+list.length+' لوحة بقت '+label);
+}
 
 // ══════════════════════════════════════════
 //  START
