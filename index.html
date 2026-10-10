@@ -395,7 +395,7 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .es-n{color:#52514E;font-size:11px}
 .es-n b{color:#0D5C52;font-size:13px}
 .es-row .bdg,.es-act .btn{direction:ltr;unicode-bidi:isolate}
-.es-q{border:0;background:none;color:#1A5276;font:inherit;font-size:11px;text-decoration:underline;cursor:pointer;padding:0}
+.es-q,.es-qc{border:0;background:none;color:#1A5276;font:inherit;font-size:11px;text-decoration:underline;cursor:pointer;padding:0}
 .es-warn{font-size:11px;color:#9A6A00;background:#FEF9E7;border-radius:6px;padding:7px 10px;margin-top:8px;line-height:1.7}
 .es-act{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12px;font-weight:700;color:#2D3748}
 .es-cols{display:flex;gap:6px 16px;flex-wrap:wrap;margin-bottom:12px}
@@ -443,6 +443,11 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .zn{border:1.5px dashed #C3D0CE;background:none;border-radius:10px;color:#7F8C8D;font:inherit;font-size:11px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:74px;padding:8px}
 .zn b{font-size:20px;line-height:1;color:var(--c)}
 .zn:hover{border-color:var(--c);color:var(--c);background:#FAFCFC}
+.es-ck{width:26px;text-align:center !important;padding:5px 2px 5px 8px !important}
+.es-ck input{width:15px;height:15px;padding:0;margin:0;accent-color:#0D7C6E;cursor:pointer;vertical-align:middle}
+.es-t tr.pk td{background:#E3F1FB !important}
+.es-t tr.pk td.es-ck{box-shadow:inset 3px 0 0 #1A5276}
+.es-pkn b{color:#1A5276}
 </style>
 </head>
 <body>
@@ -2251,7 +2256,7 @@ function genEngPdf(){
   var body='';
   for(var k=0;k<keys.length;k++){
     var eng=keys[k];
-    var stm=engStatement(eng), sub=stm.list;
+    var stm=engStatement(eng), sub=stm.chosen;
     if(!sub.length) continue;
     var pc=engPaidCount(sub), rgTxt=engRangeText(stm);
     sc.seq=stm.seq;       // "#" is this engineer's own drawing number, so the next statement can start from his drawing N
@@ -4102,6 +4107,8 @@ window.addEventListener('load',wipInit);
 var ENG_DATES={received_date:'Received',start_date:'Start',target_date:'Target',del:'Delivery'};
 var engR={};              // engineer → {n1,n2}: the range typed for him (his own drawing numbers)
 var engKeys=[];           // the engineers shown in the statement box, by row
+var engPick={};           // engineer → {drawing id: true}: the lines ticked for him (none ticked = the whole range)
+var engLast={};           // engineer → the line ticked last (for shift-click)
 function engDates(){
   var dt=function(id){ var v=wipEl(id).value; return wipDateOk(v)?v:''; };
   return {d1:dt('efDateFrom'),d2:dt('efDateTo'),by:wipEl('efDateBy').value||'received_date'};
@@ -4135,12 +4142,15 @@ function engStatement(eng){
     if(engDateOk(d,r)) list.push(d);
     else if(!wipIso(d[r.by])) noDate++;
   });
-  return {list:list,seq:seq,total:all.length,noDate:noDate,n1:n1,n2:n2};
+  // ticked lines narrow the statement to exactly those drawings
+  var pk=engPick[eng]||{}, chosen=list.filter(function(d){ return pk[d.id]; });
+  return {eng:eng,list:list,chosen:chosen.length?chosen:list,npick:chosen.length,seq:seq,total:all.length,noDate:noDate,n1:n1,n2:n2};
 }
-function engSubset(eng){ return engStatement(eng).list; }
+function engSubset(eng){ return engStatement(eng).chosen; }
 function engRangeText(st){
   var r=engDates(), p=[];
-  if(st&&(st.n1!==null||st.n2!==null)) p.push('Drawings '+(st.n1!==null?st.n1:1)+' → '+(st.n2!==null?Math.min(st.n2,st.total):st.total)+' of '+st.total);
+  if(st&&st.npick) p.push(st.npick+' selected drawing'+(st.npick!==1?'s':'')+' of '+st.total);
+  else if(st&&(st.n1!==null||st.n2!==null)) p.push('Drawings '+(st.n1!==null?st.n1:1)+' → '+(st.n2!==null?Math.min(st.n2,st.total):st.total)+' of '+st.total);
   if(r.d1||r.d2) p.push(ENG_DATES[r.by]+' date '+(r.d1?'from '+fd(r.d1):'')+(r.d1&&r.d2?' ':'')+(r.d2?'to '+fd(r.d2):''));
   return p.join(' · ');
 }
@@ -4157,7 +4167,7 @@ function engShare(sub){
   return Number.isInteger(t)?String(t):t.toFixed(2);
 }
 function engRangeInit(){
-  engR={};
+  engR={}; engPick={}; engLast={};
   ['efDateFrom','efDateTo'].forEach(function(id){
     // only "input": a "change" fires when the field loses focus, and rebuilding the cards at that moment would swallow the click on an engineer
     var el=wipEl(id); el.value=''; el.oninput=buildEngCards;
@@ -4187,30 +4197,32 @@ function engSummary(){
   engStats();
 }
 // the numbers of the box — refreshed without touching the fields being typed in
-function engStats(){
+function engStats(light){
   var box=wipEl('engSum'); if(!box||!engKeys.length) return;
   var rows=box.querySelectorAll('.es-row'), tbs=box.querySelectorAll('.es-tb'), all={}, noDate=0, r=engDates();
   engKeys.forEach(function(eng,i){
     var row=rows[i]; if(!row) return;
-    var st=engStatement(eng), sub=st.list, c=engPaidCount(sub), h;
+    var st=engStatement(eng), sub=st.chosen, c=engPaidCount(sub), h;
     sub.forEach(function(d){ all[d.id]=d; }); noDate+=st.noDate;
     row.querySelector('[data-k="n2"]').placeholder=st.total||'';
     h='<span class="es-n">من '+st.total+' لوحة ليه ·</span>';
     if(!sub.length) h+='<span class="es-n">مفيش لوحات في المدى ده</span>';
     else{
-      h+='<span class="es-n">المستخلص <b>'+sub.length+'</b> لوحة · نصيبه '+engShare(sub)+'</span>'
+      h+=(st.npick?'<span class="es-n es-pkn">محدد <b>'+st.npick+'</b> من '+st.list.length+' لوحة · نصيبه '+engShare(sub)+'</span><button type="button" class="es-qc" onclick="engPickClear('+i+')">الغي التحديد</button>'
+                  :'<span class="es-n">المستخلص <b>'+sub.length+'</b> لوحة · نصيبه '+engShare(sub)+'</span>')
         +'<span class="bdg bup">Unpaid '+c.unpaid+'</span><span class="bdg bhf">50% '+c.half+'</span><span class="bdg bpd">Paid '+c.paid+'</span>';
     }
     // shortcut: start from his first drawing that is not fully paid
     var first=0; engOwn(eng).some(function(d,k){ if(d.paid!=='paid'){ first=k+1; return true; } return false; });
     if(first>1&&st.n1!==first) h+='<button type="button" class="es-q" onclick="engFrom('+i+','+first+')">ابدأ من أول لوحة لسه متدفعتش <span dir="ltr">('+first+')</span></button>';
     row.querySelector('.es-stat').innerHTML=h;
-    if(tbs[i]) tbs[i].innerHTML=engTable(st,r);
+    if(tbs[i]){ if(!light) tbs[i].innerHTML=engTable(st,r); engPickPaint(tbs[i],st); }
   });
   var n=Object.keys(all).length, rt=engRangeText(null), f='';
   wipEl('engRg').textContent=rt; wipEl('engRg').style.display=rt?'':'none';
   if(noDate) f+='<p class="es-warn">'+noDate+' لوحة ملهاش تاريخ '+ENG_DATES[r.by]+'، فمش داخلة في المستخلص. لو عايزها، شيل التاريخ واستخدم رقم اللوحة.</p>';
-  if(n) f+='<div class="es-act"><span>حالة الدفع للـ '+n+' لوحة دي:</span>'
+  var anyPick=engKeys.some(function(eng){ return engStatement(eng).npick>0; });
+  if(n) f+='<div class="es-act"><span>حالة الدفع للـ '+n+' لوحة '+(anyPick?'المحددة':'دي')+':</span>'
     +'<button type="button" class="btn" style="background:#1E8449;color:#fff" onclick="engMarkPaid(\'paid\')">&#10003; 100% Paid</button>'
     +'<button type="button" class="btn" style="background:#D35400;color:#fff" onclick="engMarkPaid(\'half\')">50% Paid</button>'
     +'<button type="button" class="btn" style="background:#C0392B;color:#fff" onclick="engMarkPaid(\'unpaid\')">Unpaid</button></div>';
@@ -4239,13 +4251,13 @@ function engShared(d){ return (d.by_eng||'').split(',').map(function(e){return e
 function engTable(st,r){
   if(!st.list.length) return '';
   var C=engCols(), dl=ENG_DATES[r.by]||'Received';
-  var h='<table class="es-t"><thead><tr>'+(C.num?'<th class="es-no">#</th>':'')+(C.loc?'<th>Plot / Zone / Floor</th>':'')+(C.type?'<th>Type</th>':'')+(C.no?'<th>DWG No.</th>':'')
+  var h='<table class="es-t"><thead><tr><th class="es-ck"><input type="checkbox" class="es-ca" title="حدد الكل / الغي الكل" onclick="engPickAll(this)"/></th>'+(C.num?'<th class="es-no">#</th>':'')+(C.loc?'<th>Plot / Zone / Floor</th>':'')+(C.type?'<th>Type</th>':'')+(C.no?'<th>DWG No.</th>':'')
     +(C.name?'<th>Board Name</th>':'')+(C.content?'<th>Content</th>':'')+(C.status?'<th>Status</th>':'')+(C.date?'<th>'+dl+'</th>':'')+(C.paid?'<th class="es-ph">Paid</th>':'')+'</tr></thead><tbody>';
   st.list.forEach(function(d){
     var s=wipStatus(d), c=wipStColor(s), p=engPaidOf(d), n=engShared(d), dv=wipIso(d[r.by]);
     var tag=n>1?' <i title="لوحة مشتركة بين '+n+' مهندسين — حالة الدفع واحدة للوحة">1/'+n+'</i>':'';
     var btn=function(v,l){ return '<button type="button" data-v="'+v+'"'+(p===v?' class="on"':'')+' onclick="engSetPaid(this)">'+l+'</button>'; };
-    h+='<tr class="p-'+p+'">'+(C.num?'<td class="es-no">'+st.seq[d.id]+'</td>':'')
+    h+='<tr class="p-'+p+'" data-id="'+escHtml(d.id)+'"><td class="es-ck"><input type="checkbox" class="es-c" title="حدد اللوحة دي (Shift = من آخر واحدة حددتها لحد هنا)" onclick="engPickOne(this,event)"/></td>'+(C.num?'<td class="es-no">'+st.seq[d.id]+'</td>':'')
       +(C.loc?'<td class="es-nw">'+escHtml(wipLoc(d)||'-')+'</td>':'')+(C.type?'<td class="es-nw">'+escHtml(d.type||'-')+'</td>':'')
       +(C.no?'<td class="es-dn" title="'+escHtml(d.name||'')+'">'+escHtml(drwNo(d.name))+(C.name?'':tag)+'</td>':'')
       +(C.name?'<td class="es-bn">'+escHtml(d.name||'-')+tag+'</td>':'')
@@ -4263,7 +4275,7 @@ function engPdfTbl(st){
     +(C.name?'<th class="gs">Board Name</th>':'')+(C.content?'<th class="gp">Content</th>':'')+(C.status?'<th class="gs">Status</th>':'')+(C.date?'<th class="gp">'+dl+'</th>':'')
     +(C.cm?'<th class="g1">R1 Recv</th><th class="g1">R1 Reply</th><th class="g1">R1 Status</th><th class="g2">R2 Recv</th><th class="g2">R2 Reply</th><th class="g2">R2 Status</th>':'')
     +(C.paid?'<th class="gm" style="width:1%">Paid</th>':'')+'</tr>', rows='';
-  st.list.forEach(function(d,i){
+  st.chosen.forEach(function(d,i){
     var n=engShared(d), dv=wipIso(d[r.by]), tag=n>1?' <span style="color:#7F8C8D;font-weight:600">(1/'+n+')</span>':'';
     rows+='<tr style="background:'+(i%2===0?'#F4F9F8':'#fff')+'">'
       +(C.num?'<td style="text-align:center;font-weight:700;color:#0D5C52">'+st.seq[d.id]+'</td>':'')
@@ -4277,7 +4289,7 @@ function engPdfTbl(st){
       +(C.cm?'<td>'+fd(d.r1r)+'</td><td>'+fd(d.r1p)+'</td><td>'+mkBdg(rs(d.r1r,d.r1p,d.r1nc))+'</td><td>'+fd(d.r2r)+'</td><td>'+fd(d.r2p)+'</td><td>'+mkBdg(rs(d.r2r,d.r2p,d.r2nc))+'</td>':'')
       +(C.paid?'<td style="white-space:nowrap;text-align:center">'+mkPb(d.paid)+'</td>':'')+'</tr>';
   });
-  return '<table><thead>'+th+'</thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="30" class="tot">TOTAL: '+st.list.length+' DRAWINGS | SUSTRA</td></tr></tfoot></table>';
+  return '<table><thead>'+th+'</thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="30" class="tot">TOTAL: '+st.chosen.length+' DRAWINGS | SUSTRA</td></tr></tfoot></table>';
 }
 // one drawing ticked in the table
 async function engSetPaid(el){
@@ -4296,6 +4308,33 @@ async function engSetPaid(el){
   render(); engStats();
   if(bad) showToast('خطأ — حالة الدفع ماتحفظتش، جرّب تاني',true);
 }
+// ── ticking lines: exactly which drawings go into the statement ──
+function engPickPaint(tb,st){
+  var pk=engPick[st.eng]||{}, n=0;
+  Array.prototype.forEach.call(tb.querySelectorAll('tbody tr'),function(tr){
+    var on=!!pk[tr.getAttribute('data-id')], c=tr.querySelector('.es-c');
+    if(on) n++; tr.classList.toggle('pk',on); if(c) c.checked=on;
+  });
+  var a=tb.querySelector('.es-ca'); if(a){ a.checked=n>0&&n===st.list.length; a.indeterminate=n>0&&n<st.list.length; }
+}
+function engPickEng(el){ var tb=el.closest('.es-tb'); return tb?engKeys[+tb.getAttribute('data-i')]:undefined; }
+function engPickOne(el,ev){
+  var eng=engPickEng(el); if(eng===undefined) return;
+  var pk=engPick[eng]=engPick[eng]||{}, tr=el.closest('tr'), id=tr.getAttribute('data-id'), on=el.checked;
+  var trs=Array.prototype.slice.call(tr.parentNode.children), i=trs.indexOf(tr), from=i;
+  // shift-click: everything between the line ticked last and this one
+  if(ev&&ev.shiftKey&&engLast[eng]){ trs.some(function(x,k){ if(x.getAttribute('data-id')===engLast[eng]){ from=k; return true; } return false; }); }
+  for(var k=Math.min(from,i);k<=Math.max(from,i);k++){ var x=trs[k].getAttribute('data-id'); if(on) pk[x]=true; else delete pk[x]; }
+  engLast[eng]=id;
+  engStats(true);
+}
+function engPickAll(el){
+  var eng=engPickEng(el); if(eng===undefined) return;
+  var pk=engPick[eng]={};                      // un-ticking all also drops ticks left outside the current range
+  if(el.checked) engStatement(eng).list.forEach(function(d){ pk[d.id]=true; });
+  engStats(true);
+}
+function engPickClear(i){ var eng=engKeys[i]; if(eng===undefined) return; engPick[eng]={}; delete engLast[eng]; engStats(true); }
 function engRowIn(el){
   var eng=engKeys[+el.closest('.es-row').getAttribute('data-i')]; if(eng===undefined) return;
   (engR[eng]=engR[eng]||{})[el.getAttribute('data-k')]=el.value;
