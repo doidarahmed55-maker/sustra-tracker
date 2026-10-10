@@ -240,7 +240,7 @@ input:disabled{opacity:.4;cursor:not-allowed}
 .wip-t-h button:hover{background:#E1E6E6;color:#2D3748}
 .wip-tw{overflow-x:auto;border:1px solid #E8F0EF;border-radius:6px}
 .wip-tbl{table-layout:fixed;min-width:860px}
-.wip-tbl col.wc1{width:15%}.wip-tbl col.wc2{width:8%}.wip-tbl col.wc3{width:30%}.wip-tbl col.wc4{width:16%}.wip-tbl col.wc5{width:14%}.wip-tbl col.wc6{width:17%}
+.wip-tbl col.wc1{width:15%}.wip-tbl col.wc2{width:8%}.wip-tbl col.wc3{width:27%}.wip-tbl col.wc4{width:16%}.wip-tbl col.wc5{width:14%}.wip-tbl col.wc6{width:17%}.wip-tbl col.wc7{width:3%}
 .wip-tbl thead{position:static}
 .wip-tbl th{background:var(--c);overflow:hidden;text-overflow:ellipsis;padding:5px 6px}
 .wip-tbl td{padding:1px 3px}
@@ -398,23 +398,51 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .es-q{border:0;background:none;color:#1A5276;font:inherit;font-size:11px;text-decoration:underline;cursor:pointer;padding:0}
 .es-warn{font-size:11px;color:#9A6A00;background:#FEF9E7;border-radius:6px;padding:7px 10px;margin-top:8px;line-height:1.7}
 .es-act{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12px;font-weight:700;color:#2D3748}
+.es-cols{display:flex;gap:6px 16px;flex-wrap:wrap;margin-bottom:12px}
 .es-tb{direction:ltr;max-height:430px;overflow:auto;margin:0 0 6px;border-radius:6px}
 .es-tb:empty{display:none}
 .es-t{width:100%;border-collapse:collapse;font-size:11px;background:#fff}
 .es-t th{position:sticky;top:0;background:#1A5276;color:#fff;font-size:10px;font-weight:700;text-align:left;padding:6px 8px;white-space:nowrap;z-index:1}
-.es-t td{padding:5px 8px;border-bottom:1px solid #E8F0EF;color:#2D3748;vertical-align:middle}
-.es-t tr.p-paid td{background:#F3FBF6}
-.es-t tr.p-half td{background:#FFF9F1}
-.es-no{font-weight:700;color:#0D5C52;text-align:center;width:34px}
-.es-dn{font-weight:700;white-space:nowrap}
-.es-dn i{font-style:normal;font-weight:600;font-size:9px;color:#7F8C8D;background:#EEF2F2;border-radius:8px;padding:1px 5px}
-.es-ct{color:#52514E;max-width:260px}
-.es-st{display:inline-block;font-size:9px;font-weight:700;border-radius:10px;padding:2px 8px;white-space:nowrap}
-.es-paid{font:inherit;font-size:11px;font-weight:700;border:1.5px solid transparent;border-radius:6px;padding:4px 6px;cursor:pointer}
-.es-paid.p-unpaid{background:#FADBD8;color:#C0392B}
-.es-paid.p-half{background:#FDEBD0;color:#D35400}
-.es-paid.p-paid{background:#D5F5E3;color:#1E8449}
-.es-paid option{background:#fff;color:#2D3748}
+.es-t td{padding:5px 7px;border-bottom:1px solid #E8F0EF;color:#2D3748;vertical-align:middle;white-space:normal;overflow:visible;text-overflow:clip}
+.es-t tr.p-paid td{background:#F1FAF4}
+.es-t tr.p-half td{background:#FFF8EE}
+.es-no{text-align:center !important;width:34px}
+.es-t td.es-no{font-weight:700;color:#0D5C52}
+.es-nw{white-space:nowrap !important}
+.es-dn{font-weight:700;white-space:nowrap !important}
+.es-bn{font-weight:600;white-space:nowrap !important}
+.es-dn i,.es-bn i{font-style:normal;font-weight:600;font-size:9px;color:#7F8C8D;background:#EEF2F2;border-radius:8px;padding:1px 5px;white-space:nowrap}
+.es-ct{color:#52514E;overflow-wrap:anywhere;min-width:110px}
+.es-st{display:inline-block;font-size:9px;font-weight:700;border-radius:10px;padding:2px 8px;line-height:1.35;max-width:112px;text-align:center}
+/* payment state: three buttons, the current one filled */
+.es-t th.es-ph,.es-pc{width:1%;white-space:nowrap !important;text-align:center}
+.es-pp{display:inline-flex;border:1.5px solid #C9D3D1;border-radius:7px;overflow:hidden;background:#fff}
+.es-pp button{appearance:none;border:0;border-right:1px solid #DDE5E3;background:#fff;color:#7F8C8D;font:inherit;font-size:10.5px;font-weight:700;padding:5px 7px;cursor:pointer;white-space:nowrap;width:auto}
+.es-pp button:last-child{border-right:0}
+.es-pp button:hover{background:#F0F5F4;color:#2D3748}
+.es-pp button.on{color:#fff;cursor:default}
+.es-pp button.on[data-v="unpaid"]{background:#C0392B}
+.es-pp button.on[data-v="half"]{background:#D35400}
+.es-pp button.on[data-v="paid"]{background:#1E8449}
+.es-pp.p-unpaid{border-color:#E3A59E}.es-pp.p-half{border-color:#E8B98C}.es-pp.p-paid{border-color:#8CC9A4}
+/* ── flexible editing: options of a line, add a line, add a type ── */
+.wip-mc{text-align:center;padding:0 !important}
+.wip-more{border:0;background:none;color:#9AA5B4;font-size:16px;line-height:1;font-weight:700;cursor:pointer;border-radius:5px;padding:4px 6px;font-family:inherit}
+.wip-more:hover,.wip-more.on{background:#E8F0EF;color:#2D3748}
+#wipMenu{position:absolute;z-index:500;background:#fff;border:1.5px solid #1A7A6E;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:5px;min-width:250px;direction:rtl}
+#wipMenu button{display:block;width:100%;text-align:right;border:0;background:none;font:inherit;font-size:12px;font-weight:700;color:#2D3748;padding:8px 10px;border-radius:5px;cursor:pointer}
+#wipMenu button small{display:block;font-size:10px;font-weight:400;color:#7F8C8D;margin-top:2px}
+#wipMenu button:hover{background:#E8F5F3}
+#wipMenu button.dz{color:#C0392B;border-top:1px solid #EEF2F2;border-radius:0 0 5px 5px;margin-top:3px}
+#wipMenu button.dz:hover{background:#FADBD8}
+.wip-addrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:7px}
+.wip-add1{border:1.5px dashed var(--c);background:#fff;color:var(--c);font:inherit;font-size:11px;font-weight:800;border-radius:6px;padding:5px 12px;cursor:pointer}
+.wip-add1:hover{background:var(--c);color:#fff}
+.wip-add1:disabled{opacity:.5;cursor:wait}
+.wip-addrow span{font-size:10px;color:#9AA5B4}
+.zn{border:1.5px dashed #C3D0CE;background:none;border-radius:10px;color:#7F8C8D;font:inherit;font-size:11px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:74px;padding:8px}
+.zn b{font-size:20px;line-height:1;color:var(--c)}
+.zn:hover{border-color:var(--c);color:var(--c);background:#FAFCFC}
 </style>
 </head>
 <body>
@@ -823,16 +851,22 @@ User 2:
     <div class="psect">Select engineer(s):</div>
     <div class="eng-grid" id="engGrid"></div>
     <button class="btn bt" style="font-size:11px;padding:5px 10px;margin-bottom:12px" onclick="engAll()">Select All</button>
+    <div class="psect">Columns <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#7F8C8D">— شيل علامة الصح من أي عمود مش عايزه: بيختفي من الجدول ومن الـ PDF</span></div>
+    <div class="es-cols">
+      <label class="radio-row"><input type="checkbox" id="ecNum" checked/> #</label>
+      <label class="radio-row"><input type="checkbox" id="ecLoc" checked/> Plot / Zone / Floor</label>
+      <label class="radio-row"><input type="checkbox" id="ecType" checked/> Type</label>
+      <label class="radio-row"><input type="checkbox" id="ecNo" checked/> DWG No.</label>
+      <label class="radio-row"><input type="checkbox" id="ecName"/> Board Name</label>
+      <label class="radio-row"><input type="checkbox" id="ecContent" checked/> Content</label>
+      <label class="radio-row"><input type="checkbox" id="ecDel" checked/> Status</label>
+      <label class="radio-row"><input type="checkbox" id="ecDate" checked/> Date</label>
+      <label class="radio-row"><input type="checkbox" id="ecPaid" checked/> Paid</label>
+      <label class="radio-row"><input type="checkbox" id="ecComments" checked/> Comments R1 / R2 <span style="font-weight:400;color:#7F8C8D">(PDF بس)</span></label>
+    </div>
     <div class="psect">Statement <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#7F8C8D">— لكل مهندس: من لوحة رقم كام لحد كام من لوحاته هو</span></div>
     <div id="engSum"></div>
-    <div class="pdiv"></div>
-    <div class="psect">Show columns:</div>
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px">
-      <label class="radio-row"><input type="checkbox" id="ecComments" checked/> Comments (Rounds)</label>
-      <label class="radio-row"><input type="checkbox" id="ecContent" checked/> Content</label>
-      <label class="radio-row"><input type="checkbox" id="ecDel" checked/> Delivery</label>
-      <label class="radio-row"><input type="checkbox" id="ecPaid" checked/> Paid</label>
-    </div>
+
   </div>
   <div class="box-foot"><button class="btn bo" onclick="goList()">Cancel</button><button class="btn bNav" onclick="genEngPdf()">Generate PDF</button></div>
 </div></div>
@@ -2227,7 +2261,7 @@ function genEngPdf(){
     },0);
     var shareStr=Number.isInteger(totalShare)?totalShare:totalShare.toFixed(2);
     body+='<div class="sec"><div class="sec-title">'+escHtml(eng)+'<span class="sec-badge">'+shareStr+' / '+sub.length+' drawings</span>'
-      +'<span style="float:right;font-size:8px;font-weight:600;color:#52514E">'+(rgTxt?escHtml(rgTxt)+' &nbsp;|&nbsp; ':'')+'Unpaid '+pc.unpaid+' · 50% '+pc.half+' · Paid '+pc.paid+'</span></div>'+buildTbl(sub,showPaid,sc)+'</div>';
+      +'<span style="float:right;font-size:8px;font-weight:600;color:#52514E">'+(rgTxt?escHtml(rgTxt)+' &nbsp;|&nbsp; ':'')+'Unpaid '+pc.unpaid+' · 50% '+pc.half+' · Paid '+pc.paid+'</span></div>'+engPdfTbl(stm)+'</div>';
   }
   if(!body){alert('No drawings match filters');return;}
   openWin(sL,'',ds,'Engineer Drawing Report',body);
@@ -3036,12 +3070,12 @@ function wipCountTxt(rows){
 }
 
 // ── render ──
-var WIP_NCOL=6;
+var WIP_NCOL=7;
 function wipHead(){
   var cfg=wipCfg(), head='<colgroup>', ci;
   for(ci=1;ci<=WIP_NCOL;ci++) head+='<col class="wc'+ci+'"/>';
   return head+'</colgroup><thead><tr><th>'+escHtml(cfg.col1+' / '+cfg.col2+' / Floor')+'</th><th>DWG No.</th>'
-    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Start → Target</th></tr></thead>';
+    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Start → Target</th><th class="wip-mh" aria-label="options"></th></tr></thead>';
 }
 function wipRowHtml(d){
   var st=wipStatus(d), sc=wipStColor(st);
@@ -3056,6 +3090,7 @@ function wipRowHtml(d){
   h+='</select></td>';
   h+='<td><button type="button" class="wip-eng" data-f="by_eng">'+wipEngHtml(d)+'</button></td>';
   h+='<td><button type="button" class="wip-dbtn" title="'+escHtml(wipDatesTip(d))+'">'+wipDatesHtml(d)+'</button></td>';
+  h+='<td class="wip-mc"><button type="button" class="wip-more" title="خيارات اللوحة: تعديل كامل / تكرار / مسح" aria-label="options">&#8942;</button></td>';
   return h+'</tr>';
 }
 // one card per type: how many drawings, where they stand, and how much is finished
@@ -3070,15 +3105,16 @@ function wipCardsHtml(s){
       +'<div class="zc-bar">'+seg('done')+seg('recv')+seg('prog')+seg('hold')+seg('none')+'</div>'
       +'<div class="zc-st">'+line('none','Not started')+line('prog','In progress')+line('recv','Received')+line('done','Delivered')+(st.hold?line('hold','Hold'):'')+'</div>'
       +'<div class="zc-more">'+(on?'&#9652; اقفل الجدول':'&#9662; افتح الجدول')+'</div></button>';
-  }).join('');
+  }).join('')+'<button type="button" class="zn" title="ضيف نوع جديد (مثلاً STAIR) للـ Plot / Zone / Floor ده"><b>+</b>نوع جديد</button>';
 }
 function wipOpenHtml(s){
   var t=wipOpenTable(s); if(!t) return '';
   return '<div class="wip-t-h">'+escHtml(t.type||'No Type')+' <span>'+t.rows.length+'</span><button type="button" class="zc-close">&#10005; اقفل</button></div>'
-    +'<div class="wip-tw"><table class="wip-tbl">'+wipHead()+'<tbody>'+t.rows.map(wipRowHtml).join('')+'</tbody></table></div>';
+    +'<div class="wip-tw"><table class="wip-tbl">'+wipHead()+'<tbody>'+t.rows.map(wipRowHtml).join('')+'</tbody></table></div>'
+    +'<div class="wip-addrow"><button type="button" class="wip-add1">+ Add drawing</button><span dir="rtl">سطر جديد في '+escHtml(t.type||'No Type')+' — اكتب رقم اللوحة بس، والباقي يتملى زي أي سطر</span></div>';
 }
 function renderWip(){
-  wipEngClose(true); wipDateClose(true);
+  wipEngClose(true); wipDateClose(true); wipMenuClose();
   var secs=wipSections(), cfg=wipCfg(), body=wipEl('wipBody'), h='';
   wipSig=wipSignature(secs); wipStale=false;
   wipChips(secs); wipSummary(secs); wipSetupBox();
@@ -3177,7 +3213,7 @@ function wipSync(secs){
   wipSummary(secs);
 }
 function wipEditing(){
-  if(wipPop||wipDp) return true;
+  if(wipPop||wipDp||wipMn) return true;
   var a=document.activeElement, b=wipEl('wipBody');
   return !!(a&&b&&b.contains(a)&&a.tagName==='INPUT');
 }
@@ -3312,7 +3348,10 @@ function wipCommit(el){
     if(!el.classList.contains('open')) return;     // the cell is showing the short number, not the name
     v=el.value.trim();
     if(!v){ if(wn(d.name)) showToast('اسم اللوحة مينفعش يتمسح',true); }
-    else if(v!==wn(d.name)) patch={name:v};
+    else{
+      if(!wn(d.name)) v=wipExpandNo(d,v);          // a new line: "062037" becomes the full board name, like its neighbours
+      if(v!==wn(d.name)) patch={name:v};
+    }
   } else if(f==='content'){
     v=el.value.trim(); if(v!==wn(d.content)) patch={content:v};
   } else if(f==='status'){
@@ -3458,6 +3497,8 @@ function wipDateOpen(btn,id){
   });
   pop.addEventListener('focusout',function(e){ if(e.target.type==='date') wipDateCommit(id,e.target,true); });
   pop.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.type==='date'){ e.preventDefault(); e.target.blur(); } });
+  // Done: keep the focus where it is on mouse-down, so nothing on the page moves between the press and the click
+  pop.querySelector('.pop-foot button').addEventListener('mousedown',function(e){ e.preventDefault(); });
   pop.querySelector('.pop-foot button').addEventListener('click',function(){ wipDateClose(); });
 }
 function wipDateCommit(id,el,leaving){
@@ -3782,7 +3823,7 @@ function wipTaskRow(name,content){
   box.appendChild(r);
   return r;
 }
-function wipTaskOpen(){
+function wipTaskOpen(pre){
   wipEngClose(true); wipDateClose(true);
   var cfg=wipCfg(), uniq=function(f){ var o={}; drws.forEach(function(d){ var v=wn(d[f]); if(v) o[v]=1; }); return wipSortVals(o); };
   wipEl('ntlPlot').textContent=cfg.col1; wipEl('ntlZone').textContent=cfg.col2;
@@ -3792,6 +3833,8 @@ function wipTaskOpen(){
   // start from what is selected in the follow-up filter, if anything
   var fp=wipEl('wfPlot').value, fz=wipEl('wfZone').value, fl=wipEl('wfLevel').value;
   wipEl('ntPlot').value=fp||''; wipEl('ntZone').value=fp&&fz!==WIP_ALL?fz:''; wipEl('ntLevel').value=fp&&fl!==WIP_ALL?fl:'';
+  // …or from the Plot / Zone / Floor whose "+ type" card was clicked
+  if(pre){ fp=pre.plot; wipEl('ntPlot').value=pre.plot; wipEl('ntZone').value=pre.zone; wipEl('ntLevel').value=pre.level; }
   wipEl('ntType').value=''; wipEl('ntStart').value=''; wipEl('ntTarget').value=''; wipEl('ntEngIn').value='';
   wipEl('ntStart').disabled=wipDatesCol!==true; wipEl('ntTarget').disabled=wipTargetCol!==true;
   var ss=wipEl('ntStatus'); ss.innerHTML=''; WIP_STATUSES.forEach(function(s){ ss.appendChild(new Option(s,s)); }); ss.value='NOT STARTED'; ss._touched=false;
@@ -3981,6 +4024,16 @@ function wipInit(){
   b.addEventListener('click',function(e){
     var t=e.target, x;
     if(!t.closest) return;
+    // options of one drawing, a new line in the open table, a new type for this Plot / Zone / Floor
+    x=t.closest('.wip-more');
+    if(x){ var r0=wipRow(x); if(!r0) return; if(wipMn&&wipMn.btn===x) wipMenuClose(); else wipMenuOpen(x,r0.d.id); return; }
+    x=t.closest('.wip-add1,.zn');
+    if(x){
+      var sc0=x.closest('.wip-sec'), k0=sc0?sc0.getAttribute('data-k'):null; if(k0===null) return;
+      if(x.classList.contains('zn')){ var s0=wipSecOf(k0); if(s0) wipTaskOpen({plot:s0.plot,zone:s0.zone,level:s0.level}); }
+      else wipAddRow(k0,wipOpen[k0],null);
+      return;
+    }
     // a type card: open / close its table
     x=t.closest('.zc,.zc-close');
     if(x){
@@ -3998,10 +4051,11 @@ function wipInit(){
   document.addEventListener('mousedown',function(e){
     if(wipPop&&!wipPop.el.contains(e.target)&&!wipPop.btn.contains(e.target)) wipEngClose();
     if(wipDp&&!wipDp.el.contains(e.target)&&!wipDp.btn.contains(e.target)) wipDateClose();
+    if(wipMn&&!wipMn.el.contains(e.target)&&!wipMn.btn.contains(e.target)) wipMenuClose();
   });
   document.addEventListener('keydown',function(e){
     if(e.key!=='Escape') return;
-    if(wipPop) wipEngClose(); else if(wipDp) wipDateClose(); else if(wipTaskOn) wipTaskClose();
+    if(wipMn) wipMenuClose(); else if(wipPop) wipEngClose(); else if(wipDp) wipDateClose(); else if(wipTaskOn) wipTaskClose();
   });
   window.addEventListener('resize',function(){ if(wipPop) wipEngClose(); if(wipDp) wipDateClose(); });
   var tb=wipEl('wipTeamBody');
@@ -4114,6 +4168,7 @@ function engRangeInit(){
     o.disabled=(o.value==='target_date'&&wipTargetCol!==true)||((o.value==='received_date'||o.value==='start_date')&&wipDatesCol!==true);
   });
   by.value=wipDatesCol===true?'received_date':'del';
+  engColsInit();
 }
 // the statement box: one row per selected engineer with his own "from drawing … to …"
 function engSummary(){
@@ -4160,36 +4215,79 @@ function engStats(){
     +'<button type="button" class="btn" style="background:#D35400;color:#fff" onclick="engMarkPaid(\'half\')">50% Paid</button>'
     +'<button type="button" class="btn" style="background:#C0392B;color:#fff" onclick="engMarkPaid(\'unpaid\')">Unpaid</button></div>';
   wipEl('engFoot').innerHTML=f;
+  engSig=engSigNow();
 }
+// ── columns: what the statement shows, on screen and in the PDF ──
+var ENG_COLS=[['ecNum','num',1],['ecLoc','loc',1],['ecType','type',1],['ecNo','no',1],['ecName','name',0],['ecContent','content',1],['ecDel','status',1],['ecDate','date',1],['ecComments','cm',1],['ecPaid','paid',1]];
+function engColsInit(){
+  var saved={};
+  try{ saved=JSON.parse(localStorage.getItem('sustra_eng_cols')||'{}')||{}; }catch(e){}
+  ENG_COLS.forEach(function(c){
+    var el=wipEl(c[0]); if(!el) return;
+    el.checked=typeof saved[c[1]]==='boolean'?saved[c[1]]:!!c[2];
+    el.onchange=function(){
+      var m={}; ENG_COLS.forEach(function(x){ var e=wipEl(x[0]); if(e) m[x[1]]=e.checked; });
+      try{ localStorage.setItem('sustra_eng_cols',JSON.stringify(m)); }catch(e){}
+      engStats();
+    };
+  });
+}
+function engCols(){ var m={}; ENG_COLS.forEach(function(c){ var e=wipEl(c[0]); m[c[1]]=e?e.checked:!!c[2]; }); return m; }
+function engPaidOf(d){ return d.paid==='paid'?'paid':d.paid==='half'?'half':'unpaid'; }
+function engShared(d){ return (d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean).length; }
 // the statement itself, on screen: one line per drawing, with its payment state to tick
 function engTable(st,r){
   if(!st.list.length) return '';
-  var dl=ENG_DATES[r.by]||'Received';
-  var h='<table class="es-t"><thead><tr><th>#</th><th>Plot / Zone / Floor</th><th>Type</th><th>DWG No.</th><th>Content</th><th>Status</th><th>'+dl+'</th><th>Paid</th></tr></thead><tbody>';
+  var C=engCols(), dl=ENG_DATES[r.by]||'Received';
+  var h='<table class="es-t"><thead><tr>'+(C.num?'<th class="es-no">#</th>':'')+(C.loc?'<th>Plot / Zone / Floor</th>':'')+(C.type?'<th>Type</th>':'')+(C.no?'<th>DWG No.</th>':'')
+    +(C.name?'<th>Board Name</th>':'')+(C.content?'<th>Content</th>':'')+(C.status?'<th>Status</th>':'')+(C.date?'<th>'+dl+'</th>':'')+(C.paid?'<th class="es-ph">Paid</th>':'')+'</tr></thead><tbody>';
   st.list.forEach(function(d){
-    var s=wipStatus(d), c=wipStColor(s), p=d.paid==='paid'?'paid':d.paid==='half'?'half':'unpaid';
-    var n=(d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean).length;
-    var dv=wipIso(d[r.by]);
-    h+='<tr class="p-'+p+'"><td class="es-no">'+st.seq[d.id]+'</td>'
-      +'<td>'+escHtml(wipLoc(d)||'-')+'</td><td>'+escHtml(d.type||'-')+'</td>'
-      +'<td class="es-dn" title="'+escHtml(d.name||'')+'">'+escHtml(drwNo(d.name))+(n>1?' <i title="لوحة مشتركة بين '+n+' مهندسين — حالة الدفع واحدة للوحة">1/'+n+'</i>':'')+'</td>'
-      +'<td class="es-ct">'+escHtml(d.content||'-')+'</td>'
-      +'<td><span class="es-st" style="color:'+c.fg+';background:'+c.bg+'">'+escHtml(s)+'</span></td>'
-      +'<td>'+(dv?fd(dv):'-')+'</td>'
-      +'<td><select class="es-paid p-'+p+'" data-id="'+escHtml(d.id)+'" onchange="engSetPaid(this)">'
-      +'<option value="unpaid"'+(p==='unpaid'?' selected':'')+'>Unpaid</option><option value="half"'+(p==='half'?' selected':'')+'>50% Paid</option><option value="paid"'+(p==='paid'?' selected':'')+'>100% Paid</option></select></td></tr>';
+    var s=wipStatus(d), c=wipStColor(s), p=engPaidOf(d), n=engShared(d), dv=wipIso(d[r.by]);
+    var tag=n>1?' <i title="لوحة مشتركة بين '+n+' مهندسين — حالة الدفع واحدة للوحة">1/'+n+'</i>':'';
+    var btn=function(v,l){ return '<button type="button" data-v="'+v+'"'+(p===v?' class="on"':'')+' onclick="engSetPaid(this)">'+l+'</button>'; };
+    h+='<tr class="p-'+p+'">'+(C.num?'<td class="es-no">'+st.seq[d.id]+'</td>':'')
+      +(C.loc?'<td class="es-nw">'+escHtml(wipLoc(d)||'-')+'</td>':'')+(C.type?'<td class="es-nw">'+escHtml(d.type||'-')+'</td>':'')
+      +(C.no?'<td class="es-dn" title="'+escHtml(d.name||'')+'">'+escHtml(drwNo(d.name))+(C.name?'':tag)+'</td>':'')
+      +(C.name?'<td class="es-bn">'+escHtml(d.name||'-')+tag+'</td>':'')
+      +(C.content?'<td class="es-ct">'+escHtml(d.content||'-')+'</td>':'')
+      +(C.status?'<td><span class="es-st" style="color:'+c.fg+';background:'+c.bg+'">'+escHtml(s)+'</span></td>':'')
+      +(C.date?'<td class="es-nw">'+(dv?fd(dv):'-')+'</td>':'')
+      +(C.paid?'<td class="es-pc"><span class="es-pp p-'+p+'" data-id="'+escHtml(d.id)+'">'+btn('unpaid','Unpaid')+btn('half','50%')+btn('paid','Paid')+'</span></td>':'')+'</tr>';
   });
   return h+'</tbody></table>';
 }
+// the same table for the PDF (plus the comment rounds, when asked for)
+function engPdfTbl(st){
+  var C=engCols(), r=engDates(), dl=ENG_DATES[r.by]||'Received';
+  var th='<tr>'+(C.num?'<th class="gp" style="width:1%">#</th>':'')+(C.loc?'<th class="gp">Plot / Zone / Floor</th>':'')+(C.type?'<th class="gp">Type</th>':'')+(C.no?'<th class="gs">DWG No.</th>':'')
+    +(C.name?'<th class="gs">Board Name</th>':'')+(C.content?'<th class="gp">Content</th>':'')+(C.status?'<th class="gs">Status</th>':'')+(C.date?'<th class="gp">'+dl+'</th>':'')
+    +(C.cm?'<th class="g1">R1 Recv</th><th class="g1">R1 Reply</th><th class="g1">R1 Status</th><th class="g2">R2 Recv</th><th class="g2">R2 Reply</th><th class="g2">R2 Status</th>':'')
+    +(C.paid?'<th class="gm" style="width:1%">Paid</th>':'')+'</tr>', rows='';
+  st.list.forEach(function(d,i){
+    var n=engShared(d), dv=wipIso(d[r.by]), tag=n>1?' <span style="color:#7F8C8D;font-weight:600">(1/'+n+')</span>':'';
+    rows+='<tr style="background:'+(i%2===0?'#F4F9F8':'#fff')+'">'
+      +(C.num?'<td style="text-align:center;font-weight:700;color:#0D5C52">'+st.seq[d.id]+'</td>':'')
+      +(C.loc?'<td style="font-weight:600;white-space:nowrap">'+escHtml(wipLoc(d)||'-')+'</td>':'')
+      +(C.type?'<td>'+(d.type?'<span style="background:#E8F5F3;color:#0D5C52;padding:1px 3px;border-radius:2px;font-size:7px;font-weight:700">'+escHtml(d.type)+'</span>':'-')+'</td>':'')
+      +(C.no?'<td style="font-weight:700;white-space:nowrap">'+escHtml(drwNo(d.name))+(C.name?'':tag)+'</td>':'')
+      +(C.name?'<td class="wrap" style="font-weight:600;max-width:180px">'+escHtml(d.name||'-')+tag+'</td>':'')
+      +(C.content?'<td class="wrap" style="font-size:7px;color:#555;max-width:200px">'+escHtml(d.content||'-')+'</td>':'')
+      +(C.status?'<td style="font-size:7px;font-weight:700">'+escHtml(wipStatus(d))+'</td>':'')
+      +(C.date?'<td style="white-space:nowrap">'+(dv?fd(dv):'-')+'</td>':'')
+      +(C.cm?'<td>'+fd(d.r1r)+'</td><td>'+fd(d.r1p)+'</td><td>'+mkBdg(rs(d.r1r,d.r1p,d.r1nc))+'</td><td>'+fd(d.r2r)+'</td><td>'+fd(d.r2p)+'</td><td>'+mkBdg(rs(d.r2r,d.r2p,d.r2nc))+'</td>':'')
+      +(C.paid?'<td style="white-space:nowrap;text-align:center">'+mkPb(d.paid)+'</td>':'')+'</tr>';
+  });
+  return '<table><thead>'+th+'</thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="30" class="tot">TOTAL: '+st.list.length+' DRAWINGS | SUSTRA</td></tr></tfoot></table>';
+}
 // one drawing ticked in the table
 async function engSetPaid(el){
-  var id=el.getAttribute('data-id'), val=el.value, d=null;
+  var id=el.parentNode.getAttribute('data-id'), val=el.getAttribute('data-v'), d=null;
   drws.some(function(x){ if(String(x.id)===id){ d=x; return true; } return false; });
   if(!d) return;
   var old=d.paid||'unpaid'; if(old===val) return;
   d.paid=val; dataEpoch++; wipPending++;
   setSyncStatus('loading');
-  el.blur(); engStats();
+  engStats();
   var res; try{ res=await supabase.from('drawings').update({paid:val,updated_at:new Date().toISOString()}).eq('id',d.id); }catch(e){ res={error:e}; }
   var bad=!res||res.error||!res.data||!res.data.length;
   if(bad) d.paid=old; else if(res.data[0].updated_at) d.updated_at=res.data[0].updated_at;
@@ -4209,11 +4307,15 @@ function engFrom(i,n){
   engSummary();
 }
 // a change that arrives from the tracker while the report is open (someone else marked a drawing paid)
+var engSig='';
+function engSigNow(){
+  var r=engDates();
+  return engKeys.map(function(eng){ var st=engStatement(eng); return eng+'#'+st.total+'#'+st.list.map(function(d){ return d.id+'|'+(d.paid||'')+'|'+(d.status||'')+'|'+(d[r.by]||'')+'|'+(d.content||'')+'|'+(d.name||''); }).join(','); }).join(';');
+}
 function engOnData(){
-  var v=wipEl('vEng'), a=document.activeElement;
-  if(!v||v.offsetParent===null||engMarking) return;
-  if(a&&a.classList&&a.classList.contains('es-paid')) return;      // a pick list is open — the next refresh will do
-  engStats();
+  var v=wipEl('vEng');
+  if(!v||v.offsetParent===null||engMarking||!engKeys.length) return;
+  if(engSigNow()!==engSig) engStats();          // nothing changed → leave the table alone (a click may be on its way)
 }
 var engMarking=false;
 async function engMarkPaid(val){
@@ -4245,6 +4347,128 @@ async function engMarkPaid(val){
   engStats();
   if(failed) showToast('خطأ — '+failed+' لوحة ماتغيرتش، جرّب تاني',true);
   else showToast('✓ '+list.length+' لوحة بقت '+label);
+}
+
+// ══════════════════════════════════════════
+//  FLEXIBLE EDITING in the follow-up tables: add / duplicate / delete a drawing, add a type
+// ══════════════════════════════════════════
+var wipMn=null;            // the open options menu: {el,btn,id}
+var wipAdding=false;
+function wipSecOf(key){ var ss=wipSections(); for(var i=0;i<ss.length;i++){ if(ss[i].key===key) return ss[i]; } return null; }
+function wipNameTaken(n){ var k=n.toLowerCase(); return drws.some(function(d){ return wn(d.name).toLowerCase()===k; }); }
+// the number part of a board name: {pre, no, post} — null when the name has no clear number
+function wipNoParts(name){
+  var nm=wn(name), no=drwNo(nm);
+  if(!/^\d{3,}$/.test(no)||nm.length<=no.length) return null;
+  var i=nm.lastIndexOf(no);
+  return {pre:nm.slice(0,i),no:no,post:nm.slice(i+no.length)};
+}
+// the next free board name after the last numbered one of these drawings ('' when there is nothing to go by)
+function wipNextName(rows){
+  for(var i=rows.length-1;i>=0;i--){
+    var p=wipNoParts(rows[i].name); if(!p) continue;
+    for(var k=1;k<=300;k++){
+      var n=String(parseInt(p.no,10)+k); while(n.length<p.no.length) n='0'+n;
+      if(!wipNameTaken(p.pre+n+p.post)) return p.pre+n+p.post;
+    }
+  }
+  return '';
+}
+// a bare number typed into a drawing that has no name yet → the full board name, shaped like its neighbours
+function wipExpandNo(d,v){
+  if(!/^\d{3,}$/.test(v)) return v;
+  var same=function(f){ return function(x){ return wn(x[f])===wn(d[f]); }; }, all=sorted().filter(function(x){ return x.id!==d.id; });
+  var pools=[['plot','zone','level','type'],['plot','zone','level'],['plot','zone'],['plot']];
+  for(var i=0;i<pools.length;i++){
+    var rows=all.filter(function(x){ return pools[i].every(function(f){ return same(f)(x); }); });
+    for(var k=rows.length-1;k>=0;k--){ var p=wipNoParts(rows[k].name); if(p) return p.pre+v+p.post; }
+  }
+  return v;
+}
+// a new line in the open table of a Plot / Zone / Floor (src = the drawing to copy, or null for an empty line)
+async function wipAddRow(key,tk,srcId){
+  if(wipAdding) return;
+  var s=wipSecOf(key), t=null; if(!s) return;
+  s.tables.forEach(function(x){ if(x.tk===tk) t=x; }); if(!t) return;
+  var src=srcId?drws.find(function(x){ return x.id===srcId; }):null;
+  var rec={num:drws.length+1,project_id:wipProj(),plot:s.plot,zone:s.zone,level:s.level,type:t.type,name:'',content:'',
+    status:'NOT STARTED',ns:false,by_eng:'',paid:'unpaid',notes:'',link:'',updated_at:new Date().toISOString()};
+  if(wipTargetCol===true) rec.target_date=null;
+  if(wipDatesCol===true){ rec.start_date=null; rec.received_date=null; }
+  if(src){
+    var st=wipStatus(src), live=['none','prog','hold'].indexOf(wipGroup(st))>=0;      // a finished drawing is copied as a fresh task
+    rec.name=wipNextName([src])||wipNextName(t.rows);
+    rec.content=wn(src.content); rec.by_eng=wn(src.by_eng);
+    if(live){
+      rec.status=st;
+      if(wipTargetCol===true) rec.target_date=wipIso(src.target_date)||null;
+      if(wipDatesCol===true) rec.start_date=wipIso(src.start_date)||null;
+    }
+  }
+  wipAdding=true; dataEpoch++; wipPending++;
+  setSyncStatus('loading');
+  var res;
+  try{ res=await supabase.from('drawings').insertMany([rec]); }
+  catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+  wipPending--; dataEpoch++; wipAdding=false;
+  if(!wipPending) setSyncStatus(res.error?'off':'on');
+  if(res.error||!res.data||!res.data.length){ showToast('خطأ — السطر ماتضافش: '+((res.error&&res.error.message)||''),true); return; }
+  var d=res.data[0];
+  if(!drws.some(function(x){ return x.id===d.id; })) drws.push(d);
+  try{ await renum(); }catch(e){}
+  wipOpen[key]=tk;
+  wipRegister(); wipEngClose(true); wipDateClose(true); wipMenuClose();
+  var a=document.activeElement; if(a&&a.blur&&wipEl('wipBody').contains(a)) a.blur();
+  renderWip(); wipTeamRender(); wipDashRender();
+  showToast(src?'✓ اتكررت — راجع رقم اللوحة':'✓ سطر جديد اتضاف في التراكر — اكتب رقم اللوحة');
+  var tr=wipTr(d.id), el=tr?tr.querySelector('.wip-name'):null;
+  if(el){ if(tr.scrollIntoView) tr.scrollIntoView({block:'nearest'}); el.focus(); }
+}
+// remove a drawing from the tracker (a line added by mistake, a task that was cancelled)
+async function wipDelete(id){
+  var d=drws.find(function(x){ return x.id===id; }); if(!d) return;
+  var what=wn(d.name)?'«'+'⁦'+wn(d.name)+'⁩'+'»':'(سطر من غير رقم لوحة)';
+  var extra=[]; if(wn(d.by_eng)) extra.push('المهندس: ⁦'+wn(d.by_eng)+'⁩'); extra.push('الحالة: ⁦'+wipStatus(d)+'⁩');
+  if(d.paid==='paid'||d.paid==='half') extra.push('متسجّل عليها دفع: ⁦'+pv(d.paid).l+'⁩');
+  if(!confirm('هتتمسح اللوحة '+what+' من التراكر نهائياً.\n'+extra.join(' · ')+'\n\nمتأكد؟')) return;
+  dataEpoch++; wipPending++;
+  setSyncStatus('loading');
+  var res;
+  try{ res=await supabase.from('drawings').delete().eq('id',id); }
+  catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+  wipPending--; dataEpoch++;
+  if(!wipPending) setSyncStatus(res.error?'off':'on');
+  if(res.error){ showToast('خطأ في المسح: '+res.error.message,true); return; }
+  drws=drws.filter(function(x){ return x.id!==id; });
+  try{ await renum(); }catch(e){}
+  wipRegister(); wipMenuClose(); renderWip(); wipTeamRender(); wipDashRender();
+  showToast('🗑 اتمسحت من التراكر');
+}
+function wipMenuOpen(btn,id){
+  wipMenuClose(); wipEngClose(true); wipDateClose(true);
+  var el=document.createElement('div'); el.id='wipMenu';
+  el.innerHTML='<button type="button" data-a="edit">&#9998; افتح اللوحة كاملة<small>كل البيانات: النوع، الدور، اللينك، الكومنتات…</small></button>'
+    +'<button type="button" data-a="dup">&#10697; كرّر اللوحة<small>سطر جديد بنفس المحتوى والمهندس، برقم اللوحة اللي بعده</small></button>'
+    +'<button type="button" data-a="del" class="dz">&#128465; امسح اللوحة</button>';
+  document.body.appendChild(el);
+  wipPlace(el,btn);
+  btn.classList.add('on');
+  wipMn={el:el,btn:btn,id:id};
+  el.addEventListener('click',function(e){
+    var b=e.target.closest?e.target.closest('button[data-a]'):null; if(!b||!wipMn) return;
+    var a=b.getAttribute('data-a'), did=wipMn.id, tr=wipTr(did), sec=tr?tr.closest('.wip-sec'):null, k=sec?sec.getAttribute('data-k'):null;
+    wipMenuClose();
+    if(a==='edit') goEdit(did);
+    else if(a==='dup'){ if(k!==null) wipAddRow(k,wipOpen[k],did); }
+    else wipDelete(did);
+  });
+}
+function wipMenuClose(){
+  if(!wipMn) return;
+  wipMn.btn.classList.remove('on');
+  if(wipMn.el.parentNode) wipMn.el.parentNode.removeChild(wipMn.el);
+  wipMn=null;
+  setTimeout(wipTick,0);
 }
 
 // ══════════════════════════════════════════
