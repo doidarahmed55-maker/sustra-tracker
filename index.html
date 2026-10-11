@@ -496,6 +496,14 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .wip-tbl tr.drop-b td{box-shadow:inset 0 -3px 0 var(--c,#0D5C52)}
 #wipMenu .mv{display:flex;gap:4px;border-bottom:1px solid #EEF2F2;padding-bottom:4px;margin-bottom:3px}
 #wipMenu .mv button{flex:1;text-align:center;font-size:11px;padding:7px 4px}
+/* ── Engineer Report uses the whole width of the screen ── */
+#vEng .page{max-width:none;padding:20px 24px 50px}
+#vEng .eng-grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+#vEng .es-tb{max-height:max(430px,calc(100vh - 230px))}
+@media(max-width:700px){#vEng .page{padding:14px 10px 40px}}
+.es-fx{display:inline-block;min-width:34px;margin-right:7px;padding:3px 5px;border-radius:5px;background:#EEF2F2;color:#7F8C8D;font-size:10.5px;font-weight:700;text-align:center;vertical-align:middle}
+.es-fx.sh{background:#FDEBD0;color:#B7791F}
+.es-pc .es-pp{vertical-align:middle}
 </style>
 </head>
 <body>
@@ -4335,6 +4343,8 @@ function engColsInit(){
   });
 }
 function engCols(){ var m={}; ENG_COLS.forEach(function(c){ var e=wipEl(c[0]); m[c[1]]=e?e.checked:!!c[2]; }); return m; }
+// share of a drawing done by n engineers, as a short factor: 1 · 0.5 · 0.33 · 0.25
+function engFactor(n){ var v=n>1?1/n:1; return Number.isInteger(v)?String(v):String(+v.toFixed(2)); }
 function engPaidOf(d){ return d.paid==='paid'?'paid':d.paid==='half'?'half':'unpaid'; }
 function engShared(d){ return (d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean).length; }
 // the statement itself, on screen: one line per drawing, with its payment state to tick
@@ -4345,7 +4355,9 @@ function engTable(st,r){
     +(C.name?'<th>Board Name</th>':'')+(C.content?'<th>Content</th>':'')+(C.status?'<th>Status</th>':'')+(C.date?'<th>'+dl+'</th>':'')+(C.paid?'<th class="es-ph">Paid</th>':'')+'</tr></thead><tbody>';
   st.list.forEach(function(d){
     var s=wipStatus(d), c=wipStColor(s), p=engPaidOf(d), n=engShared(d), dv=wipIso(d[r.by]);
-    var tag=n>1?' <i title="لوحة مشتركة بين '+n+' مهندسين — حالة الدفع واحدة للوحة">1/'+n+'</i>':'';
+    // the engineer's share of this drawing, as a factor next to Paid (1 · 0.5 · 0.33 · 0.25 …); beside the number only when Paid is hidden
+    var tag=n>1&&!C.paid?' <i title="لوحة مشتركة بين '+n+' مهندسين — حالة الدفع واحدة للوحة">×'+engFactor(n)+'</i>':'';
+    var fx='<span class="es-fx'+(n>1?' sh':'')+'" title="'+(n>1?'نصيبه من اللوحة — مشتركة بين '+n+' مهندسين':'اللوحة كلها ليه')+'">×'+engFactor(n)+'</span>';
     var btn=function(v,l){ return '<button type="button" data-v="'+v+'"'+(p===v?' class="on"':'')+' onclick="engSetPaid(this)">'+l+'</button>'; };
     h+='<tr class="p-'+p+'" data-id="'+escHtml(d.id)+'"><td class="es-ck"><input type="checkbox" class="es-c" title="حدد اللوحة دي (Shift = من آخر واحدة حددتها لحد هنا)" onclick="engPickOne(this,event)"/></td>'+(C.num?'<td class="es-no">'+st.seq[d.id]+'</td>':'')
       +(C.loc?'<td class="es-nw">'+escHtml(wipLoc(d)||'-')+'</td>':'')+(C.type?'<td class="es-nw">'+escHtml(d.type||'-')+'</td>':'')
@@ -4354,7 +4366,7 @@ function engTable(st,r){
       +(C.content?'<td class="es-ct">'+escHtml(d.content||'-')+'</td>':'')
       +(C.status?'<td><span class="es-st" style="color:'+c.fg+';background:'+c.bg+'">'+escHtml(s)+'</span></td>':'')
       +(C.date?'<td class="es-nw">'+(dv?fd(dv):'-')+'</td>':'')
-      +(C.paid?'<td class="es-pc"><span class="es-pp p-'+p+'" data-id="'+escHtml(d.id)+'">'+btn('unpaid','Unpaid')+btn('half','50%')+btn('paid','Paid')+'</span></td>':'')+'</tr>';
+      +(C.paid?'<td class="es-pc">'+fx+'<span class="es-pp p-'+p+'" data-id="'+escHtml(d.id)+'">'+btn('unpaid','Unpaid')+btn('half','50%')+btn('paid','Paid')+'</span></td>':'')+'</tr>';
   });
   return h+'</tbody></table>';
 }
@@ -4366,7 +4378,7 @@ function engPdfTbl(st){
     +(C.cm?'<th class="g1">R1 Recv</th><th class="g1">R1 Reply</th><th class="g1">R1 Status</th><th class="g2">R2 Recv</th><th class="g2">R2 Reply</th><th class="g2">R2 Status</th>':'')
     +(C.paid?'<th class="gm" style="width:1%">Paid</th>':'')+'</tr>', rows='';
   st.chosen.forEach(function(d,i){
-    var n=engShared(d), dv=wipIso(d[r.by]), tag=n>1?' <span style="color:#7F8C8D;font-weight:600">(1/'+n+')</span>':'';
+    var n=engShared(d), dv=wipIso(d[r.by]), tag=n>1&&!C.paid?' <span style="color:#7F8C8D;font-weight:600">(×'+engFactor(n)+')</span>':'';
     rows+='<tr style="background:'+(i%2===0?'#F4F9F8':'#fff')+'">'
       +(C.num?'<td style="text-align:center;font-weight:700;color:#0D5C52">'+st.seq[d.id]+'</td>':'')
       +(C.loc?'<td style="font-weight:600;white-space:nowrap">'+escHtml(wipLoc(d)||'-')+'</td>':'')
@@ -4377,7 +4389,7 @@ function engPdfTbl(st){
       +(C.status?'<td style="font-size:7px;font-weight:700">'+escHtml(wipStatus(d))+'</td>':'')
       +(C.date?'<td style="white-space:nowrap">'+(dv?fd(dv):'-')+'</td>':'')
       +(C.cm?'<td>'+fd(d.r1r)+'</td><td>'+fd(d.r1p)+'</td><td>'+mkBdg(rs(d.r1r,d.r1p,d.r1nc))+'</td><td>'+fd(d.r2r)+'</td><td>'+fd(d.r2p)+'</td><td>'+mkBdg(rs(d.r2r,d.r2p,d.r2nc))+'</td>':'')
-      +(C.paid?'<td style="white-space:nowrap;text-align:center">'+mkPb(d.paid)+'</td>':'')+'</tr>';
+      +(C.paid?'<td style="white-space:nowrap;text-align:center"><span style="display:inline-block;min-width:26px;font-weight:700;color:'+(n>1?'#B7791F':'#7F8C8D')+'">×'+engFactor(n)+'</span> '+mkPb(d.paid)+'</td>':'')+'</tr>';
   });
   return '<table><thead>'+th+'</thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="30" class="tot">TOTAL: '+st.chosen.length+' DRAWINGS | SUSTRA</td></tr></tfoot></table>';
 }
