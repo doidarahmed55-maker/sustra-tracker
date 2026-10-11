@@ -514,6 +514,20 @@ button.es-fx:hover,button.es-fx.on{background:#B7791F;color:#fff}
 #engShare .sh-r small{font-size:9px;color:#7F8C8D;white-space:nowrap}
 #engShare .sh-r.me{background:#FDF3E1}
 #engShare .sh-n{font-size:10px;color:#7F8C8D;margin-top:6px;line-height:1.6}
+/* ── engineer cards shaded by payment: green = paid part, red = still owed ── */
+#vEng .eng-card,#vEng .eng-card:hover,#vEng .eng-card.active{background:linear-gradient(to right,rgba(30,132,73,.20) 0,rgba(30,132,73,.20) var(--p,0%),rgba(192,57,43,.14) var(--p,0%),rgba(192,57,43,.14) 100%)}
+#vEng .eng-card{border-color:#E1E6E6}
+#vEng .eng-card:hover{border-color:#1A5276}
+#vEng .eng-card.active{border-color:#1A5276;box-shadow:0 0 0 2px #1A5276}
+.eng-pay{margin-left:auto;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:2px;white-space:nowrap}
+.eng-pay>b{font-size:15px;font-weight:800;color:#1E6B3F;line-height:1}
+.eng-pay span{display:flex;gap:6px;font-size:9.5px;font-weight:700}
+.eng-pay i{font-style:normal}
+.eng-pay .g{color:#1E6B3F}
+.eng-pay .r{color:#A93226}
+.eng-find{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.eng-find input{max-width:340px;padding:8px 11px;font-size:12px}
+.eng-find span{font-size:11px;color:#7F8C8D}
 </style>
 </head>
 <body>
@@ -701,7 +715,7 @@ User 2:
     <button class="btn bNav" onclick="goUpd()">&#8593; Update</button>
     <button class="btn" style="background:#1A5276;color:#fff" onclick="goDrwList()">&#128196; Drawings List</button>
     <button class="btn bAmb" onclick="goPlot()">&#128202; Plot DWGs</button>
-    <button class="btn bc" onclick="goEng()">&#128119; Engineer</button>
+    <button class="btn bc" onclick="goEng()">&#128119; Engineers Payment</button>
     <button class="btn bp" onclick="goPdf()">&#8998; PDF</button>
     <button class="btn bo" onclick="doXlsData()" title="تصدير Excel">&#8659; Excel Data</button>
     <button class="btn bo" style="border-color:#B7950B;color:#B7950B" onclick="doXlsReport()" title="Excel Report">&#8659; Excel Report</button>
@@ -907,7 +921,7 @@ User 2:
 <!-- ── ENGINEER VIEW ── -->
 <div id="vEng">
 <div class="page"><div class="box">
-  <div class="box-hdr" style="background:#1A5276"><h2>Engineer Report</h2><button class="btn" style="padding:5px 11px;font-size:11px;color:#fff;border:1.5px solid #fff;background:transparent" onclick="goList()">&#8592; Back</button></div>
+  <div class="box-hdr" style="background:#1A5276"><h2>Engineers Payment</h2><button class="btn" style="padding:5px 11px;font-size:11px;color:#fff;border:1.5px solid #fff;background:transparent" onclick="goList()">&#8592; Back</button></div>
   <div class="box-body">
     <div class="psect">Filter by:</div>
     <div class="fg" style="margin-bottom:12px">
@@ -928,6 +942,7 @@ User 2:
       </select></div>
     </div>
     <div class="psect">Select engineer(s):</div>
+    <div class="eng-find"><input type="search" id="engQ" dir="auto" placeholder="&#128269; ابحث باسم المهندس…" autocomplete="off" oninput="engFilterCards()"/><span id="engQn"></span></div>
     <div class="eng-grid" id="engGrid"></div>
     <button class="btn bt" style="font-size:11px;padding:5px 10px;margin-bottom:12px" onclick="engAll()">Select All</button>
     <div class="psect">Columns <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#7F8C8D">— شيل علامة الصح من أي عمود مش عايزه: بيختفي من الجدول ومن الـ PDF</span></div>
@@ -2161,6 +2176,7 @@ function buildEngCards(){
     eh+='<div><div class="eng-nm">'+e+'</div><div class="eng-cn">'+engs[e]+' drawing'+(engs[e]>1?'s':'')+'</div></div></div>';
   }
   eg.innerHTML=eh||'<p style="font-size:11px;color:#aaa;padding:10px">No engineers match filters.</p>';
+  engCardsPaint();
   engSummary();
 }
 
@@ -2193,7 +2209,7 @@ function colNone(){for(var c=0;c<COLS.length;c++){if(COLS[c].always)continue;del
 function rowAll(){var s=sorted();for(var i=0;i<s.length;i++){selRows[i]=true;document.getElementById('rc-'+i).checked=true;document.getElementById('sr-'+i).classList.add('active');}}
 function rowNone(){var s=sorted();for(var i=0;i<s.length;i++){delete selRows[i];document.getElementById('rc-'+i).checked=false;document.getElementById('sr-'+i).classList.remove('active');}}
 function togEng(el){var e=el.getAttribute('data-eng');if(selEngs[e]){delete selEngs[e];el.classList.remove('active');}else{selEngs[e]=true;el.classList.add('active');}engSummary();}
-function engAll(){var cards=document.querySelectorAll('.eng-card');for(var i=0;i<cards.length;i++){var e=cards[i].getAttribute('data-eng');selEngs[e]=true;cards[i].classList.add('active');}engSummary();}
+function engAll(){var cards=document.querySelectorAll('.eng-card');for(var i=0;i<cards.length;i++){if(cards[i].style.display==='none')continue;var e=cards[i].getAttribute('data-eng');selEngs[e]=true;cards[i].classList.add('active');}engSummary();}
 
 // ── PDF GENERATION ──
 
@@ -4276,6 +4292,7 @@ function engShare(sub){
 }
 function engRangeInit(){
   engR={}; engPick={}; engLast={};
+  if(wipEl('engQ')) wipEl('engQ').value='';
   ['efDateFrom','efDateTo'].forEach(function(id){
     // only "input": a "change" fires when the field loses focus, and rebuilding the cards at that moment would swallow the click on an engineer
     var el=wipEl(id); el.value=''; el.oninput=buildEngCards;
@@ -4337,6 +4354,57 @@ function engStats(light){
     +'<button type="button" class="btn" style="background:#C0392B;color:#fff" onclick="engMarkPaid(\'unpaid\')">Unpaid</button></div>';
   wipEl('engFoot').innerHTML=f;
   engSig=engSigNow();
+  engCardsPaint();
+}
+// ── the engineer cards: shaded green for the part of his work that is paid, red for what is still owed ──
+// A drawing counts by the engineer's share of it (×1, ×0.5 …); "50% Paid" counts as half paid.
+function engNum2(v){ return String(+v.toFixed(2)); }
+function engCardStats(){
+  var r=engDates(), m={};
+  drws.forEach(function(d){
+    if(!engBase(d)||!engDateOk(d,r)) return;
+    var list=(d.by_eng||'Unassigned').split(',').map(function(e){return e.trim();}).filter(Boolean);
+    if(!list.length) list=['Unassigned'];
+    var sh=1/list.length, pf=d.paid==='paid'?1:d.paid==='half'?0.5:0;
+    list.forEach(function(e){ var o=m[e]=m[e]||{n:0,paid:0}; o.n+=sh; o.paid+=sh*pf; });
+  });
+  return m;
+}
+// search above the cards: part of a name, with or without "Eng.", small spelling mistakes allowed
+function engNameHit(q,name){
+  var qk=engKey(q); if(!qk) return true;
+  var nk=engKey(name), nt=nk.split(' ');
+  if(nk.replace(/ /g,'').indexOf(qk.replace(/ /g,''))>=0) return true;
+  return qk.split(' ').every(function(t){
+    return nt.some(function(x){
+      if(x.indexOf(t)>=0) return true;
+      if(t.length<4) return false;
+      return Math.min(engLev(t,x),engLev(t,x.slice(0,t.length)),engLev(t,x.slice(0,t.length+1)))<=(t.length>=8?2:1);
+    });
+  });
+}
+function engFilterCards(){
+  var inp=wipEl('engQ'), grid=wipEl('engGrid'); if(!inp||!grid) return;
+  var q=normalize(inp.value), cards=grid.querySelectorAll('.eng-card'), shown=0;
+  Array.prototype.forEach.call(cards,function(c){
+    var ok=!q||engNameHit(q,c.getAttribute('data-eng'));
+    c.style.display=ok?'':'none'; if(ok) shown++;
+  });
+  var n=wipEl('engQn'); if(n) n.textContent=q?(shown?shown+' من '+cards.length:'مفيش مهندس بالاسم ده'):'';
+}
+function engCardsPaint(){
+  var grid=wipEl('engGrid'); if(!grid) return;
+  engFilterCards();
+  var m=engCardStats();
+  Array.prototype.forEach.call(grid.querySelectorAll('.eng-card'),function(c){
+    var o=m[c.getAttribute('data-eng')]; if(!o) return;
+    var pct=o.n?Math.round(o.paid*100/o.n):0, left=o.n-o.paid;
+    c.style.setProperty('--p',(o.n?o.paid*100/o.n:0).toFixed(2)+'%');
+    var el=c.querySelector('.eng-pay');
+    if(!el){ el=document.createElement('div'); el.className='eng-pay'; c.appendChild(el); }
+    el.innerHTML='<b>'+pct+'%</b><span><i class="g">Paid '+engNum2(o.paid)+'</i><i class="r">Unpaid '+engNum2(left)+'</i></span>';
+    c.title=engNum2(o.paid)+' paid of '+engNum2(o.n)+' drawings — '+engNum2(left)+' still unpaid';
+  });
 }
 // ── columns: what the statement shows, on screen and in the PDF ──
 var ENG_COLS=[['ecNum','num',1],['ecLoc','loc',1],['ecType','type',1],['ecNo','no',1],['ecName','name',0],['ecContent','content',1],['ecDel','status',1],['ecDate','date',1],['ecComments','cm',1],['ecPaid','paid',1]];
