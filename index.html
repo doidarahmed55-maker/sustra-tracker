@@ -504,6 +504,16 @@ select.wip-st option{background:#fff;color:#1C2526;font-weight:600}
 .es-fx{display:inline-block;min-width:34px;margin-right:7px;padding:3px 5px;border-radius:5px;background:#EEF2F2;color:#7F8C8D;font-size:10.5px;font-weight:700;text-align:center;vertical-align:middle}
 .es-fx.sh{background:#FDEBD0;color:#B7791F}
 .es-pc .es-pp{vertical-align:middle}
+button.es-fx{border:0;font-family:inherit;cursor:pointer;width:auto;text-decoration:underline dotted;text-underline-offset:2px}
+button.es-fx:hover,button.es-fx.on{background:#B7791F;color:#fff}
+#engShare{position:absolute;z-index:600;background:#fff;border:1.5px solid #B7791F;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:10px 12px;min-width:250px;max-width:340px;font-size:12px;color:#2D3748}
+#engShare .sh-h{font-size:11px;color:#5C4306;margin-bottom:8px;line-height:1.6}
+#engShare .sh-r{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:5px;background:#F7F9F9;margin-bottom:4px}
+#engShare .sh-r b{font-weight:700;flex:1;text-align:left}
+#engShare .sh-r i{font-style:normal;font-weight:700;color:#B7791F}
+#engShare .sh-r small{font-size:9px;color:#7F8C8D;white-space:nowrap}
+#engShare .sh-r.me{background:#FDF3E1}
+#engShare .sh-n{font-size:10px;color:#7F8C8D;margin-top:6px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -4296,6 +4306,7 @@ function engSummary(){
 }
 // the numbers of the box — refreshed without touching the fields being typed in
 function engStats(light){
+  if(!light) engShareHide();
   var box=wipEl('engSum'); if(!box||!engKeys.length) return;
   var rows=box.querySelectorAll('.es-row'), tbs=box.querySelectorAll('.es-tb'), all={}, noDate=0, r=engDates();
   engKeys.forEach(function(eng,i){
@@ -4357,7 +4368,8 @@ function engTable(st,r){
     var s=wipStatus(d), c=wipStColor(s), p=engPaidOf(d), n=engShared(d), dv=wipIso(d[r.by]);
     // the engineer's share of this drawing, as a factor next to Paid (1 · 0.5 · 0.33 · 0.25 …); beside the number only when Paid is hidden
     var tag=n>1&&!C.paid?' <i title="لوحة مشتركة بين '+n+' مهندسين — حالة الدفع واحدة للوحة">×'+engFactor(n)+'</i>':'';
-    var fx='<span class="es-fx'+(n>1?' sh':'')+'" title="'+(n>1?'نصيبه من اللوحة — مشتركة بين '+n+' مهندسين':'اللوحة كلها ليه')+'">×'+engFactor(n)+'</span>';
+    var fx=n>1?'<button type="button" class="es-fx sh" onclick="engShareShow(this)" title="مشتركة مع: '+escHtml(wipEngList(d.by_eng).filter(function(x){ return x!==st.eng; }).join('، '))+' — اضغط للتفاصيل">×'+engFactor(n)+'</button>'
+               :'<span class="es-fx" title="اللوحة كلها ليه">×1</span>';
     var btn=function(v,l){ return '<button type="button" data-v="'+v+'"'+(p===v?' class="on"':'')+' onclick="engSetPaid(this)">'+l+'</button>'; };
     h+='<tr class="p-'+p+'" data-id="'+escHtml(d.id)+'"><td class="es-ck"><input type="checkbox" class="es-c" title="حدد اللوحة دي (Shift = من آخر واحدة حددتها لحد هنا)" onclick="engPickOne(this,event)"/></td>'+(C.num?'<td class="es-no">'+st.seq[d.id]+'</td>':'')
       +(C.loc?'<td class="es-nw">'+escHtml(wipLoc(d)||'-')+'</td>':'')+(C.type?'<td class="es-nw">'+escHtml(d.type||'-')+'</td>':'')
@@ -4410,6 +4422,32 @@ async function engSetPaid(el){
   render(); engStats();
   if(bad) showToast('خطأ — حالة الدفع ماتحفظتش، جرّب تاني',true);
 }
+// ── who shares a drawing: click the ×0.5 next to Paid ──
+var engShareBox=null;      // {el, btn}
+function engShareHide(){
+  if(!engShareBox) return;
+  if(engShareBox.el.parentNode) engShareBox.el.parentNode.removeChild(engShareBox.el);
+  engShareBox.btn.classList.remove('on');
+  engShareBox=null;
+}
+function engShareShow(btn){
+  if(engShareBox&&engShareBox.btn===btn){ engShareHide(); return; }
+  engShareHide();
+  var tr=btn.closest('tr'), id=tr?tr.getAttribute('data-id'):null, me=engPickEng(btn), d=null;
+  drws.some(function(x){ if(String(x.id)===id){ d=x; return true; } return false; });
+  if(!d) return;
+  var names=wipEngList(d.by_eng), f=engFactor(names.length);
+  var el=document.createElement('div'); el.id='engShare'; el.setAttribute('dir','rtl');
+  el.innerHTML='<div class="sh-h">اللوحة <b dir="ltr">'+escHtml(drwNo(d.name))+'</b> مشتركة بين '+names.length+' مهندسين — كل واحد <b dir="ltr">×'+f+'</b></div>'
+    +names.map(function(n){ return '<div class="sh-r'+(n===me?' me':'')+'"><b dir="ltr">'+escHtml(n)+'</b><i dir="ltr">×'+f+'</i>'+(n===me?'<small>صاحب المستخلص ده</small>':'')+'</div>'; }).join('')
+    +'<div class="sh-n">حالة الدفع واحدة للوحة كلها — لو اتغيرت هنا بتتغير عند الباقيين.</div>';
+  document.body.appendChild(el);
+  wipPlace(el,btn);
+  btn.classList.add('on');
+  engShareBox={el:el,btn:btn};
+}
+document.addEventListener('mousedown',function(e){ if(engShareBox&&!engShareBox.el.contains(e.target)&&!engShareBox.btn.contains(e.target)) engShareHide(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&engShareBox) engShareHide(); });
 // ── ticking lines: exactly which drawings go into the statement ──
 function engPickPaint(tb,st){
   var pk=engPick[st.eng]||{}, n=0;
