@@ -528,6 +528,78 @@ button.es-fx:hover,button.es-fx.on{background:#B7791F;color:#fff}
 .eng-find{display:flex;align-items:center;gap:10px;margin-bottom:9px}
 .eng-find input{max-width:340px;padding:8px 11px;font-size:12px}
 .eng-find span{font-size:11px;color:#7F8C8D}
+/* ── engineer picker: chosen engineers + a search box ── */
+#wipPop.ep2{min-width:290px;max-height:none;overflow:visible}
+.ep-cur{display:flex;flex-wrap:wrap;gap:5px;padding:2px 2px 6px}
+.ep-cur p{padding:4px 2px !important}
+.ep-chip{display:inline-flex;align-items:center;gap:4px;background:#E8F5F3;border:1px solid #BFE0DA;border-radius:14px;padding:3px 4px 3px 10px;font-size:11px;color:#1C4F48}
+.ep-chip b{font-weight:700}
+.ep-chip button{border:0;background:#fff;color:#9AA5B4;width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:9px;line-height:18px;padding:0}
+.ep-chip button:hover{background:#FADBD8;color:#C0392B}
+.ep-hint{font-size:9.5px;color:#9AA5B4;padding:4px 2px 0;direction:rtl;text-align:right}
+/* ── share editor ── */
+.es-fx.x0{background:#E5E7E9;color:#7F8C8D;text-decoration:line-through}
+.es-fx.up{background:#D6EAF8;color:#1A5276}
+.es-t tr.x0 td{opacity:.55}
+.es-t tr.x0 td.es-pc,.es-t tr.x0 td.es-ck{opacity:1}
+.es-nx{color:#7F8C8D;background:#EEF2F2;border-radius:9px;padding:1px 7px}
+#engShare .sh-r input{width:70px;padding:4px 6px;font-size:12px;font-weight:700;text-align:center;direction:ltr}
+#engShare .sh-sum{font-size:11px;color:#52514E;margin:6px 2px}
+#engShare .sh-sum.bad b{color:#C0392B}
+#engShare .sh-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+#engShare .sh-btns .btn{font-size:11px;padding:5px 10px}
+/* ── "+" between the lines of the Drawing Register ── */
+#tb td.rg-n{position:relative}
+.ins-b{position:absolute;left:4px;bottom:-9px;z-index:4;width:18px;height:18px;border-radius:50%;border:1.5px solid #1A7A6E;background:#fff;color:#1A7A6E;font-size:13px;font-weight:800;line-height:14px;padding:0;cursor:pointer;opacity:0;transition:opacity .12s;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.ins-b.top{bottom:auto;top:-9px}
+#tb tr:hover .ins-b,.ins-b:focus{opacity:1}
+.ins-b:hover{background:#1A7A6E;color:#fff}
+/* ── status tiles open a list ── */
+.sum-t[data-st]{cursor:pointer;transition:transform .08s,box-shadow .08s}
+.sum-t[data-st]:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.sum-t.on{box-shadow:0 0 0 2.5px #1C2526}
+#wipSumList{--c:#2D3748;margin-top:12px}
+#wipSumList:empty{display:none}
+.sl-h{display:flex;align-items:center;gap:10px;margin-bottom:7px;direction:rtl}
+.sl-h b{direction:ltr;font-size:11px;font-weight:800;border-radius:6px;padding:3px 10px;letter-spacing:.4px}
+.sl-h span{font-size:11px;color:#7F8C8D}
+.sl-x{margin-inline-start:auto;border:none;background:#F1F4F4;color:#7F8C8D;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit}
+.sl-e{font-size:11px;color:#9AA5B4;padding:6px 2px}
+.wip-sn.ls{cursor:default}
+.wip-sn.ls::before{content:none}
+.wip-sn.ls:hover{background:#EEF4F3;color:var(--c,#0D5C52)}
+.wip-ty{font-style:normal;font-size:9px;font-weight:800;color:#0D5C52;background:#E8F5F3;border-radius:3px;padding:1px 4px;margin-left:4px}
+.wip-tbl tr.flash td{background:#FFF3C4 !important;transition:background .3s}
+.wip-tbl col.wc8{width:96px}
+#invNote{--c:#5C4306}
+#invNote .inv-tb{background:#fff}
+.inv-c{padding:2px 6px !important}
+/* ── give an engineer a task ── */
+.tm-nm{border:0;background:none;font:inherit;color:inherit;font-weight:inherit;padding:0;cursor:pointer;text-align:inherit;text-decoration:underline dotted;text-underline-offset:3px}
+.tm-nm:hover,.tm-nm.on{color:#1A7A6E}
+#wipGive{position:absolute;z-index:600;background:#fff;border:1.5px solid #1A7A6E;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:6px;min-width:270px}
+#wipGive .gv-h{font-size:11px;color:#52514E;padding:4px 8px 6px}
+#wipGive button{display:block;width:100%;text-align:right;border:0;background:none;font:inherit;font-size:12px;font-weight:700;color:#2D3748;padding:8px 10px;border-radius:5px;cursor:pointer}
+#wipGive button small{display:block;font-size:10px;font-weight:400;color:#7F8C8D;margin-top:2px}
+#wipGive button:hover{background:#E8F5F3}
+#wipAsg{position:fixed;inset:0;z-index:700;background:rgba(29,37,38,.6);display:none;align-items:flex-start;justify-content:center;padding:36px 14px;overflow-y:auto}
+#wipAsg .nt-box{max-width:1000px}
+#wipAsg .nt-top{display:flex;align-items:center;gap:12px}
+#wipAsg .nt-x{margin-inline-start:auto}
+.asg-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.asg-tools input[type=search]{max-width:420px}
+#asgList{direction:ltr;max-height:55vh;overflow:auto;border-radius:6px;border:1px solid #E8F0EF}
+.asg-none{font-size:12px;color:#9AA5B4;padding:14px;direction:rtl}
+#wipAsg .nt-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px;border-top:1px solid #E8F0EF;direction:rtl}
+/* ── dragging lines of the Drawing Register ── */
+.rg-grip{display:inline-block;width:12px;height:16px;margin-right:4px;vertical-align:middle;cursor:grab;opacity:0;transition:opacity .12s}
+.rg-grip::before{content:"\22EE\22EE";font-size:11px;letter-spacing:-3px;color:#7F8C8D}
+#tb tr:hover .rg-grip{opacity:1}
+.rg-grip:active{cursor:grabbing}
+#tb tr.dragging td{opacity:.35}
+#tb tr.drop-a td{box-shadow:inset 0 3px 0 #1A7A6E}
+#tb tr.drop-b td{box-shadow:inset 0 -3px 0 #1A7A6E}
+#tb tr.flash td{background:#FFF3C4 !important;transition:background .3s}
 </style>
 </head>
 <body>
@@ -766,6 +838,7 @@ User 2:
       </div>
       <div class="wip-chips" id="wipChips"></div>
       <div class="wip-sum" id="wipSum"></div>
+      <div id="wipSumList"></div>
     </div>
     <div id="wipSetup"></div>
     <div id="wipBody"></div>
@@ -1654,6 +1727,7 @@ var COLS=[
   {k:'name',lb:'Board Name',always:true},
   {k:'content',lb:'Content',always:false},
   {k:'del',lb:'Status',always:false},
+  {k:'dates',lb:'Start · Target · Time',always:false},
   {k:'by_eng',lb:'By',always:false},
   {k:'r1',lb:'Round 1',always:false},
   {k:'r2',lb:'Round 2',always:false},
@@ -1766,6 +1840,7 @@ function nextNum(){
 }
 
 function goAdd(){
+  insAfter=null;
   editId=null; clearF(); applyLastVals();
   document.getElementById('fNum').value = nextNum();
   setTimeout(refreshEngDatalist, 50);
@@ -1852,8 +1927,10 @@ function renderRegister(){
     var st=d.status||'NOT STARTED';
     var stC=wipStColor(st), stColor=stC.fg, stBg=stC.bg;
     var stHtml='<span style="padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;background:'+stBg+';color:'+stColor+'">'+st+'</span>';
-    h+='<tr>';
-    h+='<td style="text-align:center;font-weight:700;color:#0D5C52">'+(d.num||i+1)+'</td>';
+    h+='<tr class="rg-row" data-rid="'+escHtml(d.id)+'">';
+    h+='<td class="rg-n" style="text-align:center;font-weight:700;color:#0D5C52"><span class="rg-grip" draggable="true" title="اسحب لفوق أو لتحت عشان تغيّر مكان اللوحة — الترقيم بيتظبط لوحده"></span>'+(d.num||i+1)
+      +(i===0?'<button type="button" class="ins-b top" onclick="goAddAfter(\'\')" title="ضيف لوحة جديدة في أول الجدول">+</button>':'')
+      +'<button type="button" class="ins-b" onclick="goAddAfter(\''+d.id+'\')" title="ضيف لوحة جديدة هنا (بعد اللوحة دي)">+</button></td>';
     h+='<td style="font-weight:600">'+(d.plot||'-')+'</td>';
     h+='<td>'+(d.zone||'-')+'</td><td>'+(d.level||'-')+'</td><td>'+tt+'</td>';
     var nameCell=d.link?'<a class="name-link" href="'+escHtml(d.link)+'" target="_blank" rel="noopener">'+escHtml(d.name)+'</a>':escHtml(d.name);
@@ -2009,6 +2086,7 @@ async function saveDrw(){
         if(idx>=0) drws[idx]=Object.assign({},drws[idx],rec);
       }
     } else {
+      if(insAfter!==null&&rec.num===insAfter+1) await regShiftFrom(rec.num);     // make room: the drawings from here on move down by one
       var res = await supabase.from('drawings').insert(rec).select().single();
       error = res.error;
       if(!error && res.data){
@@ -2161,8 +2239,8 @@ function buildEngCards(){
   filtered.forEach(function(d){
     var engsInDwg=(d.by_eng||'Unassigned').split(',').map(function(e){return e.trim();}).filter(Boolean);
     if(!engsInDwg.length) engsInDwg=['Unassigned'];
-    var share=1/engsInDwg.length;
-    engsInDwg.forEach(function(e){engs[e]=(engs[e]||0)+share;});
+    var shm=engSharesOf(d);
+    engsInDwg.forEach(function(e){engs[e]=(engs[e]||0)+(shm[e]||0);});
   });
   var eg=document.getElementById('engGrid'),eh='',keys=Object.keys(engs);
   // changing a filter keeps the engineers that were already selected
@@ -2173,7 +2251,7 @@ function buildEngCards(){
     var init=e.replace(/Eng\./i,'').trim().split(' ').map(function(w){return w[0]||'';}).join('').toUpperCase().slice(0,2)||'?';
     eh+='<div class="eng-card'+(selEngs[e]?' active':'')+'" id="ec'+k+'" data-eng="'+e.replace(/"/g,'&quot;')+'" onclick="togEng(this)">';
     eh+='<div class="eng-av">'+init+'</div>';
-    eh+='<div><div class="eng-nm">'+e+'</div><div class="eng-cn">'+engs[e]+' drawing'+(engs[e]>1?'s':'')+'</div></div></div>';
+    eh+='<div><div class="eng-nm">'+e+'</div><div class="eng-cn">'+engFx(engs[e])+' drawing'+(engs[e]!==1?'s':'')+'</div></div></div>';
   }
   eg.innerHTML=eh||'<p style="font-size:11px;color:#aaa;padding:10px">No engineers match filters.</p>';
   engCardsPaint();
@@ -2282,6 +2360,7 @@ function buildTbl(subset,showPaid,sc){
   th+='<th class="gs">Board Name</th>';
   if(!sc||sc.content) th+='<th class="gp">Content</th>';
   if(!sc||sc.del)     th+='<th class="gs">Status</th>';
+  if(!sc||sc.dates)   th+='<th class="gs">Start</th><th class="gs">Target</th><th class="gs">Time</th>';
   if(!sc||sc.by_eng)  th+='<th class="gp">By</th>';
   if(!sc||sc.r1)      th+='<th class="g1">R1 Recv</th><th class="g1">R1 Reply</th><th class="g1">R1 Status</th>';
   if(!sc||sc.r2)      th+='<th class="g2">R2 Recv</th><th class="g2">R2 Reply</th><th class="g2">R2 Status</th>';
@@ -2305,6 +2384,7 @@ function buildTbl(subset,showPaid,sc){
     if(!sc||sc.content) rows+='<td class="wrap" style="font-size:7px;color:#555;max-width:160px">'+(d.content||'-')+'</td>';
     var stPdf=d.status||'NOT STARTED';
     if(!sc||sc.del)     rows+='<td style="font-size:7px;font-weight:700">'+stPdf+'</td>';
+    if(!sc||sc.dates){ var tm=wipTimeTxt(d); rows+='<td style="white-space:nowrap">'+(wipIso(d.start_date)?fd(wipIso(d.start_date)):'-')+'</td><td style="white-space:nowrap">'+(wipIso(d.target_date)?fd(wipIso(d.target_date)):'-')+'</td><td style="white-space:nowrap;font-weight:700;color:'+tm.c+'">'+tm.t+'</td>'; }
     if(!sc||sc.by_eng)  rows+='<td style="font-size:7px;font-weight:600">'+(d.by_eng||'-')+'</td>';
     if(!sc||sc.r1)      rows+='<td>'+fd(d.r1r)+'</td><td>'+fd(d.r1p)+'</td><td>'+mkBdg(s1)+'</td>';
     if(!sc||sc.r2)      rows+='<td>'+fd(d.r2r)+'</td><td>'+fd(d.r2p)+'</td><td>'+mkBdg(s2)+'</td>';
@@ -2358,11 +2438,7 @@ function genEngPdf(){
     if(!sub.length) continue;
     var pc=engPaidCount(sub), rgTxt=engRangeText(stm);
     sc.seq=stm.seq;       // "#" is this engineer's own drawing number, so the next statement can start from his drawing N
-    var totalShare=sub.reduce(function(acc,d){
-      var engsInD=(d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean);
-      return acc+(engsInD.length>0?1/engsInD.length:1);
-    },0);
-    var shareStr=Number.isInteger(totalShare)?totalShare:totalShare.toFixed(2);
+    var shareStr=engShare(sub,eng);
     body+='<div class="sec"><div class="sec-title">'+escHtml(eng)+'<span class="sec-badge">'+shareStr+' / '+sub.length+' drawings</span>'
       +'<span style="float:right;font-size:8px;font-weight:600;color:#52514E">'+(rgTxt?escHtml(rgTxt)+' &nbsp;|&nbsp; ':'')+'Unpaid '+pc.unpaid+' · 50% '+pc.half+' · Paid '+pc.paid+'</span></div>'+engPdfTbl(stm)+'</div>';
   }
@@ -2899,12 +2975,14 @@ var wipMode='local';      // 'db' once the wip_watch table answers; 'local' = th
 var wipNeedTable=false;   // wip_watch is missing → show the one-time setup box
 var wipTargetCol=null;    // does drawings.target_date exist? true / false once known
 var wipDatesCol=null;     // do drawings.start_date + received_date exist?
+var wipSharesCol=null;    // does drawings.shares exist? (each engineer's share of a shared drawing)
 var wipWatchEpoch=0;      // bumped on every change of the list, so a slower reload is not applied over it
 var WIP_SQL=[
   "-- SUSTRA Drawing Tracker — Work in Progress (safe to run again)",
   "alter table drawings add column if not exists target_date date;",
   "alter table drawings add column if not exists start_date date;",
   "alter table drawings add column if not exists received_date date;",
+  "alter table drawings add column if not exists shares text;",
   "",
   "create table if not exists wip_watch (",
   "  id uuid primary key default gen_random_uuid(),",
@@ -2961,6 +3039,7 @@ async function wipLoad(){
   var proj=wipProj(), ep=++wipWatchEpoch, res, p;
   if(wipTargetCol!==true){ p=await wipProbe('target_date',/target_date|42703/i); if(p!==null) wipTargetCol=p; }
   if(wipDatesCol!==true){ p=await wipProbe('start_date,received_date',/start_date|received_date|42703/i); if(p!==null) wipDatesCol=p; }
+  if(wipSharesCol!==true){ p=await wipProbe('shares',/shares|42703/i); if(p!==null) wipSharesCol=p; }
   try{ res=await supabase.from('wip_watch').select('*').eq('project_id',proj).order('created_at',{ascending:true}); }
   catch(e){ res={error:{message:'network'}}; }
   if(ep!==wipWatchEpoch||proj!==wipProj()) return;
@@ -2993,11 +3072,12 @@ async function wipPollWatch(){
 // one-time database setup box
 function wipSetupBox(){
   var box=wipEl('wipSetup'); if(!box) return;
-  if(!wipNeedTable&&wipTargetCol!==false&&wipDatesCol!==false){ box.innerHTML=''; return; }
+  if(!wipNeedTable&&wipTargetCol!==false&&wipDatesCol!==false&&wipSharesCol!==false){ box.innerHTML=''; return; }
   var why=[];
   if(wipNeedTable) why.push('قايمة المتابعة محفوظة على المتصفح ده بس لحد ما الجدول يتعمل');
   if(wipTargetCol===false) why.push('عمود Target Date مقفول');
   if(wipDatesCol===false) why.push('تاريخ بداية التاسك وتاريخ الاستلام مش بيتسجلوا (فمعدل الإنتاج مش هيتحسب)');
+  if(wipSharesCol===false) why.push('نسبة كل مهندس في اللوحة المشتركة مش هتتحفظ');
   box.innerHTML='<div class="wip-setup"><b>&#9881;&#65039; خطوة واحدة في Supabase</b>'
     +'<p>'+why.join(' — ')+'. افتح <b>SQL Editor</b> في Supabase، الصق الكود ده واضغط Run، وبعدين اضغط «تم — افحص تاني».</p>'
     +'<pre id="wipSql" dir="ltr">'+escHtml(WIP_SQL)+'</pre>'
@@ -3009,10 +3089,10 @@ function wipCopySql(){
   catch(e){ showToast('انسخ الكود يدوي',true); }
 }
 async function wipRecheck(){
-  wipTargetCol=null; wipDatesCol=null;
+  wipTargetCol=null; wipDatesCol=null; wipSharesCol=null;
   await wipLoad(); await wipTeamLoad(); await fetchDrawings();
   wipRegister(); wipRenderAll();
-  if(!wipNeedTable&&wipTargetCol===true&&wipDatesCol===true) showToast('✓ تمام — كل حاجة جاهزة في التراكر');
+  if(!wipNeedTable&&wipTargetCol===true&&wipDatesCol===true&&wipSharesCol===true) showToast('✓ تمام — كل حاجة جاهزة في التراكر');
   else showToast('لسه — اتأكد إن الكود اشتغل من غير أخطاء',true);
 }
 
@@ -3090,6 +3170,21 @@ function wipDates(d){
   if(n===0) return {t:range+' · today',c:'soon'};
   return {t:range+' · '+n+'d left',c:n<=2?'soon':'ok'};
 }
+// the "Time" column of the print-outs: how long it took, or how long is left
+function wipTimeTxt(d){
+  var g=wipGroup(wipStatus(d)), s=wipIso(d.start_date), t=wipIso(d.target_date), r=wipIso(d.received_date);
+  if(g==='done'||g==='recv'){
+    var lab=g==='done'?'Delivered':'Received';
+    if(s&&r&&wipDayNum(r)>=wipDayNum(s)) return {t:lab+' in '+(wipDayNum(r)-wipDayNum(s)+1)+'d',c:'#1E6B3F'};
+    return {t:r?lab+' '+wipShort(r):lab,c:'#1E6B3F'};
+  }
+  if(g==='hold') return {t:'Hold',c:'#C0392B'};
+  if(!t) return {t:s?'Started '+wipShort(s):'-',c:'#52514E'};
+  var n=wipDayNum(t)-wipDayNum(wipToday());
+  if(n<0) return {t:(-n)+'d late',c:'#C0392B'};
+  if(n===0) return {t:'Due today',c:'#B7791F'};
+  return {t:n+'d left',c:n<=2?'#B7791F':'#1E6B3F'};
+}
 function wipDatesHtml(d){ var x=wipDates(d); return '<span class="wip-d '+x.c+'">'+escHtml(x.t)+'</span>'; }
 function wipDatesTip(d){
   var p=[];
@@ -3108,6 +3203,17 @@ function wipStamp(prev,patch){
   if((g==='none'||g==='prog')&&was==='RECEIVED'&&val('received_date')) patch.received_date=null;   // RECEIVED was undone → not handed in yet
 }
 
+// each engineer's share of a drawing: what was set for it (drawings.shares), otherwise an equal split.
+// A set split only counts while the drawing still has exactly those engineers.
+function engSharesOf(d){
+  var list=wipEngList(d.by_eng); if(!list.length) list=['Unassigned'];
+  var m=null, out={};
+  if(d.shares){ try{ m=JSON.parse(d.shares); }catch(e){ m=null; } }
+  if(m&&(typeof m!=='object'||Object.keys(m).length!==list.length||list.some(function(n){ return typeof m[n]!=='number'||!(m[n]>=0); }))) m=null;
+  list.forEach(function(n){ out[n]=m?m[n]:1/list.length; });
+  return out;
+}
+function engShareOf(d,eng){ var m=engSharesOf(d); return m[eng]!==undefined?m[eng]:0; }
 function wipEngList(v){ return wn(v).split(',').map(function(e){return e.trim();}).filter(Boolean); }
 function wipEngHtml(d){
   var l=wipEngList(d.by_eng);
@@ -3177,18 +3283,20 @@ function wipCountTxt(rows){
 
 // ── render ──
 var WIP_NCOL=7;
-function wipHead(){
+function wipHead(extra){
   var cfg=wipCfg(), head='<colgroup>', ci;
   for(ci=1;ci<=WIP_NCOL;ci++) head+='<col class="wc'+ci+'"/>';
+  if(extra) head+='<col class="wc8"/>';
   return head+'</colgroup><thead><tr><th>'+escHtml(cfg.col1+' / '+cfg.col2+' / Floor')+'</th><th>DWG No.</th>'
-    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Start → Target</th><th class="wip-mh" aria-label="options"></th></tr></thead>';
+    +'<th>Content</th><th>Status</th><th>Engineer</th><th>Start → Target</th><th class="wip-mh" aria-label="options"></th>'+(extra?'<th>'+escHtml(extra)+'</th>':'')+'</tr></thead>';
 }
-function wipRowHtml(d,i){
+function wipRowHtml(d,i,o){
+  var ls=!!(o&&o.list);
   var st=wipStatus(d), sc=wipStColor(st);
   var opts=WIP_STATUSES.slice(); if(opts.indexOf(st)<0) opts.push(st);
   var h='<tr data-id="'+escHtml(d.id)+'">';
   // Plot + Zone + Floor in one short code; the type is the card's own title
-  h+='<td class="ro" style="font-weight:600" title="'+escHtml([wn(d.plot),wn(d.zone),wn(d.level)].filter(Boolean).join(' › '))+'"><span class="wip-sn" draggable="true" title="اسحب لفوق أو لتحت عشان تغيّر ترتيب اللوحة">'+((i||0)+1)+'</span>'+escHtml(wipLoc(d)||'-')+'</td>';
+  h+='<td class="ro" style="font-weight:600" title="'+escHtml([wn(d.plot),wn(d.zone),wn(d.level)].filter(Boolean).join(' › '))+'">'+(ls?'<span class="wip-sn ls">'+((i||0)+1)+'</span>':'<span class="wip-sn" draggable="true" title="اسحب لفوق أو لتحت عشان تغيّر ترتيب اللوحة">'+((i||0)+1)+'</span>')+escHtml(wipLoc(d)||'-')+(ls&&wn(d.type)?' <i class="wip-ty">'+escHtml(wn(d.type))+'</i>':'')+'</td>';
   h+='<td><input class="wip-in wip-name" data-f="name" value="'+escHtml(drwNo(d.name))+'" title="'+escHtml(wn(d.name))+'" autocomplete="off" spellcheck="false"/></td>';
   h+='<td><input class="wip-in" data-f="content" value="'+escHtml(wn(d.content))+'" title="'+escHtml(wn(d.content))+'" placeholder="+ content" autocomplete="off"/></td>';
   h+='<td><select class="wip-in wip-st" data-f="status" style="background:'+sc.bg+';color:'+sc.fg+'">';
@@ -3250,14 +3358,15 @@ function wipSummary(secs){
     if(seen[d.id]) return; seen[d.id]=1; total++;
     var st=wipStatus(d); if(n[st]===undefined) other++; else n[st]++;
   }); });
-  if(!total){ box.innerHTML=''; return; }
-  var h='<div class="sum-t tot"><b>'+total+'</b><span>Total</span></div>';
+  if(!total){ box.innerHTML=''; wipSumListSync(secs); return; }
+  var h='<div class="sum-t tot'+(wipSumSel==='*'?' on':'')+'" data-st="*" title="اضغط تشوف اللوح"><b>'+total+'</b><span>Total</span></div>';
   order.forEach(function(k){
     var c=wipStColor(k);
-    h+='<div class="sum-t" data-st="'+k+'" style="background:'+c.bg+';color:'+c.fg+'"><b>'+n[k]+'</b><span>'+(k==='DELIVERED AFTER COMMENTS'?'Delivered after comments':k)+'</span></div>';
+    h+='<div class="sum-t'+(wipSumSel===k?' on':'')+'" data-st="'+k+'" title="اضغط تشوف اللوح" style="background:'+c.bg+';color:'+c.fg+'"><b>'+n[k]+'</b><span>'+(k==='DELIVERED AFTER COMMENTS'?'Delivered after comments':k)+'</span></div>';
   });
-  if(other) h+='<div class="sum-t" style="background:#EAECEE;color:#7F8C8D"><b>'+other+'</b><span>Other</span></div>';
+  if(other) h+='<div class="sum-t'+(wipSumSel==='~'?' on':'')+'" data-st="~" style="background:#EAECEE;color:#7F8C8D"><b>'+other+'</b><span>Other</span></div>';
   box.innerHTML=h;
+  wipSumListSync(secs);
 }
 function wipChips(secs){
   var cfg=wipCfg(), h='';
@@ -3307,7 +3416,7 @@ function wipSync(secs){
   var map={}, byKey={}, body=wipEl('wipBody');
   drws.forEach(function(d){ map[d.id]=d; });
   secs.forEach(function(s){ byKey[s.key]=s; });
-  Array.prototype.forEach.call(body.querySelectorAll('tr[data-id]'),function(tr){
+  Array.prototype.forEach.call(document.querySelectorAll('#wipBody tr[data-id], #wipSumList tr[data-id], #invNote tr[data-id]'),function(tr){
     var d=map[tr.getAttribute('data-id')]; if(d) wipPaintRow(tr,d);
   });
   Array.prototype.forEach.call(body.querySelectorAll('.wip-sec'),function(el){
@@ -3323,7 +3432,7 @@ function wipSync(secs){
 function wipEditing(){
   if(wipPop||wipDp||wipMn||wipDrag||wipOrdering) return true;
   var a=document.activeElement, b=wipEl('wipBody');
-  return !!(a&&b&&b.contains(a)&&a.tagName==='INPUT');
+  return !!(a&&a.tagName==='INPUT'&&(b&&b.contains(a)||wipInList(a)));
 }
 // called whenever `drws` changed (fresh tracker data, or a save)
 function wipOnData(){
@@ -3337,7 +3446,7 @@ function wipOnData(){
   wipTeamRender(); wipDashRender();
   if(wipTaskOn) wipTaskSuggest();
 }
-function wipTick(){ if(wipStale&&wipVisible()&&!wipEditing()) renderWip(); }
+function wipTick(){ if(wipStale&&wipVisible()&&!wipEditing()) renderWip(); if(!wipEditing()&&typeof invOnData==='function') invOnData(); }
 function wipRenderAll(){
   if(!wipVisible()) return;
   wipFillFilter();
@@ -3513,26 +3622,25 @@ function wipPlace(pop,btn){
 function wipEngOpen(btn,id){
   wipEngClose(true); wipDateClose(true);
   var d=drws.find(function(x){return x.id===id;}); if(!d) return;
-  var cur=wipEngList(d.by_eng), names=[];
-  engNames.forEach(function(n){ n=wn(n); if(n&&n.indexOf(',')<0&&names.indexOf(n)<0) names.push(n); });
-  cur.forEach(function(n){ if(names.indexOf(n)<0) names.push(n); });
+  var cur=wipEngList(d.by_eng);
   var pop=document.createElement('div'), h='';
-  pop.id='wipPop';
-  names.forEach(function(n){ h+='<label><input type="checkbox" value="'+escHtml(n)+'"'+(cur.indexOf(n)>=0?' checked':'')+'/> '+escHtml(n)+'</label>'; });
-  if(!names.length) h='<p>مفيش مهندسين متسجلين — اكتب الاسم تحت.</p>';
-  // an engineer who is not in the list yet can simply be typed in
-  h+='<div class="pop-new"><input type="text" placeholder="اسم مهندس جديد…" autocomplete="off" maxlength="80"/><button type="button" class="btn bo" style="padding:4px 9px;font-size:11px">+ Add</button></div>';
+  pop.id='wipPop'; pop.className='ep2';
+  // the engineers on the drawing (✕ takes one off) and one search box — no long list to scroll through
+  h+='<div class="ep-cur">'+(cur.length?cur.map(function(n){ return '<span class="ep-chip"><b>'+escHtml(n)+'</b><button type="button" data-rm="'+escHtml(n)+'" title="شيله من اللوحة دي">&#10005;</button></span>'; }).join('')
+      :'<p>مفيش مهندس على اللوحة دي لسه</p>')+'</div>';
+  h+='<div class="pop-new"><input type="text" placeholder="&#128269; اكتب اسم المهندس…" autocomplete="off" maxlength="80"/><button type="button" class="btn bo" style="padding:4px 9px;font-size:11px">+ Add</button></div>';
+  h+='<div class="ep-hint">اكتب أي جزء من الاسم — capital أو small زي بعض</div>';
   h+='<div class="pop-foot"><button type="button" class="btn bt" style="padding:4px 12px;font-size:11px">Done</button></div>';
   pop.innerHTML=h;
   document.body.appendChild(pop);
   wipPlace(pop,btn);
   btn.classList.add('on');
   wipPop={id:id,btn:btn,el:pop};
-  pop.addEventListener('change',function(e){
-    if(e.target.type!=='checkbox') return;
-    var sel=[];
-    Array.prototype.forEach.call(pop.querySelectorAll('input:checked'),function(c){ sel.push(c.value); });
-    wipSave(id,{by_eng:sel.join(',')});
+  pop.addEventListener('click',function(e){
+    var x=e.target.closest?e.target.closest('button[data-rm]'):null; if(!x) return;
+    var nm=x.getAttribute('data-rm'), now=drws.find(function(y){return y.id===id;}); if(!now) return;
+    wipSave(id,{by_eng:wipEngList(now.by_eng).filter(function(n){ return n!==nm; }).join(',')});
+    wipEngOpen(btn,id);
   });
   pop.querySelector('.pop-foot button').addEventListener('click',function(){ wipEngClose(); });
   var ni=pop.querySelector('.pop-new input');
@@ -3550,6 +3658,7 @@ function wipEngOpen(btn,id){
     onNew:function(t){ ni.value=t; addNew(); },
     taken:function(){ var x=drws.find(function(y){return y.id===id;}); return x?wipEngList(x.by_eng):[]; }
   });
+  setTimeout(function(){ if(wipPop&&wipPop.el===pop) ni.focus(); },30);
 }
 // make sure a name is in the tracker's engineers list; returns the name as it is stored
 function wipEngKnown(name){
@@ -3736,7 +3845,7 @@ function wipTeamRender(){
   if(!t.working.length) h+='<p class="tm-none">'+(q?'مفيش مهندس شغال بالاسم ده.':'مفيش حد عنده لوحات IN PROGRESS.')+'</p>';
   else h+='<div class="tm-grid">';
   t.working.forEach(function(e){
-    h+='<div class="tm-card"><div class="tm-name">'+escHtml(e.name)+'<span>'+e.count+' in progress</span>'+(t.off[e.key]?'<small>متشال من المتاحين — بس لسه معاه شغل</small>':'')+'</div>';
+    h+='<div class="tm-card"><div class="tm-name"><button type="button" class="tm-nm" data-n="'+escHtml(e.name)+'" title="اديله تاسك">'+escHtml(e.name)+'</button><span>'+e.count+' in progress</span>'+(t.off[e.key]?'<small>متشال من المتاحين — بس لسه معاه شغل</small>':'')+'</div>';
     e.groups.forEach(function(g){
       var late=0, next=null;
       g.rows.forEach(function(d){
@@ -3758,7 +3867,7 @@ function wipTeamRender(){
   h+='<div class="tm-h">&#9989; فاضيين ومتاحين <span>'+t.free.length+'</span></div>';
   if(!t.free.length) h+='<p class="tm-none">'+(q?'مفيش مهندس فاضي بالاسم ده.':'مفيش حد فاضي دلوقتي — كل المهندسين معاهم شغل.')+'</p>';
   else h+='<div class="tm-free">'+t.free.map(function(n){
-    return '<span>'+escHtml(n)+'<button type="button" class="tm-rm" data-n="'+escHtml(n)+'" title="مبقاش شغال معانا — شيله من المتاحين">&#10005;</button></span>';
+    return '<span><button type="button" class="tm-nm" data-n="'+escHtml(n)+'" title="اضغط عشان تديله تاسك">'+escHtml(n)+'</button><button type="button" class="tm-rm" data-n="'+escHtml(n)+'" title="مبقاش شغال معانا — شيله من المتاحين">&#10005;</button></span>';
   }).join('')+'</div>';
   if(t.gone.length){
     h+='<div class="tm-gone"><button type="button" class="tm-gone-h">'+(showGone?'&#9662;':'&#9656;')+' مبقوش شغالين معانا ('+t.gone.length+')</button>';
@@ -3847,11 +3956,11 @@ function wipDashData(){
   }
   drws.forEach(function(d){
     var eng=wipEngList(d.by_eng); if(!eng.length) return;
-    var sh=1/eng.length, g=wipGroup(wipStatus(d)), slot=wipTypeSlot(d.type), fin=g==='recv'||g==='done';
+    var shm=engSharesOf(d), g=wipGroup(wipStatus(d)), slot=wipTypeSlot(d.type), fin=g==='recv'||g==='done';
     var a=wipDayNum(wipIso(d.start_date)), b=wipDayNum(wipIso(d.received_date));
     var dated=fin&&a!==null&&b!==null&&b>=a&&b-a<=730;
     eng.forEach(function(n){
-      var e=get(n); e.total+=sh;
+      var sh=shm[n]||0, e=get(n); e.total+=sh;
       if(g==='prog') e.prog+=sh;
       if(fin){ e.done+=sh; e.types[slot]+=sh; }
       if(dated){ e.rateN+=sh; for(var x=a;x<=b;x++) e.days[x]=1; }     // overlapping tasks share their days
@@ -4104,6 +4213,9 @@ function genWipPdf(){
 function wipInit(){
   var b=wipEl('wipBody'); if(!b||b._wip) return; b._wip=1;
   engSgInit();
+  var b0=b;
+  // the same editing works in the type tables and in the two lists (status tiles, drawings without invoice)
+  [b0,wipEl('wipSumList'),wipEl('invNote')].forEach(function(b){ if(!b) return;
   b.addEventListener('focusin',function(e){
     var el=e.target;
     if(el.classList&&el.classList.contains('wip-name')){
@@ -4131,7 +4243,7 @@ function wipInit(){
     var el=e.target, f=el.getAttribute?el.getAttribute('data-f'):null;
     if(f==='status') wipCommit(el);
   });
-  wipDragInit(b);
+  if(b===b0) wipDragInit(b);
   b.addEventListener('keydown',function(e){
     var el=e.target; if(el.tagName!=='INPUT') return;
     el._fresh=false;
@@ -4177,6 +4289,9 @@ function wipInit(){
     x=t.closest('.wip-eng');
     if(x){ var r2=wipRow(x); if(!r2) return; if(wipPop&&wipPop.btn===x) wipEngClose(); else wipEngOpen(x,r2.d.id); }
   });
+  });
+  b=b0;
+  wipSumInit();
   document.addEventListener('mousedown',function(e){
     if(wipPop&&!wipPop.el.contains(e.target)&&!wipPop.btn.contains(e.target)&&!(e.target.closest&&e.target.closest('.eng-sg'))) wipEngClose();
     if(wipDp&&!wipDp.el.contains(e.target)&&!wipDp.btn.contains(e.target)) wipDateClose();
@@ -4189,6 +4304,8 @@ function wipInit(){
   window.addEventListener('resize',function(){ if(wipPop) wipEngClose(); if(wipDp) wipDateClose(); });
   var tb=wipEl('wipTeamBody');
   if(tb) tb.addEventListener('click',function(e){
+    var g=e.target.closest?e.target.closest('.tm-nm'):null;
+    if(g){ wipGiveMenu(g,g.getAttribute('data-n')); return; }
     var x=e.target.closest?e.target.closest('.tm-rm,.tm-back,.tm-gone-h'):null;
     if(!x) return;
     if(x.classList.contains('tm-rm')) wipTeamRemove(x.getAttribute('data-n'));
@@ -4267,8 +4384,10 @@ function engStatement(eng){
     else if(!wipIso(d[r.by])) noDate++;
   });
   // ticked lines narrow the statement to exactly those drawings
-  var pk=engPick[eng]||{}, chosen=list.filter(function(d){ return pk[d.id]; });
-  return {eng:eng,list:list,chosen:chosen.length?chosen:list,npick:chosen.length,seq:seq,total:all.length,noDate:noDate,n1:n1,n2:n2};
+  // a drawing whose share for him is 0 is "not counted": listed (so it can be put back) but not in his statement
+  var pay=list.filter(function(d){ return engShareOf(d,eng)>0; }), nx=list.length-pay.length;
+  var pk=engPick[eng]||{}, chosen=pay.filter(function(d){ return pk[d.id]; });
+  return {eng:eng,list:list,nx:nx,chosen:chosen.length?chosen:pay,npick:chosen.length,seq:seq,total:all.length,noDate:noDate,n1:n1,n2:n2};
 }
 function engSubset(eng){ return engStatement(eng).chosen; }
 function engRangeText(st){
@@ -4283,12 +4402,9 @@ function engPaidCount(sub){
   sub.forEach(function(d){ c[d.paid==='paid'?'paid':d.paid==='half'?'half':'unpaid']++; });
   return c;
 }
-function engShare(sub){
-  var t=sub.reduce(function(acc,d){
-    var n=(d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean).length;
-    return acc+(n>0?1/n:1);
-  },0);
-  return Number.isInteger(t)?String(t):t.toFixed(2);
+function engShare(sub,eng){
+  var t=sub.reduce(function(acc,d){ return acc+engShareOf(d,eng); },0);
+  return Number.isInteger(t)?String(t):String(+t.toFixed(2));
 }
 function engRangeInit(){
   engR={}; engPick={}; engLast={};
@@ -4334,8 +4450,9 @@ function engStats(light){
     h='<span class="es-n">من '+st.total+' لوحة ليه ·</span>';
     if(!sub.length) h+='<span class="es-n">مفيش لوحات في المدى ده</span>';
     else{
-      h+=(st.npick?'<span class="es-n es-pkn">محدد <b>'+st.npick+'</b> من '+st.list.length+' لوحة · نصيبه '+engShare(sub)+'</span><button type="button" class="es-qc" onclick="engPickClear('+i+')">الغي التحديد</button>'
-                  :'<span class="es-n">المستخلص <b>'+sub.length+'</b> لوحة · نصيبه '+engShare(sub)+'</span>')
+      h+=(st.npick?'<span class="es-n es-pkn">محدد <b>'+st.npick+'</b> من '+st.list.length+' لوحة · نصيبه '+engShare(sub,eng)+'</span><button type="button" class="es-qc" onclick="engPickClear('+i+')">الغي التحديد</button>'
+                  :'<span class="es-n">المستخلص <b>'+sub.length+'</b> لوحة · نصيبه '+engShare(sub,eng)+'</span>')
+        +(st.nx?'<span class="es-n es-nx">'+st.nx+' مش محسوبة</span>':'')
         +'<span class="bdg bup">Unpaid '+c.unpaid+'</span><span class="bdg bhf">50% '+c.half+'</span><span class="bdg bpd">Paid '+c.paid+'</span>';
     }
     // shortcut: start from his first drawing that is not fully paid
@@ -4365,8 +4482,8 @@ function engCardStats(){
     if(!engBase(d)||!engDateOk(d,r)) return;
     var list=(d.by_eng||'Unassigned').split(',').map(function(e){return e.trim();}).filter(Boolean);
     if(!list.length) list=['Unassigned'];
-    var sh=1/list.length, pf=d.paid==='paid'?1:d.paid==='half'?0.5:0;
-    list.forEach(function(e){ var o=m[e]=m[e]||{n:0,paid:0}; o.n+=sh; o.paid+=sh*pf; });
+    var shm=engSharesOf(d), pf=d.paid==='paid'?1:d.paid==='half'?0.5:0;
+    list.forEach(function(e){ var sh=shm[e]||0, o=m[e]=m[e]||{n:0,paid:0}; o.n+=sh; o.paid+=sh*pf; });
   });
   return m;
 }
@@ -4424,6 +4541,7 @@ function engColsInit(){
 function engCols(){ var m={}; ENG_COLS.forEach(function(c){ var e=wipEl(c[0]); m[c[1]]=e?e.checked:!!c[2]; }); return m; }
 // share of a drawing done by n engineers, as a short factor: 1 · 0.5 · 0.33 · 0.25
 function engFactor(n){ var v=n>1?1/n:1; return Number.isInteger(v)?String(v):String(+v.toFixed(2)); }
+function engFx(v){ return Number.isInteger(v)?String(v):String(+v.toFixed(2)); }
 function engPaidOf(d){ return d.paid==='paid'?'paid':d.paid==='half'?'half':'unpaid'; }
 function engShared(d){ return (d.by_eng||'').split(',').map(function(e){return e.trim();}).filter(Boolean).length; }
 // the statement itself, on screen: one line per drawing, with its payment state to tick
@@ -4435,11 +4553,11 @@ function engTable(st,r){
   st.list.forEach(function(d){
     var s=wipStatus(d), c=wipStColor(s), p=engPaidOf(d), n=engShared(d), dv=wipIso(d[r.by]);
     // the engineer's share of this drawing, as a factor next to Paid (1 · 0.5 · 0.33 · 0.25 …); beside the number only when Paid is hidden
-    var tag=n>1&&!C.paid?' <i title="لوحة مشتركة بين '+n+' مهندسين — حالة الدفع واحدة للوحة">×'+engFactor(n)+'</i>':'';
-    var fx=n>1?'<button type="button" class="es-fx sh" onclick="engShareShow(this)" title="مشتركة مع: '+escHtml(wipEngList(d.by_eng).filter(function(x){ return x!==st.eng; }).join('، '))+' — اضغط للتفاصيل">×'+engFactor(n)+'</button>'
-               :'<span class="es-fx" title="اللوحة كلها ليه">×1</span>';
+    var v=engShareOf(d,st.eng), others=wipEngList(d.by_eng).filter(function(x){ return x!==st.eng; });
+    var tag=(n>1||v!==1)&&!C.paid?' <i title="نصيبه من اللوحة">×'+engFx(v)+'</i>':'';
+    var fx='<button type="button" class="es-fx'+(v===0?' x0':v<1?' sh':v>1?' up':'')+'" onclick="engShareShow(this)" title="'+(v===0?'مش محسوبة في مستحقاته':others.length?'مشتركة مع: '+escHtml(others.join('، ')):'اللوحة كلها ليه')+' — اضغط لتعديل النسبة">×'+engFx(v)+'</button>';
     var btn=function(v,l){ return '<button type="button" data-v="'+v+'"'+(p===v?' class="on"':'')+' onclick="engSetPaid(this)">'+l+'</button>'; };
-    h+='<tr class="p-'+p+'" data-id="'+escHtml(d.id)+'"><td class="es-ck"><input type="checkbox" class="es-c" title="حدد اللوحة دي (Shift = من آخر واحدة حددتها لحد هنا)" onclick="engPickOne(this,event)"/></td>'+(C.num?'<td class="es-no">'+st.seq[d.id]+'</td>':'')
+    h+='<tr class="p-'+p+(v===0?' x0':'')+'" data-id="'+escHtml(d.id)+'"><td class="es-ck"><input type="checkbox" class="es-c" title="حدد اللوحة دي (Shift = من آخر واحدة حددتها لحد هنا)" onclick="engPickOne(this,event)"/></td>'+(C.num?'<td class="es-no">'+st.seq[d.id]+'</td>':'')
       +(C.loc?'<td class="es-nw">'+escHtml(wipLoc(d)||'-')+'</td>':'')+(C.type?'<td class="es-nw">'+escHtml(d.type||'-')+'</td>':'')
       +(C.no?'<td class="es-dn" title="'+escHtml(d.name||'')+'">'+escHtml(drwNo(d.name))+(C.name?'':tag)+'</td>':'')
       +(C.name?'<td class="es-bn">'+escHtml(d.name||'-')+tag+'</td>':'')
@@ -4458,7 +4576,7 @@ function engPdfTbl(st){
     +(C.cm?'<th class="g1">R1 Recv</th><th class="g1">R1 Reply</th><th class="g1">R1 Status</th><th class="g2">R2 Recv</th><th class="g2">R2 Reply</th><th class="g2">R2 Status</th>':'')
     +(C.paid?'<th class="gm" style="width:1%">Paid</th>':'')+'</tr>', rows='';
   st.chosen.forEach(function(d,i){
-    var n=engShared(d), dv=wipIso(d[r.by]), tag=n>1&&!C.paid?' <span style="color:#7F8C8D;font-weight:600">(×'+engFactor(n)+')</span>':'';
+    var n=engShared(d), dv=wipIso(d[r.by]), v=engShareOf(d,st.eng), tag=(n>1||v!==1)&&!C.paid?' <span style="color:#7F8C8D;font-weight:600">(×'+engFx(v)+')</span>':'';
     rows+='<tr style="background:'+(i%2===0?'#F4F9F8':'#fff')+'">'
       +(C.num?'<td style="text-align:center;font-weight:700;color:#0D5C52">'+st.seq[d.id]+'</td>':'')
       +(C.loc?'<td style="font-weight:600;white-space:nowrap">'+escHtml(wipLoc(d)||'-')+'</td>':'')
@@ -4469,7 +4587,7 @@ function engPdfTbl(st){
       +(C.status?'<td style="font-size:7px;font-weight:700">'+escHtml(wipStatus(d))+'</td>':'')
       +(C.date?'<td style="white-space:nowrap">'+(dv?fd(dv):'-')+'</td>':'')
       +(C.cm?'<td>'+fd(d.r1r)+'</td><td>'+fd(d.r1p)+'</td><td>'+mkBdg(rs(d.r1r,d.r1p,d.r1nc))+'</td><td>'+fd(d.r2r)+'</td><td>'+fd(d.r2p)+'</td><td>'+mkBdg(rs(d.r2r,d.r2p,d.r2nc))+'</td>':'')
-      +(C.paid?'<td style="white-space:nowrap;text-align:center"><span style="display:inline-block;min-width:26px;font-weight:700;color:'+(n>1?'#B7791F':'#7F8C8D')+'">×'+engFactor(n)+'</span> '+mkPb(d.paid)+'</td>':'')+'</tr>';
+      +(C.paid?'<td style="white-space:nowrap;text-align:center"><span style="display:inline-block;min-width:26px;font-weight:700;color:'+(v!==1?'#B7791F':'#7F8C8D')+'">×'+engFx(v)+'</span> '+mkPb(d.paid)+'</td>':'')+'</tr>';
   });
   return '<table><thead>'+th+'</thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="30" class="tot">TOTAL: '+st.chosen.length+' DRAWINGS | SUSTRA</td></tr></tfoot></table>';
 }
@@ -4504,15 +4622,61 @@ function engShareShow(btn){
   var tr=btn.closest('tr'), id=tr?tr.getAttribute('data-id'):null, me=engPickEng(btn), d=null;
   drws.some(function(x){ if(String(x.id)===id){ d=x; return true; } return false; });
   if(!d) return;
-  var names=wipEngList(d.by_eng), f=engFactor(names.length);
+  var names=wipEngList(d.by_eng), cur=engSharesOf(d), can=wipSharesCol===true, eq=engFx(1/Math.max(1,names.length));
   var el=document.createElement('div'); el.id='engShare'; el.setAttribute('dir','rtl');
-  el.innerHTML='<div class="sh-h">اللوحة <b dir="ltr">'+escHtml(drwNo(d.name))+'</b> مشتركة بين '+names.length+' مهندسين — كل واحد <b dir="ltr">×'+f+'</b></div>'
-    +names.map(function(n){ return '<div class="sh-r'+(n===me?' me':'')+'"><b dir="ltr">'+escHtml(n)+'</b><i dir="ltr">×'+f+'</i>'+(n===me?'<small>صاحب المستخلص ده</small>':'')+'</div>'; }).join('')
-    +'<div class="sh-n">حالة الدفع واحدة للوحة كلها — لو اتغيرت هنا بتتغير عند الباقيين.</div>';
+  var h='<div class="sh-h">نصيب كل مهندس في اللوحة <b dir="ltr">'+escHtml(drwNo(d.name))+'</b>'+(names.length>1?' — مشتركة بين '+names.length:'')+'</div>';
+  names.forEach(function(n,i){
+    h+='<div class="sh-r'+(n===me?' me':'')+'"><b dir="ltr">'+escHtml(n)+'</b>'
+      +'<input type="number" min="0" max="1" step="0.05" data-i="'+i+'" value="'+engFx(cur[n])+'"'+(can?'':' disabled')+'/>'
+      +(n===me?'<small>صاحب المستخلص</small>':'')+'</div>';
+  });
+  h+='<div class="sh-sum">المجموع: <b dir="ltr"></b></div>';
+  if(can){
+    h+='<div class="sh-btns"><button type="button" class="btn bt" data-a="save">حفظ</button>'
+      +(names.length>1?'<button type="button" class="btn bo" data-a="eq">قسّم بالتساوي (×'+eq+')</button>':'')
+      +(me&&names.indexOf(me)>=0?'<button type="button" class="btn" data-a="x" style="background:#FADBD8;color:#A93226">'+(cur[me]===0?'رجّعها في مستحقاته':'مش محسوبة لـ <span dir="ltr">'+escHtml(me)+'</span>')+'</button>':'')+'</div>'
+      +'<div class="sh-n">النسبة 0 = اللوحة مش داخلة في مستحقات المهندس ده (بتفضل في داتا المشروع عادي). حالة الدفع واحدة للوحة كلها.</div>';
+  } else h+='<div class="sh-n">عشان تتحفظ النسب محتاج خطوة SQL واحدة (بتظهر فوق في Work in Progress).</div>';
+  el.innerHTML=h;
   document.body.appendChild(el);
   wipPlace(el,btn);
   btn.classList.add('on');
   engShareBox={el:el,btn:btn};
+  var ins=el.querySelectorAll('input[data-i]');
+  function sum(){ var t=0; Array.prototype.forEach.call(ins,function(x){ t+=Math.max(0,parseFloat(x.value)||0); }); var b2=el.querySelector('.sh-sum b'); b2.textContent=engFx(t); el.querySelector('.sh-sum').classList.toggle('bad',Math.abs(t-1)>0.001); }
+  sum();
+  el.addEventListener('input',sum);
+  el.addEventListener('click',function(e){
+    var x=e.target.closest?e.target.closest('button[data-a]'):null; if(!x) return;
+    var a=x.getAttribute('data-a'), m={};
+    if(a==='eq'){ engShareSave(d,null); return; }
+    names.forEach(function(n,i){ var v=parseFloat(ins[i].value); m[n]=isNaN(v)||v<0?0:Math.min(v,1); });
+    if(a==='x') m[me]=cur[me]===0?(names.length>1?+(1/names.length).toFixed(4):1):0;
+    engShareSave(d,m);
+  });
+  el.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.tagName==='INPUT'){ e.preventDefault(); var sv=el.querySelector('button[data-a="save"]'); if(sv) sv.click(); } });
+  if(ins.length&&can) setTimeout(function(){ var t=ins[Math.max(0,names.indexOf(me))]; if(t){ t.focus(); t.select(); } },30);
+}
+// save the shares of a drawing (null = equal split, the default)
+async function engShareSave(d,m){
+  var names=wipEngList(d.by_eng), val=null;
+  if(m){
+    var equal=names.every(function(n){ return Math.abs(m[n]-1/names.length)<0.0005; });
+    if(!equal){ var o={}; names.forEach(function(n){ o[n]=+(+m[n]).toFixed(4); }); val=JSON.stringify(o); }
+  }
+  engShareHide();
+  if((d.shares||null)===val) return;
+  var old=d.shares===undefined?null:d.shares;
+  d.shares=val; dataEpoch++; wipPending++;
+  setSyncStatus('loading');
+  engStats();
+  var res; try{ res=await supabase.from('drawings').update({shares:val,updated_at:new Date().toISOString()}).eq('id',d.id); }catch(e){ res={error:e}; }
+  var bad=!res||res.error||!res.data||!res.data.length;
+  if(bad) d.shares=old;
+  wipPending--; dataEpoch++;
+  if(!wipPending) setSyncStatus(bad?'off':'on');
+  render(); engStats();
+  showToast(bad?'خطأ — النسبة ماتحفظتش':'✓ النسبة اتحفظت',bad);
 }
 document.addEventListener('mousedown',function(e){ if(engShareBox&&!engShareBox.el.contains(e.target)&&!engShareBox.btn.contains(e.target)) engShareHide(); });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&engShareBox) engShareHide(); });
@@ -4698,6 +4862,11 @@ function wipMenuOpen(btn,id){
     +'<button type="button" data-a="edit">&#9998; افتح اللوحة كاملة<small>كل البيانات: النوع، الدور، اللينك، الكومنتات…</small></button>'
     +'<button type="button" data-a="dup">&#10697; كرّر اللوحة<small>سطر جديد بنفس المحتوى والمهندس، برقم اللوحة اللي بعده</small></button>'
     +'<button type="button" data-a="del" class="dz">&#128465; امسح اللوحة</button>';
+  // in a list (not a type table): no moving / duplicating there, but a way to its table
+  if(!btn.closest('.wip-sec')){
+    Array.prototype.forEach.call(el.querySelectorAll('.mv,[data-a="dup"]'),function(x){ x.parentNode.removeChild(x); });
+    el.insertAdjacentHTML('afterbegin','<button type="button" data-a="go">&#8618; روح للوحة في جدولها<small>يفتح كارت النوع بتاعها تحت</small></button>');
+  }
   document.body.appendChild(el);
   wipPlace(el,btn);
   btn.classList.add('on');
@@ -4706,7 +4875,8 @@ function wipMenuOpen(btn,id){
     var b=e.target.closest?e.target.closest('button[data-a]'):null; if(!b||!wipMn) return;
     var a=b.getAttribute('data-a'), did=wipMn.id, tr=wipTr(did), sec=tr?tr.closest('.wip-sec'):null, k=sec?sec.getAttribute('data-k'):null;
     wipMenuClose();
-    if(a==='up'||a==='down') wipMove(did,a==='up'?-1:1);
+    if(a==='go') wipJumpTo(did);
+    else if(a==='up'||a==='down') wipMove(did,a==='up'?-1:1);
     else if(a==='edit') goEdit(did);
     else if(a==='dup'){ if(k!==null) wipAddRow(k,wipOpen[k],did); }
     else wipDelete(did);
@@ -4901,6 +5071,276 @@ async function wipReorder(key,ids,keepId){
 }
 
 // ══════════════════════════════════════════
+//  INSERT A DRAWING AT A PLACE in the Drawing Register (any project)
+// ══════════════════════════════════════════
+var insAfter=null;         // tracker number the new drawing goes right after (0 = at the top); null = a normal "Add Drawing"
+function goAddAfter(id){
+  var d=id?drws.find(function(x){ return String(x.id)===String(id); }):null;
+  goAdd();
+  insAfter=d?(d.num||0):0;
+  if(d){
+    // start from the drawing above: same Plot / Zone / Level / Type
+    wipEl('fPlot').value=d.plot||''; wipEl('fZone').value=d.zone||''; wipEl('fLevel').value=d.level||'';
+    var pre=['COLUMNS','CORES','BEAMS','SLAB','STAIR','RAMP','FOUNDATION','WALLS'], t=wipEl('fType'), tc=wipEl('fTypeC');
+    if(d.type&&pre.indexOf(d.type)<0){ t.value='OTHER'; tc.value=d.type; tc.style.display='block'; }
+    else { t.value=d.type||''; tc.value=''; tc.style.display='none'; }
+  }
+  wipEl('fNum').value=insAfter+1;
+  wipEl('ftitle').textContent=d?'Add Drawing — بعد لوحة # '+(d.num||'')+' ('+drwNo(d.name)+')':'Add Drawing — في أول الجدول';
+}
+// every drawing from number n on moves one place down, so the new one can take number n
+async function regShiftFrom(n){
+  var list=drws.filter(function(d){ return (d.num||0)>=n; }), failed=0, now=new Date().toISOString();
+  dataEpoch++; wipPending++;
+  for(var i=0;i<list.length;i+=10){
+    await Promise.all(list.slice(i,i+10).map(function(d){
+      return supabase.from('drawings').update({num:(d.num||0)+1,updated_at:now}).eq('id',d.id).then(function(r){ if(r.error||!r.data||!r.data.length) failed++; else d.num=(d.num||0)+1; },function(){ failed++; });
+    }));
+  }
+  wipPending--; dataEpoch++;
+  if(failed) showToast('تنبيه — '+failed+' لوحة ماتحركتش لتحت؛ اعمل Re-Number لو الترتيب باظ',true);
+}
+
+// ══════════════════════════════════════════
+//  STATUS TILES → the list of those drawings (editable like the type tables)
+// ══════════════════════════════════════════
+var wipSumSel=null;        // '*' all · a status · '~' other · null = closed
+var wipSumSig='';
+function wipInList(a){ var x=wipEl('wipSumList'), y=wipEl('invNote'); return !!(a&&(x&&x.contains(a)||y&&y.contains(a))); }
+function wipSumRows(secs){
+  var order=['IN PROGRESS','NOT STARTED','HOLD','RECEIVED','DELIVERED','DELIVERED AFTER COMMENTS'], seen={}, out=[];
+  secs.forEach(function(s){ s.tables.forEach(function(t){ t.rows.forEach(function(d){
+    if(seen[d.id]) return; seen[d.id]=1;
+    var st=wipStatus(d);
+    if(wipSumSel==='*'||(wipSumSel==='~'?order.indexOf(st)<0:st===wipSumSel)) out.push(d);
+  }); }); });
+  return out;
+}
+function wipSumBusy(box){
+  var a=document.activeElement;
+  if(a&&box.contains(a)&&(a.tagName==='INPUT'||a.tagName==='SELECT')) return true;
+  return [wipPop,wipDp,wipMn].some(function(p){ return p&&box.contains(p.btn); });
+}
+function wipSumListSync(secs){
+  var box=wipEl('wipSumList'); if(!box) return;
+  if(!wipSumSel){ box.innerHTML=''; wipSumSig=''; return; }
+  var rows=wipSumRows(secs||wipSections()), sig=wipSumSel+'|'+rows.map(function(d){ return d.id; }).join(',');
+  if(sig===wipSumSig&&box.firstChild) return;               // same lines — they are repainted in place
+  if(wipSumBusy(box)){ wipStale=true; return; }               // not under a cell being edited
+  wipSumSig=sig;
+  var lab=wipSumSel==='*'?'كل اللوح المتابَعة':wipSumSel==='~'?'Other':wipSumSel, c=wipSumSel==='*'||wipSumSel==='~'?{fg:'#2D3748',bg:'#EAECEE'}:wipStColor(wipSumSel);
+  box.style.setProperty('--c',c.fg);
+  box.innerHTML='<div class="sl-h"><b style="color:'+c.fg+';background:'+c.bg+'">'+escHtml(lab)+'</b><span>'+rows.length+' لوحة — تقدر تعدّل فيها هنا على طول</span><button type="button" class="sl-x">&#10005; اقفل</button></div>'
+    +(rows.length?'<div class="wip-tw"><table class="wip-tbl">'+wipHead()+'<tbody>'+rows.map(function(d,i){ return wipRowHtml(d,i,{list:true}); }).join('')+'</tbody></table></div>'
+      :'<p class="sl-e">مفيش لوح بالحالة دي دلوقتي.</p>');
+}
+function wipSumInit(){
+  var t=wipEl('wipSum'), l=wipEl('wipSumList');
+  if(t) t.addEventListener('click',function(e){
+    var x=e.target.closest?e.target.closest('.sum-t[data-st]'):null; if(!x) return;
+    var k=x.getAttribute('data-st');
+    wipSumSel=wipSumSel===k?null:k; wipSumSig='';
+    wipEngClose(true); wipDateClose(true); wipMenuClose();
+    wipSummary(wipSections());
+    if(wipSumSel&&l&&l.scrollIntoView) l.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+  if(l) l.addEventListener('click',function(e){
+    if(e.target.closest&&e.target.closest('.sl-x')){ wipSumSel=null; wipSumSig=''; wipSummary(wipSections()); }
+  });
+}
+// from a list to the drawing in its own type table
+function wipJumpTo(id){
+  var d=drws.find(function(x){ return String(x.id)===String(id); }); if(!d) return;
+  var key=wn(d.plot)+'\u0001'+wn(d.zone)+'\u0001'+wn(d.level), s=wipSecOf(key);
+  if(!s){ showToast('الـ Plot / Zone / Floor بتاعها مش في المتابعة — ضيفه من فوق الأول',true); return; }
+  if(wipHideHas(key,wn(d.type).toUpperCase())){ showToast('النوع بتاعها مخفي — اظهره الأول',true); return; }
+  wipOpen[key]=wn(d.type).toUpperCase(); renderWip();
+  var tr=wipTr(id); if(!tr) return;
+  if(tr.scrollIntoView) tr.scrollIntoView({behavior:'smooth',block:'center'});
+  tr.classList.add('flash'); setTimeout(function(){ tr.classList.remove('flash'); },1600);
+}
+
+// ══════════════════════════════════════════
+//  GIVE AN ENGINEER A TASK (click his name in the Engineers section)
+// ══════════════════════════════════════════
+var wipGive=null;          // the small menu {el, btn}
+function wipGiveClose(){ if(!wipGive) return; if(wipGive.el.parentNode) wipGive.el.parentNode.removeChild(wipGive.el); wipGive.btn.classList.remove('on'); wipGive=null; }
+function wipGiveMenu(btn,name){
+  if(wipGive&&wipGive.btn===btn){ wipGiveClose(); return; }
+  wipGiveClose();
+  var n=drws.filter(function(d){ return !wipEngList(d.by_eng).length&&wipGroup(wipStatus(d))!=='done'&&wipGroup(wipStatus(d))!=='recv'; }).length;
+  var el=document.createElement('div'); el.id='wipGive'; el.setAttribute('dir','rtl');
+  el.innerHTML='<div class="gv-h">اديله تاسك — <b dir="ltr">'+escHtml(name)+'</b></div>'
+    +'<button type="button" data-a="new">&#10133; تاسك جديد<small>New Task والمهندس ده متعلّم عليه</small></button>'
+    +'<button type="button" data-a="old">&#128203; لوحة موجودة من غير مهندس<small>'+(n?n+' لوحة مستنية مهندس':'مفيش لوح من غير مهندس دلوقتي')+'</small></button>';
+  document.body.appendChild(el);
+  wipPlace(el,btn); btn.classList.add('on');
+  wipGive={el:el,btn:btn};
+  el.addEventListener('click',function(e){
+    var b=e.target.closest?e.target.closest('button[data-a]'):null; if(!b) return;
+    var a=b.getAttribute('data-a'); wipGiveClose();
+    if(a==='new'){ wipTaskOpen(); wipTaskSel=[name]; wipTaskSuggest(); }
+    else wipAsgOpen(name);
+  });
+}
+document.addEventListener('mousedown',function(e){ if(wipGive&&!wipGive.el.contains(e.target)&&!wipGive.btn.contains(e.target)) wipGiveClose(); });
+// the drawings that have no engineer yet, to hand some to him
+var wipAsg=null;           // {name, pick:{id:true}, all:false}
+function wipAsgRows(){
+  var q=engKey(wipEl('asgQ')?wipEl('asgQ').value:'');
+  return sorted().filter(function(d){
+    if(wipEngList(d.by_eng).length) return false;
+    var g=wipGroup(wipStatus(d));
+    if(!wipAsg.all&&(g==='done'||g==='recv')) return false;
+    if(!q) return true;
+    var hay=engKey([d.plot,d.zone,d.level,d.type,d.name,d.content].join(' '));
+    return q.split(' ').every(function(t){ return hay.indexOf(t)>=0; });
+  });
+}
+function wipAsgOpen(name){
+  wipAsg={name:name,pick:{},all:false};
+  var m=wipEl('wipAsg');
+  if(!m){
+    m=document.createElement('div'); m.id='wipAsg';
+    m.addEventListener('click',function(e){ if(e.target===m) wipAsgClose(); });
+    document.body.appendChild(m);
+  }
+  m.innerHTML='<div class="nt-box"><div class="nt-top"><h2>&#128203; لوح من غير مهندس</h2><small dir="rtl">علّم على اللوح اللي هتديها لـ <b dir="ltr">'+escHtml(name)+'</b></small><button type="button" class="nt-x" onclick="wipAsgClose()">&#10005;</button></div>'
+    +'<div class="nt-body"><div class="asg-tools"><input type="search" id="asgQ" dir="auto" placeholder="&#128269; ابحث: Plot / Zone / نوع / رقم لوحة / محتوى…" autocomplete="off" oninput="wipAsgRender()"/>'
+    +'<label class="radio-row"><input type="checkbox" id="asgAll" onchange="wipAsg.all=this.checked;wipAsgRender()"/> اعرض كمان اللي اتسلمت</label></div>'
+    +'<div id="asgList"></div></div>'
+    +'<div class="nt-foot"><label class="radio-row"><input type="checkbox" id="asgStart" checked/> ابدأها دلوقتي (IN PROGRESS + تاريخ البداية النهارده)</label>'
+    +'<span style="flex:1"></span><button type="button" class="btn bo" onclick="wipAsgClose()">Cancel</button><button type="button" class="btn bt" id="asgSave" onclick="wipAsgSave()"></button></div></div>';
+  m.style.display='flex';
+  wipAsgRender();
+  setTimeout(function(){ var q=wipEl('asgQ'); if(q) q.focus(); },40);
+}
+function wipAsgClose(){ var m=wipEl('wipAsg'); if(m) m.style.display='none'; wipAsg=null; }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&wipAsg) wipAsgClose(); });
+function wipAsgRender(){
+  if(!wipAsg) return;
+  var rows=wipAsgRows(), box=wipEl('asgList'), h='';
+  if(!rows.length) h='<p class="asg-none">مفيش لوح من غير مهندس'+(wipEl('asgQ').value?' بالبحث ده':'')+'.</p>';
+  else{
+    h='<table class="es-t"><thead><tr><th class="es-ck"><input type="checkbox" id="asgCa" onclick="wipAsgAll(this.checked)"/></th><th>Plot / Zone / Floor</th><th>Type</th><th>DWG No.</th><th>Content</th><th>Status</th><th>Target</th></tr></thead><tbody>';
+    rows.forEach(function(d){
+      var st=wipStatus(d), c=wipStColor(st);
+      h+='<tr data-id="'+escHtml(d.id)+'" class="'+(wipAsg.pick[d.id]?'pk':'')+'"><td class="es-ck"><input type="checkbox" class="asg-c"'+(wipAsg.pick[d.id]?' checked':'')+' onchange="wipAsgPick(this)"/></td>'
+        +'<td class="es-nw">'+escHtml(wipLoc(d)||'-')+'</td><td class="es-nw">'+escHtml(d.type||'-')+'</td><td class="es-dn" title="'+escHtml(wn(d.name))+'">'+escHtml(drwNo(d.name))+'</td>'
+        +'<td class="es-ct">'+escHtml(wn(d.content)||'-')+'</td><td><span class="es-st" style="color:'+c.fg+';background:'+c.bg+'">'+escHtml(st)+'</span></td>'
+        +'<td class="es-nw">'+(wipIso(d.target_date)?fd(wipIso(d.target_date)):'-')+'</td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+  box.innerHTML=h;
+  wipAsgCount();
+}
+function wipAsgPick(el){ var id=el.closest('tr').getAttribute('data-id'); if(el.checked) wipAsg.pick[id]=true; else delete wipAsg.pick[id]; el.closest('tr').classList.toggle('pk',el.checked); wipAsgCount(); }
+function wipAsgAll(on){ wipAsgRows().forEach(function(d){ if(on) wipAsg.pick[d.id]=true; else delete wipAsg.pick[d.id]; }); wipAsgRender(); }
+function wipAsgCount(){
+  var n=Object.keys(wipAsg.pick).length, b=wipEl('asgSave');
+  if(b){ b.textContent=n?'اديله '+n+' لوحة':'علّم على لوحة الأول'; b.disabled=!n; }
+  var rows=wipAsgRows(), ca=wipEl('asgCa');
+  if(ca){ var k=rows.filter(function(d){ return wipAsg.pick[d.id]; }).length; ca.checked=k>0&&k===rows.length; ca.indeterminate=k>0&&k<rows.length; }
+}
+async function wipAsgSave(){
+  if(!wipAsg) return;
+  var name=wipAsg.name, start=wipEl('asgStart').checked, ids=Object.keys(wipAsg.pick);
+  var list=ids.map(function(id){ return drws.find(function(d){ return String(d.id)===id; }); }).filter(Boolean);
+  if(!list.length) return;
+  var b=wipEl('asgSave'); b.disabled=true; b.textContent='Saving...';
+  dataEpoch++; wipPending++; setSyncStatus('loading');
+  var failed=0, now=new Date().toISOString();
+  for(var i=0;i<list.length;i+=8){
+    await Promise.all(list.slice(i,i+8).map(function(d){
+      var patch={by_eng:name};
+      if(start&&wipStatus(d)==='NOT STARTED'){ patch.status='IN PROGRESS'; wipStamp(d,patch); }
+      return supabase.from('drawings').update(Object.assign({},patch,{updated_at:now})).eq('id',d.id).then(function(r){
+        if(r.error||!r.data||!r.data.length){ failed++; return; }
+        Object.assign(d,patch);
+      },function(){ failed++; });
+    }));
+  }
+  wipPending--; dataEpoch++;
+  if(wipEngKnown(name)===null) await wipEngRegister(name);
+  setSyncStatus(failed?'off':'on');
+  wipAsgClose();
+  render(); wipTeamRender(); wipDashRender();
+  showToast(failed?'خطأ — '+failed+' لوحة ماتسجلتش، جرّب تاني':'✓ '+(list.length-failed)+' لوحة اتسجلت باسم '+name,!!failed);
+}
+
+// ══════════════════════════════════════════
+//  DRAWING REGISTER: drag a line up / down — the tracker numbers follow (1, 2, 3 … in the new order)
+// ══════════════════════════════════════════
+var regDrag=null, regStale=false, regSaving=false;
+(function(){
+  var orig=renderRegister;
+  renderRegister=function(){ if(regDrag||regSaving){ regStale=true; return; } regStale=false; return orig.apply(this,arguments); };
+})();
+function regDragEnd(){
+  if(!regDrag) return;
+  Array.prototype.forEach.call(regDrag.body.querySelectorAll('tr'),function(x){ x.classList.remove('drop-a','drop-b','dragging'); });
+  regDrag=null;
+  if(regStale) renderRegister();
+}
+function regDragInit(){
+  var b=wipEl('tb'); if(!b||b._rg) return; b._rg=1;
+  b.addEventListener('dragstart',function(e){
+    var h=e.target&&e.target.closest?e.target.closest('.rg-grip'):null, tr=h?h.closest('tr[data-rid]'):null;
+    if(!tr||regSaving){ if(tr) e.preventDefault(); return; }
+    regDrag={id:tr.getAttribute('data-rid'),tr:tr,body:b,over:null,after:false};
+    tr.classList.add('dragging');
+    try{ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',regDrag.id); if(e.dataTransfer.setDragImage) e.dataTransfer.setDragImage(tr,14,14); }catch(x){}
+  });
+  b.addEventListener('dragover',function(e){
+    if(!regDrag) return;
+    var tr=e.target&&e.target.closest?e.target.closest('tr[data-rid]'):null; if(!tr) return;
+    e.preventDefault(); try{ e.dataTransfer.dropEffect='move'; }catch(x){}
+    var rc=tr.getBoundingClientRect(), after=e.clientY>rc.top+rc.height/2;
+    if(regDrag.over!==tr||regDrag.after!==after){
+      Array.prototype.forEach.call(b.querySelectorAll('tr.drop-a,tr.drop-b'),function(x){ x.classList.remove('drop-a','drop-b'); });
+      regDrag.over=tr; regDrag.after=after;
+      if(tr!==regDrag.tr) tr.classList.add(after?'drop-b':'drop-a');
+    }
+  });
+  b.addEventListener('drop',function(e){
+    if(!regDrag) return;
+    e.preventDefault();
+    var d=regDrag, to=d.over?d.over.getAttribute('data-rid'):null;
+    regDragEnd();
+    if(to&&to!==d.id) regMove(d.id,to,d.after);
+  });
+  b.addEventListener('dragend',regDragEnd);
+}
+// put drawing `id` right before / after drawing `to`, then number everything 1, 2, 3 … in that order
+async function regMove(id,to,after){
+  var list=sorted(), item=list.find(function(d){ return String(d.id)===String(id); }); if(!item) return;
+  list=list.filter(function(d){ return d!==item; });
+  var at=list.findIndex(function(d){ return String(d.id)===String(to); }); if(at<0) return;
+  list.splice(at+(after?1:0),0,item);
+  var ch=[];
+  list.forEach(function(d,i){ if(d.num!==i+1) ch.push({d:d,from:d.num,to:i+1}); });
+  if(!ch.length) return;
+  regSaving=true; dataEpoch++; wipPending++;
+  ch.forEach(function(c){ c.d.num=c.to; });
+  regSaving=false; renderRegister(); regSaving=true;
+  setSyncStatus('loading');
+  var failed=0, now=new Date().toISOString();
+  for(var i=0;i<ch.length;i+=10){
+    await Promise.all(ch.slice(i,i+10).map(function(c){
+      return supabase.from('drawings').update({num:c.to,updated_at:now}).eq('id',c.d.id).then(function(r){ if(r.error||!r.data||!r.data.length) failed++; },function(){ failed++; });
+    }));
+  }
+  wipPending--; dataEpoch++; regSaving=false;
+  if(failed){ try{ await fetchDrawings(); await renum(); }catch(e){} showToast('خطأ — الترتيب الجديد ماتحفظش كله، جرّب تاني',true); }
+  else { setSyncStatus('on'); showToast('✓ اتنقلت لـ # '+item.num+' — الترقيم اتظبط'); }
+  render();
+  var tr=wipEl('tb').querySelector('tr[data-rid="'+String(item.id).replace(/"/g,'\\"')+'"]');
+  if(tr){ tr.classList.add('flash'); setTimeout(function(){ tr.classList.remove('flash'); },1600); }
+}
+window.addEventListener('load',regDragInit);
+
+// ══════════════════════════════════════════
 //  INVOICE NOTICE — drawings that have no invoice number yet
 // ══════════════════════════════════════════
 // Read-only on top of the existing Invoice feature (WADI YAMM only): it counts and lists the drawings whose
@@ -4927,15 +5367,11 @@ function invNotice(){
     h+='<div class="inv-f"><button type="button" class="'+(invFilter==='all'?'on':'')+'" onclick="invSetFilter(\'all\')">الكل <i>'+miss.length+'</i></button>';
     INV_GROUPS.forEach(function(g){ if(n[g[0]]) h+='<button type="button" class="'+(invFilter===g[0]?'on':'')+'" onclick="invSetFilter(\''+g[0]+'\')">'+g[1]+' <i>'+n[g[0]]+'</i></button>'; });
     h+='<a href="#" onclick="invReport();return false;">افتح تقرير «Not in Invoice» للطباعة</a></div>';
-    h+='<div class="inv-tb"><table class="es-t"><thead><tr><th class="es-no">#</th><th>Plot / Zone / Floor</th><th>Type</th><th>DWG No.</th><th>Content</th><th>Status</th><th>Engineer</th><th class="es-ph">Invoice</th></tr></thead><tbody>';
-    list.forEach(function(d){
-      var s=wipStatus(d), c=wipStColor(s), opts='';
+    h+='<div class="inv-tb"><table class="wip-tbl">'+wipHead('Invoice')+'<tbody>';
+    list.forEach(function(d,i){
+      var opts='';
       for(var iv=0;iv<=10;iv++) opts+='<option value="'+iv+'"'+(iv===0?' selected':'')+'>'+(iv===0?'No INV':'INV-'+iv)+'</option>';
-      h+='<tr><td class="es-no">'+(d.num||'-')+'</td><td class="es-nw">'+escHtml(wipLoc(d)||'-')+'</td><td class="es-nw">'+escHtml(d.type||'-')+'</td>'
-        +'<td class="es-dn" title="'+escHtml(wn(d.name))+'">'+escHtml(drwNo(d.name))+'</td><td class="es-ct">'+escHtml(wn(d.content)||'-')+'</td>'
-        +'<td><span class="es-st" style="color:'+c.fg+';background:'+c.bg+'">'+escHtml(s)+'</span></td>'
-        +'<td class="inv-eng">'+escHtml(wipEngList(d.by_eng).join(', ')||'-')+'</td>'
-        +'<td class="es-pc"><select class="inv-sel" data-id="'+escHtml(d.id)+'" onchange="invSet(this)">'+opts+'</select></td></tr>';
+      h+=wipRowHtml(d,i,{list:true}).replace(/<\/tr>$/,'')+'<td class="inv-c"><select class="inv-sel" data-id="'+escHtml(d.id)+'" onchange="invSet(this)">'+opts+'</select></td></tr>';
     });
     h+='</tbody></table></div>';
   }
@@ -4949,7 +5385,8 @@ function invReport(){ goInvoice(); wipEl('invNum').value=0; loadInvoiceRows(); }
 // fresh tracker data: redraw only when the list really changed, and never under an open pick list
 function invOnData(){
   var box=wipEl('invNote'), a=document.activeElement; if(!box) return;
-  if(a&&a.classList&&a.classList.contains('inv-sel')) return;
+  if(a&&box.contains(a)&&(a.tagName==='INPUT'||a.tagName==='SELECT')) return;          // a cell of the list is being edited
+  if([wipPop,wipDp,wipMn].some(function(p){ return p&&box.contains(p.btn); })) return;
   if(invSigNow()!==invSig) invNotice();
 }
 // an invoice number picked in the list: saved by the tracker's own function, then the list and the register follow
