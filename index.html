@@ -600,6 +600,47 @@ button.es-fx:hover,button.es-fx.on{background:#B7791F;color:#fff}
 #tb tr.drop-a td{box-shadow:inset 0 3px 0 #1A7A6E}
 #tb tr.drop-b td{box-shadow:inset 0 -3px 0 #1A7A6E}
 #tb tr.flash td{background:#FFF3C4 !important;transition:background .3s}
+/* ── one page for all projects ── */
+#oLogo{display:none !important}
+.reg-b{margin-bottom:26px}
+.reg-pl{display:inline-block;color:#fff;border-radius:6px;padding:2px 10px;font-size:13px;letter-spacing:.5px}
+.reg-b .chdr h2 small{font-size:10px;color:#9AA5B4;font-weight:600;margin-left:6px}
+#projPop{position:absolute;z-index:650;background:#fff;border:1.5px solid #2D3748;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:6px;min-width:250px}
+#projPop .pp-h{font-size:11px;color:#52514E;padding:4px 8px 6px;font-weight:700}
+#projPop>button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;font:inherit;font-size:12px;color:#2D3748;padding:8px 10px;border-radius:5px;cursor:pointer;text-align:right}
+#projPop>button:hover{background:#EEF2F7}
+#projPop>button i,.pm-r i{width:10px;height:10px;border-radius:3px;display:inline-block;flex-shrink:0}
+#projPop>button small{margin-inline-start:auto;color:#9AA5B4;font-size:10px}
+#projPop.pm{min-width:330px}
+.pm-r{display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:1px solid #EEF2F2;font-size:12px}
+.pm-r small{color:#7F8C8D;font-size:10px;margin-inline-start:auto}
+.pm-e{border:0;background:#F1F4F4;border-radius:5px;cursor:pointer;padding:3px 7px;font-size:11px}
+.pm-f{padding:10px 8px 4px}
+.pm-ft{font-size:12px;font-weight:800;color:#1A7A6E;margin-bottom:8px}
+.pm-f label{display:block;font-size:10px;font-weight:700;color:#52514E;margin-bottom:7px}
+.pm-f input{margin-top:3px;font-size:12px;padding:6px 8px}
+.pm-2{display:flex;gap:8px}.pm-2 label{flex:1}
+.pm-b{display:flex;gap:6px;flex-wrap:wrap}.pm-b .btn{font-size:11px;padding:6px 12px}
+.pm-n{font-size:10px;color:#9A6A00;margin-top:6px}
+.wip-pj{display:inline-block;color:#fff;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.5px;margin-inline-end:8px;border:1px solid rgba(255,255,255,.5)}
+.dash-pj{width:auto;margin-inline-start:auto;padding:5px 9px;font-size:11px}
+#secDash .psec-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wip-sec-h .wip-pj{background:rgba(0,0,0,.18)}
+/* ── payments across projects ── */
+.es-pj{display:inline-block;color:#fff;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.4px}
+.es-mo{font-size:11px;color:#2D3748;background:#EEF2F7;border-radius:9px;padding:2px 9px}
+.es-mo b{font-weight:800}.es-mo b.g{color:#1E6B3F}.es-mo b.r{color:#A93226}
+.es-pr{border:0;font:inherit;cursor:pointer;margin-right:6px;padding:3px 7px;border-radius:5px;background:#EAF2F8;color:#1A5276;font-size:10.5px;font-weight:700;vertical-align:middle;width:auto}
+.es-pr.own{background:#D6EAF8;box-shadow:inset 0 0 0 1px #5DADE2}
+.es-pr.none{background:#FDF2E9;color:#B9770E}
+.es-pr:hover{background:#1A5276;color:#fff}
+.eng-prices{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:12px}
+.ep-p{display:inline-flex;align-items:center;gap:7px;font-size:11px;background:#F7F9F9;border:1px solid #E1E6E6;border-radius:7px;padding:5px 9px}
+.ep-p i{width:9px;height:9px;border-radius:3px}
+.ep-p input{width:110px;padding:5px 7px;font-size:12px;font-weight:700}
+.eng-prices small{font-size:10px;color:#9AA5B4}
+.eng-amt{font-size:9.5px;color:#52514E;font-weight:700}
+.eng-amt i{font-style:normal}
 </style>
 </head>
 <body>
@@ -775,7 +816,7 @@ User 2:
   </div>
   <div class="hdr-r">
     <!-- Project Badge -->
-    <div id="projBadge" style="background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 12px;font-size:11px;font-weight:700;color:#fff;cursor:pointer" onclick="changeProject()" title="Switch Project">
+    <div id="projBadge" style="background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 12px;font-size:11px;font-weight:700;color:#fff;cursor:pointer" onclick="projMenu(this)" title="Switch Project">
       <span id="projBadgeTxt">—</span> <span style="font-size:9px;opacity:.6">▼</span>
     </div>
     <!-- Sync Status -->
@@ -784,16 +825,16 @@ User 2:
       <span id="syncTxt">Live</span>
     </div>
     <div class="hdiv" style="height:30px"></div>
-    <button class="btn bNav" onclick="goUpd()">&#8593; Update</button>
-    <button class="btn" style="background:#1A5276;color:#fff" onclick="goDrwList()">&#128196; Drawings List</button>
-    <button class="btn bAmb" onclick="goPlot()">&#128202; Plot DWGs</button>
+    <button class="btn bNav" onclick="projAsk(this,'Update — أنهي جدول؟',goUpd)">&#8593; Update</button>
+    <button class="btn" style="background:#1A5276;color:#fff" onclick="projAsk(this,'Drawings List — أنهي مشروع؟',goDrwList)">&#128196; Drawings List</button>
+    <button class="btn bAmb" onclick="projAsk(this,'Plot / Part DWGs — أنهي مشروع؟',goPlot)">&#128202; Plot / Part DWGs</button>
     <button class="btn bc" onclick="goEng()">&#128119; Engineers Payment</button>
-    <button class="btn bp" onclick="goPdf()">&#8998; PDF</button>
-    <button class="btn bo" onclick="doXlsData()" title="تصدير Excel">&#8659; Excel Data</button>
-    <button class="btn bo" style="border-color:#B7950B;color:#B7950B" onclick="doXlsReport()" title="Excel Report">&#8659; Excel Report</button>
-    <button class="btn" id="invoiceBtn" style="background:#6C3483;color:#fff;display:none" onclick="goInvoice()">📋 Invoice</button>
-    <button class="btn bt" onclick="goAdd()">+ Add Drawing</button>
-    <button class="btn" style="background:#6C3483;color:#fff;font-size:10px" onclick="renumAll()" title="إعادة ترقيم كل اللوحات">🔢 Re-Number</button>
+    <button class="btn bp" onclick="projAsk(this,'PDF — أنهي مشروع؟',goPdf)">&#8998; PDF</button>
+    <button class="btn bo" onclick="projAsk(this,'Excel Data — داتا أنهي مشروع؟',doXlsData)" title="تصدير Excel">&#8659; Excel Data</button>
+    <button class="btn bo" style="border-color:#B7950B;color:#B7950B" onclick="projAsk(this,'Excel Report — أنهي مشروع؟',doXlsReport)" title="Excel Report">&#8659; Excel Report</button>
+    <button class="btn" id="invoiceBtn" style="background:#6C3483;color:#fff;display:none" onclick="setCtx('WADI_YAMM');goInvoice()">📋 Orascom Invoice</button>
+    <button class="btn bt" onclick="projAsk(this,'Add Drawing — في أنهي مشروع؟',goAdd)">+ Add Drawing</button>
+    <button class="btn" style="background:#6C3483;color:#fff;font-size:10px" onclick="projAsk(this,'Re-Number — أنهي مشروع؟',renumAll)" title="إعادة ترقيم لوحات مشروع">🔢 Re-Number</button>
     <!-- User Badge -->
     <div class="user-badge">
       <div class="user-av" id="userAv">?</div>
@@ -831,6 +872,7 @@ User 2:
         </div>
       </div>
       <div class="wip-bar">
+        <div class="f"><label for="wfProj">Project</label><select id="wfProj" onchange="wipFillFilter()"></select></div>
         <div class="f"><label id="wlPlot" for="wfPlot">Plot</label><select id="wfPlot" onchange="wipFillFilter()"></select></div>
         <div class="f"><label id="wlZone" for="wfZone">Zone</label><select id="wfZone" onchange="wipFillFilter()"></select></div>
         <div class="f"><label for="wfLevel">Floor</label><select id="wfLevel"></select></div>
@@ -857,17 +899,18 @@ User 2:
 
   <!-- ══════════ 3) DASHBOARDS ══════════ -->
   <div class="psec viz" id="secDash">
-    <div class="psec-h"><h2>&#128202; Dashboards</h2><small dir="rtl">من لوحات المشروع الحالي كله — بتتحدث لوحدها مع أي تعديل</small></div>
+    <div class="psec-h"><h2>&#128202; Dashboards</h2><small dir="rtl">بتتحدث لوحدها مع أي تعديل</small><select id="wipDashProj" class="dash-pj" onchange="wipDashRender()"></select></div>
     <div class="dash-grid" id="wipDash"></div>
   </div>
 
   <!-- ══════════ 4) DRAWING REGISTER (all drawings of the project) ══════════ -->
-  <div class="psec-h" id="secReg" style="scroll-margin-top:50px"><h2>&#128203; Drawing Register</h2><small dir="rtl">كل لوحات المشروع</small></div>
+  <div class="psec-h" id="secReg" style="scroll-margin-top:50px"><h2>&#128203; Drawing Register</h2><small dir="rtl">جدول لكل مشروع — تحت بعض</small></div>
+  <div id="regTpl" style="display:none">
   <div class="stats">
-    <div class="sc"><div class="sc-l">Total</div><div class="sc-v" id="s0">0</div></div>
-    <div class="sc a"><div class="sc-l">Pending</div><div class="sc-v" id="s1">0</div></div>
-    <div class="sc g"><div class="sc-l">Replied</div><div class="sc-v" id="s2">0</div></div>
-    <div class="sc r"><div class="sc-l">No Comments</div><div class="sc-v" id="s3">0</div></div>
+    <div class="sc"><div class="sc-l">Total</div><div class="sc-v" data-r="s0">0</div></div>
+    <div class="sc a"><div class="sc-l">Pending</div><div class="sc-v" data-r="s1">0</div></div>
+    <div class="sc g"><div class="sc-l">Replied</div><div class="sc-v" data-r="s2">0</div></div>
+    <div class="sc r"><div class="sc-l">No Comments</div><div class="sc-v" data-r="s3">0</div></div>
   </div>
   <div class="card">
     <div class="chdr"><h2>Drawing Register</h2></div>
@@ -883,7 +926,7 @@ User 2:
         <th colspan="3" class="g2" style="text-align:center">Round 2</th>
 
         <th rowspan="2" class="gm">Paid</th>
-        <th rowspan="2" class="gp" id="invColHdr" style="display:none;background:#6C3483">Invoice</th>
+        <th rowspan="2" class="gp" data-r="invColHdr" style="display:none;background:#6C3483">Invoice</th>
         <th rowspan="2" class="gp"></th>
       </tr><tr>
         <th class="gp">Plot</th><th class="gp">Zone</th><th class="gp">Level</th><th class="gp">Type</th>
@@ -891,9 +934,11 @@ User 2:
         <th class="g2">Recv</th><th class="g2">Reply</th><th class="g2">Status</th>
 
       </tr></thead>
-      <tbody id="tb"></tbody>
+      <tbody data-r="tb"></tbody>
     </table></div>
   </div>
+  </div>
+  <div id="regBlocks"></div>
 </div>
 </div>
 
@@ -998,8 +1043,9 @@ User 2:
   <div class="box-body">
     <div class="psect">Filter by:</div>
     <div class="fg" style="margin-bottom:12px">
-      <div class="f"><label>Plot</label><select id="efPlot"><option value="">All</option></select></div>
-      <div class="f"><label>Zone</label><select id="efZone"><option value="">All</option></select></div>
+      <div class="f"><label>Project</label><select id="efProj"><option value="">All</option></select></div>
+      <div class="f"><label id="eflPlot">Plot</label><select id="efPlot"><option value="">All</option></select></div>
+      <div class="f"><label id="eflZone">Zone</label><select id="efZone"><option value="">All</option></select></div>
       <div class="f"><label>Level</label><select id="efLevel"><option value="">All</option></select></div>
       <div class="f"><label>Type</label><select id="efType"><option value="">All</option></select></div>
     </div>
@@ -1014,6 +1060,8 @@ User 2:
         <option value="del">Delivery — التاريخ اللي في فورم اللوحة</option>
       </select></div>
     </div>
+    <div class="psect">Price of a drawing</div>
+    <div id="engPrices" class="eng-prices"></div>
     <div class="psect">Select engineer(s):</div>
     <div class="eng-find"><input type="search" id="engQ" dir="auto" placeholder="&#128269; ابحث باسم المهندس…" autocomplete="off" oninput="engFilterCards()"/><span id="engQn"></span></div>
     <div class="eng-grid" id="engGrid"></div>
@@ -1145,6 +1193,7 @@ User 2:
     <div class="nt-top"><h2>+ New Task</h2><small dir="rtl">مفيش خانة إجبارية — اللي مش عارفه دلوقتي سيبه فاضي وكمّله بعدين</small><button type="button" class="nt-x" onclick="wipTaskClose()">&#10005;</button></div>
     <div class="nt-body">
       <div class="nt-g">
+        <div class="f"><label for="ntProj">Project</label><select id="ntProj" onchange="wipTaskProj()"></select></div>
         <div class="f"><label id="ntlPlot" for="ntPlot">Plot</label><input id="ntPlot" list="ntPlots" autocomplete="off" oninput="this.value=this.value.toUpperCase()"/><datalist id="ntPlots"></datalist></div>
         <div class="f"><label id="ntlZone" for="ntZone">Zone</label><input id="ntZone" list="ntZones" autocomplete="off" oninput="this.value=this.value.toUpperCase()"/><datalist id="ntZones"></datalist></div>
         <div class="f"><label for="ntLevel">Level</label><input id="ntLevel" list="ntLevels" autocomplete="off" oninput="this.value=this.value.toUpperCase()"/><datalist id="ntLevels"></datalist></div>
@@ -1535,7 +1584,7 @@ async function loadApp(){
   var sLogo = document.getElementById('sLogo');
   if(sLogo) document.getElementById('projLogoBox').innerHTML = '<img src="'+sLogo.src+'" style="height:50px;width:50px;border-radius:8px;object-fit:contain"/>';
 
-  showProjectSelector();
+  enterOffice();
 }
 
 function showProjectSelector(){
@@ -1635,12 +1684,7 @@ var editId = null;  // stores drawing UUID when editing
 
 async function fetchDrawings(){
   setSyncStatus('loading');
-  var q = supabase.from('drawings').select('*');
-  if(currentProject){
-    q = q.eq('project_id', currentProject);
-  } else {
-    q = q.eq('project_id', 'WADI_YAMM');
-  }
+  var q = supabase.from('drawings').select('*');      // every project — the page shows them all
   q = q.order('num',{ascending:true,nullsFirst:false});
   var {data,error} = await q;
   if(error){ console.error(error); setSyncStatus('off'); return; }
@@ -1665,11 +1709,11 @@ function setupRealtime(){
     var proj = currentProject || 'WADI_YAMM';
     wipPollWatch(); wipTeamPoll(); wipHidePoll();
     var ep = dataEpoch;
-    var {data, error} = await supabase.from('drawings').select('*').eq('project_id', proj).order('num',{ascending:true,nullsFirst:false});
+    var {data, error} = await supabase.from('drawings').select('*').order('num',{ascending:true,nullsFirst:false});
     if(error){ setSyncStatus('off'); return; }
     if(!wipPending) setSyncStatus('on');
     if(importBusy) return;
-    if(ep!==dataEpoch || wipPending || proj!==(currentProject||'WADI_YAMM')) return;   // an edit was made meanwhile — the next poll picks it up
+    if(ep!==dataEpoch || wipPending) return;   // an edit was made meanwhile — the next poll picks it up
     if(data && JSON.stringify(data)!==JSON.stringify(drws)){
       drws = data;
       render();
@@ -1768,12 +1812,13 @@ function ovSt(d){
   return 'none';
 }
 function sorted(){
-  return drws.slice().sort(function(a,b){ return (a.num||9999)-(b.num||9999); });
+  var p=currentProject||projList()[0];
+  return drws.filter(function(d){ return (d.project_id||'WADI_YAMM')===p; }).sort(function(a,b){ return (a.num||9999)-(b.num||9999); });
 }
 
 // إعادة ترقيم شاملة لكل اللوحات
 async function renumAll(){
-  if(!confirm('هيعيد ترقيم كل اللوحات من 1 لـ '+drws.length+' بالترتيب الحالي — متأكد؟')) return;
+  if(!confirm('هيعيد ترقيم لوحات '+projLabel(currentProject)+' من 1 لـ '+sorted().length+' بالترتيب الحالي — متأكد؟')) return;
   showToast('جاري إعادة الترقيم...');
   var s = sorted();
   var updates = [];
@@ -1836,7 +1881,7 @@ function normalize(s){ return (s||'').replace(/\s+/g,' ').trim(); }
 
 function nextNum(){
   // بعد الترقيم التلقائي الأرقام دايماً 1..N بدون فجوات
-  return drws.length + 1;
+  return sorted().length + 1;
 }
 
 function goAdd(){
@@ -1929,7 +1974,7 @@ function renderRegister(){
     var stHtml='<span style="padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;background:'+stBg+';color:'+stColor+'">'+st+'</span>';
     h+='<tr class="rg-row" data-rid="'+escHtml(d.id)+'">';
     h+='<td class="rg-n" style="text-align:center;font-weight:700;color:#0D5C52"><span class="rg-grip" draggable="true" title="اسحب لفوق أو لتحت عشان تغيّر مكان اللوحة — الترقيم بيتظبط لوحده"></span>'+(d.num||i+1)
-      +(i===0?'<button type="button" class="ins-b top" onclick="goAddAfter(\'\')" title="ضيف لوحة جديدة في أول الجدول">+</button>':'')
+      +(i===0?'<button type="button" class="ins-b top" onclick="goAddAfter(\'\',\''+currentProject+'\')" title="ضيف لوحة جديدة في أول الجدول">+</button>':'')
       +'<button type="button" class="ins-b" onclick="goAddAfter(\''+d.id+'\')" title="ضيف لوحة جديدة هنا (بعد اللوحة دي)">+</button></td>';
     h+='<td style="font-weight:600">'+(d.plot||'-')+'</td>';
     h+='<td>'+(d.zone||'-')+'</td><td>'+(d.level||'-')+'</td><td>'+tt+'</td>';
@@ -2004,7 +2049,7 @@ function onDelChange(){
   var type  = document.getElementById('fType').value;
   if(!plot) return;
   // Find matching drawings
-  var matches = drws.filter(function(d){
+  var matches = sorted().filter(function(d){
     return (d.plot||'')===plot && (d.zone||'')===zone &&
            (d.level||'')===level && (d.type||'')===type &&
            d.id !== editId && !d.ns;
@@ -2233,7 +2278,7 @@ function buildEngCards(){
   var rg=engDates();
   var filtered=drws.filter(function(d){
     return (!fp||(d.plot||'')===fp)&&(!fz||(d.zone||'')===fz)&&
-           (!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft)&&engDateOk(d,rg);
+           (!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft)&&engDateOk(d,rg)&&engProjOk(d);
   });
   var engs={};
   filtered.forEach(function(d){
@@ -2263,7 +2308,7 @@ async function goPlot(){
   if(!drws.length){alert('No drawings');return;}
   function fillSel(id,vals){var el=document.getElementById(id);el.innerHTML='<option value="">All</option>';vals.sort().forEach(function(v){if(v)el.innerHTML+='<option>'+v+'</option>';});}
   var plots={},zones={},levels={},types={};
-  drws.forEach(function(d){if(d.plot)plots[d.plot]=1;if(d.zone)zones[d.zone]=1;if(d.level)levels[d.level]=1;if(d.type)types[d.type]=1;});
+  sorted().forEach(function(d){if(d.plot)plots[d.plot]=1;if(d.zone)zones[d.zone]=1;if(d.level)levels[d.level]=1;if(d.type)types[d.type]=1;});
   fillSel('pfPlot',Object.keys(plots));fillSel('pfLevel',Object.keys(levels));fillSel('pfType',Object.keys(types));
   var zl=document.getElementById('pfZoneList'),zh='';
   Object.keys(zones).sort().forEach(function(z){
@@ -2434,7 +2479,8 @@ function genEngPdf(){
   var body='';
   for(var k=0;k<keys.length;k++){
     var eng=keys[k];
-    var stm=engStatement(eng), sub=stm.chosen;
+    body+=engPdfBody(eng); continue;
+    var stm=engStatement(eng,projList()[0]), sub=stm.chosen;
     if(!sub.length) continue;
     var pc=engPaidCount(sub), rgTxt=engRangeText(stm);
     sc.seq=stm.seq;       // "#" is this engineer's own drawing number, so the next statement can start from his drawing N
@@ -2752,7 +2798,7 @@ async function goDrwList(){
   dlSelRows={};dlSelCols={};
   function fillSel(id,vals){var el=document.getElementById(id);el.innerHTML='<option value="">All</option>';vals.sort().forEach(function(v){if(v)el.innerHTML+='<option>'+v+'</option>';});}
   var plots={},zones={},levels={},types={};
-  drws.forEach(function(d){if(d.plot)plots[d.plot]=1;if(d.zone)zones[d.zone]=1;if(d.level)levels[d.level]=1;if(d.type)types[d.type]=1;});
+  sorted().forEach(function(d){if(d.plot)plots[d.plot]=1;if(d.zone)zones[d.zone]=1;if(d.level)levels[d.level]=1;if(d.type)types[d.type]=1;});
   fillSel('dlPlot',Object.keys(plots));fillSel('dlZone',Object.keys(zones));fillSel('dlLevel',Object.keys(levels));fillSel('dlType',Object.keys(types));
   ['dlPlot','dlZone','dlLevel','dlType'].forEach(function(id){document.getElementById(id).onchange=buildDlRows;});
   var cg=document.getElementById('dlColGrid'),ch='';
@@ -2821,7 +2867,7 @@ function goInvoice(){
 function loadInvoiceRows(){
   var num = parseInt(document.getElementById('invNum').value);
   if(isNaN(num)) num=1;
-  var subset = drws.filter(function(d){ return (d.invoice||0)===num; });
+  var subset = sorted().filter(function(d){ return (d.invoice||0)===num; });
   var label = num===0?'Not in any Invoice':'Invoice '+num;
   document.getElementById('invCount').textContent = subset.length + ' drawing'+(subset.length!==1?'s':'');
   
@@ -2866,7 +2912,7 @@ function loadInvoiceRows(){
 
 function genInvoicePdf(){
   var num = parseInt(document.getElementById('invNum').value)||1;
-  var subset = drws.filter(function(d){ return (d.invoice||0)===num; });
+  var subset = sorted().filter(function(d){ return (d.invoice||0)===num; });
   if(!subset.length){alert('No drawings in this invoice');return;}
 
   var showPlot=document.getElementById('icPlot').checked;
@@ -2976,6 +3022,7 @@ var wipNeedTable=false;   // wip_watch is missing → show the one-time setup bo
 var wipTargetCol=null;    // does drawings.target_date exist? true / false once known
 var wipDatesCol=null;     // do drawings.start_date + received_date exist?
 var wipSharesCol=null;    // does drawings.shares exist? (each engineer's share of a shared drawing)
+var wipPriceCol=null;     // does drawings.price exist? (the price of one drawing, instead of its project's)
 var wipWatchEpoch=0;      // bumped on every change of the list, so a slower reload is not applied over it
 var WIP_SQL=[
   "-- SUSTRA Drawing Tracker — Work in Progress (safe to run again)",
@@ -2983,6 +3030,7 @@ var WIP_SQL=[
   "alter table drawings add column if not exists start_date date;",
   "alter table drawings add column if not exists received_date date;",
   "alter table drawings add column if not exists shares text;",
+  "alter table drawings add column if not exists price numeric;",
   "",
   "create table if not exists wip_watch (",
   "  id uuid primary key default gen_random_uuid(),",
@@ -3007,24 +3055,27 @@ var WIP_SQL=[
 
 function wipProj(){ return currentProject||'WADI_YAMM'; }
 function wipMe(){ return wn(currentUser&&currentUser.email).toLowerCase(); }
-function wipSame(a,b){ return a.plot===b.plot&&a.zone===b.zone&&a.level===b.level; }
+function wipSame(a,b){ return (a.proj||'')===(b.proj||'')&&a.plot===b.plot&&a.zone===b.zone&&a.level===b.level; }
 // in the table '*' means "all"; in memory that is null
-function wipFromRow(r){ return {id:r.id,plot:wn(r.plot),zone:r.zone===WIP_ALL||r.zone===null||r.zone===undefined?null:String(r.zone),level:r.level===WIP_ALL||r.level===null||r.level===undefined?null:String(r.level)}; }
-function wipToRow(w){ return {project_id:wipProj(),plot:w.plot,zone:w.zone===null?WIP_ALL:w.zone,level:w.level===null?WIP_ALL:w.level,created_by:wipMe()}; }
+function wipFromRow(r){ return {id:r.id,proj:wn(r.project_id),plot:wn(r.plot),zone:r.zone===WIP_ALL||r.zone===null||r.zone===undefined?null:String(r.zone),level:r.level===WIP_ALL||r.level===null||r.level===undefined?null:String(r.level)}; }
+function wipToRow(w){ return {project_id:w.proj||wipProj(),plot:w.plot,zone:w.zone===null?WIP_ALL:w.zone,level:w.level===null?WIP_ALL:w.level,created_by:wipMe()}; }
 
 // browser copy — used only until the wip_watch table exists
-function wipKey(){ return 'sustra_wip::'+wipMe()+'::'+wipProj(); }
+function wipKey(p){ return 'sustra_wip::'+wipMe()+'::'+(p||wipProj()); }
 function wipLocalRead(){
   var out=[];
-  try{
-    var a=JSON.parse(localStorage.getItem(wipKey())||'[]');
-    if(Array.isArray(a)) a.forEach(function(w){
-      if(w&&typeof w.plot==='string'&&w.plot) out.push({plot:w.plot,zone:typeof w.zone==='string'?w.zone:null,level:typeof w.level==='string'?w.level:null});
-    });
-  }catch(e){}
+  projList().forEach(function(p){
+    try{
+      var a=JSON.parse(localStorage.getItem(wipKey(p))||'[]');
+      if(Array.isArray(a)) a.forEach(function(w){
+        if(w&&typeof w.plot==='string'&&w.plot) out.push({proj:p,plot:w.plot,zone:typeof w.zone==='string'?w.zone:null,level:typeof w.level==='string'?w.level:null});
+      });
+    }catch(e){}
+  });
   return out;
 }
-function wipLocalWrite(){ try{localStorage.setItem(wipKey(),JSON.stringify(wipWatch));}catch(e){} }
+function wipLocalWrite(){ projList().forEach(function(p){ try{ localStorage.setItem(wipKey(p),JSON.stringify(wipWatch.filter(function(w){ return w.proj===p; }))); }catch(e){} }); }
+function wipLocalClear(){ projList().forEach(function(p){ try{ localStorage.removeItem(wipKey(p)); }catch(e){} }); }
 
 async function wipProbe(cols,rx){
   try{
@@ -3040,9 +3091,12 @@ async function wipLoad(){
   if(wipTargetCol!==true){ p=await wipProbe('target_date',/target_date|42703/i); if(p!==null) wipTargetCol=p; }
   if(wipDatesCol!==true){ p=await wipProbe('start_date,received_date',/start_date|received_date|42703/i); if(p!==null) wipDatesCol=p; }
   if(wipSharesCol!==true){ p=await wipProbe('shares',/shares|42703/i); if(p!==null) wipSharesCol=p; }
-  try{ res=await supabase.from('wip_watch').select('*').eq('project_id',proj).order('created_at',{ascending:true}); }
+  if(wipPriceCol!==true){ p=await wipProbe('price',/price|42703/i); if(p!==null) wipPriceCol=p; }
+  // every project's followed list (rows whose project_id starts with "__" are the page's own settings)
+  try{ res=await supabase.from('wip_watch').select('*').order('created_at',{ascending:true}); }
   catch(e){ res={error:{message:'network'}}; }
-  if(ep!==wipWatchEpoch||proj!==wipProj()) return;
+  if(ep!==wipWatchEpoch) return;
+  if(!res.error) res.data=(res.data||[]).filter(function(r){ var p=wn(r.project_id); return p&&p.indexOf('__')!==0&&PROJECT_CONFIG[p]; });
   if(res.error){
     // table not created yet → keep working from this browser; any other error (offline…) → keep what we have
     if(/wip_watch|schema cache|does not exist|42P01|PGRST205/i.test(res.error.message||'')){ wipMode='local'; wipNeedTable=true; wipWatch=wipLocalRead(); }
@@ -3054,10 +3108,10 @@ async function wipLoad(){
     if(loc.length){
       try{
         var ins=await supabase.from('wip_watch').insertMany(loc.map(wipToRow));
-        if(ep!==wipWatchEpoch||proj!==wipProj()) return;
-        if(!ins.error){ ins.data.forEach(function(r){ wipWatch.push(wipFromRow(r)); }); try{localStorage.removeItem(wipKey());}catch(e){} }
+        if(ep!==wipWatchEpoch) return;
+        if(!ins.error){ ins.data.forEach(function(r){ wipWatch.push(wipFromRow(r)); }); wipLocalClear(); }
       }catch(e){}
-    } else { try{localStorage.removeItem(wipKey());}catch(e){} }
+    } else wipLocalClear();
   }
 }
 function wipListChanged(){ if(wipMode==='local') wipLocalWrite(); }
@@ -3072,12 +3126,13 @@ async function wipPollWatch(){
 // one-time database setup box
 function wipSetupBox(){
   var box=wipEl('wipSetup'); if(!box) return;
-  if(!wipNeedTable&&wipTargetCol!==false&&wipDatesCol!==false&&wipSharesCol!==false){ box.innerHTML=''; return; }
+  if(!wipNeedTable&&wipTargetCol!==false&&wipDatesCol!==false&&wipSharesCol!==false&&wipPriceCol!==false){ box.innerHTML=''; return; }
   var why=[];
   if(wipNeedTable) why.push('قايمة المتابعة محفوظة على المتصفح ده بس لحد ما الجدول يتعمل');
   if(wipTargetCol===false) why.push('عمود Target Date مقفول');
   if(wipDatesCol===false) why.push('تاريخ بداية التاسك وتاريخ الاستلام مش بيتسجلوا (فمعدل الإنتاج مش هيتحسب)');
   if(wipSharesCol===false) why.push('نسبة كل مهندس في اللوحة المشتركة مش هتتحفظ');
+  if(wipPriceCol===false) why.push('سعر لوحة معينة (غير سعر المشروع) مش هيتحفظ');
   box.innerHTML='<div class="wip-setup"><b>&#9881;&#65039; خطوة واحدة في Supabase</b>'
     +'<p>'+why.join(' — ')+'. افتح <b>SQL Editor</b> في Supabase، الصق الكود ده واضغط Run، وبعدين اضغط «تم — افحص تاني».</p>'
     +'<pre id="wipSql" dir="ltr">'+escHtml(WIP_SQL)+'</pre>'
@@ -3089,10 +3144,10 @@ function wipCopySql(){
   catch(e){ showToast('انسخ الكود يدوي',true); }
 }
 async function wipRecheck(){
-  wipTargetCol=null; wipDatesCol=null; wipSharesCol=null;
+  wipTargetCol=null; wipDatesCol=null; wipSharesCol=null; wipPriceCol=null;
   await wipLoad(); await wipTeamLoad(); await fetchDrawings();
   wipRegister(); wipRenderAll();
-  if(!wipNeedTable&&wipTargetCol===true&&wipDatesCol===true&&wipSharesCol===true) showToast('✓ تمام — كل حاجة جاهزة في التراكر');
+  if(!wipNeedTable&&wipTargetCol===true&&wipDatesCol===true&&wipSharesCol===true&&wipPriceCol===true) showToast('✓ تمام — كل حاجة جاهزة في التراكر');
   else showToast('لسه — اتأكد إن الكود اشتغل من غير أخطاء',true);
 }
 
@@ -3223,17 +3278,17 @@ function wipEngHtml(d){
 
 // ── build sections from the watch list ──
 function wipMatch(w,d){
-  return wn(d.plot)===w.plot&&(w.zone===null||wn(d.zone)===w.zone)&&(w.level===null||wn(d.level)===w.level);
+  return projOf(d)===w.proj&&wn(d.plot)===w.plot&&(w.zone===null||wn(d.zone)===w.zone)&&(w.level===null||wn(d.level)===w.level);
 }
 function wipSections(){
-  var all=sorted(), secs=[], byKey={}, zoneOrd={}, zn=0;
+  var all=sortedAll(), secs=[], byKey={}, zoneOrd={}, zn=0;
   wipWatch.forEach(function(w){
     all.forEach(function(d){
       if(!wipMatch(w,d)) return;
-      var p=wn(d.plot), z=wn(d.zone), l=wn(d.level), k=p+'\u0001'+z+'\u0001'+l, zk=p+'\u0001'+z, s=byKey[k];
+      var pj=projOf(d), p=wn(d.plot), z=wn(d.zone), l=wn(d.level), k=pj+'\u0001'+p+'\u0001'+z+'\u0001'+l, zk=pj+'\u0001'+p+'\u0001'+z, s=byKey[k];
       if(!s){
         if(zoneOrd[zk]===undefined) zoneOrd[zk]=zn++;
-        s=byKey[k]={key:k,plot:p,zone:z,level:l,zi:zoneOrd[zk],ord:secs.length,rows:[],ids:{}};
+        s=byKey[k]={key:k,proj:pj,plot:p,zone:z,level:l,zi:zoneOrd[zk],ord:secs.length,rows:[],ids:{}};
         secs.push(s);
       }
       if(!s.ids[d.id]){ s.ids[d.id]=1; s.rows.push(d); }
@@ -3283,8 +3338,8 @@ function wipCountTxt(rows){
 
 // ── render ──
 var WIP_NCOL=7;
-function wipHead(extra){
-  var cfg=wipCfg(), head='<colgroup>', ci;
+function wipHead(extra,proj){
+  var cfg=proj?projCfg(proj):{col1:'Plot',col2:'Zone'}, head='<colgroup>', ci;
   for(ci=1;ci<=WIP_NCOL;ci++) head+='<col class="wc'+ci+'"/>';
   if(extra) head+='<col class="wc8"/>';
   return head+'</colgroup><thead><tr><th>'+escHtml(cfg.col1+' / '+cfg.col2+' / Floor')+'</th><th>DWG No.</th>'
@@ -3324,7 +3379,7 @@ function wipCardsHtml(s){
 function wipOpenHtml(s){
   var t=wipOpenTable(s); if(!t) return '';
   return '<div class="wip-t-h">'+escHtml(t.type||'No Type')+' <span>'+t.rows.length+'</span><button type="button" class="zc-close">&#10005; اقفل</button></div>'
-    +'<div class="wip-tw"><table class="wip-tbl">'+wipHead()+'<tbody>'+t.rows.map(wipRowHtml).join('')+'</tbody></table></div>'
+    +'<div class="wip-tw"><table class="wip-tbl">'+wipHead('',s.proj)+'<tbody>'+t.rows.map(wipRowHtml).join('')+'</tbody></table></div>'
     +'<div class="wip-addrow"><button type="button" class="wip-add1">+ Add drawing</button><span dir="rtl">سطر جديد في '+escHtml(t.type||'No Type')+' — اكتب رقم اللوحة بس، والباقي يتملى زي أي سطر</span></div>';
 }
 function renderWip(){
@@ -3333,7 +3388,7 @@ function renderWip(){
   wipSig=wipSignature(secs); wipStale=false;
   wipChips(secs); wipSummary(secs); wipSetupBox();
   if(!wipWatch.length){
-    body.innerHTML='<div class="wip-empty"><div style="font-size:30px">&#128736;</div>اختار '+escHtml(cfg.col1)+' / '+escHtml(cfg.col2)+' / Floor من فوق واضغط <b>+ Add</b> عشان تبدأ المتابعة.<br/>تقدر تضيف أكتر من واحد وتتابعهم مع بعض.</div>';
+    body.innerHTML='<div class="wip-empty"><div style="font-size:30px">&#128736;</div>اختار المشروع وبعدين '+escHtml(cfg.col1)+' / '+escHtml(cfg.col2)+' / Floor من فوق واضغط <b>+ Add</b> عشان تبدأ المتابعة.<br/>تقدر تضيف أكتر من واحد وتتابعهم مع بعض.</div>';
     return;
   }
   if(!secs.length){
@@ -3343,7 +3398,7 @@ function renderWip(){
   secs.forEach(function(s){
     var st=wipStats(s.rows);
     h+='<div class="wip-sec" data-k="'+escHtml(s.key)+'" style="--c:'+s.color+'">';
-    h+='<div class="wip-sec-h"><span class="wip-ttl">'+escHtml(wipTitle(s))+'</span><span class="wip-cnt">'+wipCountTxt(s.rows)+'</span><span class="wip-pct">'+st.pct+'%</span></div>';
+    h+='<div class="wip-sec-h">'+(projList().length>1?'<span class="wip-pj">'+escHtml(projLabel(s.proj))+'</span>':'')+'<span class="wip-ttl">'+escHtml(wipTitle(s))+'</span><span class="wip-cnt">'+wipCountTxt(s.rows)+'</span><span class="wip-pct">'+st.pct+'%</span></div>';
     h+='<div class="zc-cards">'+wipCardsHtml(s)+'</div><div class="zc-hid">'+wipHiddenHtml(s)+'</div><div class="zc-open">'+wipOpenHtml(s)+'</div></div>';
   });
   body.innerHTML=h;
@@ -3369,16 +3424,16 @@ function wipSummary(secs){
   wipSumListSync(secs);
 }
 function wipChips(secs){
-  var cfg=wipCfg(), h='';
+  var h='', many=projList().length>1;
   wipWatch.forEach(function(w,i){
-    var n=0, color='#BDC3C7';
+    var n=0, color='#BDC3C7', cfg=projCfg(w.proj);
     secs.forEach(function(s){
-      if(s.plot===w.plot&&(w.zone===null||s.zone===w.zone)&&(w.level===null||s.level===w.level)){
+      if(s.proj===w.proj&&s.plot===w.plot&&(w.zone===null||s.zone===w.zone)&&(w.level===null||s.level===w.level)){
         if(!n) color=s.color;
         n+=s.rows.length;
       }
     });
-    var parts=[w.plot, w.zone===null?'All '+cfg.col2+'s':(w.zone||'(blank)'), w.level===null?'All Floors':(w.level||'(blank)')];
+    var parts=(many?[projLabel(w.proj)]:[]).concat([w.plot]).concat([w.zone===null?'All '+cfg.col2+'s':(w.zone||'(blank)'), w.level===null?'All Floors':(w.level||'(blank)')]);
     h+='<span class="wip-chip" style="border-left-color:'+color+'">'+escHtml(parts.join(' › '))
       +' <span class="n'+(n?'':' zero')+'">'+n+'</span>'
       +'<button type="button" title="شيل من المتابعة" onclick="wipRemove('+i+')">&#10005;</button></span>';
@@ -3473,15 +3528,18 @@ function wipSetOpts(sel,list){
   sel.value=list.some(function(o){return o[0]===keep;})?keep:list[0][0];
 }
 function wipFillFilter(){
-  var sp=wipEl('wfPlot'), sz=wipEl('wfZone'), sl=wipEl('wfLevel'), cfg=wipCfg();
+  var sj=wipEl('wfProj'), sp=wipEl('wfPlot'), sz=wipEl('wfZone'), sl=wipEl('wfLevel');
+  // the project first — the other fields follow that project's own columns
+  if(sj) wipSetOpts(sj,projList().map(function(p){ return [p,projLabel(p)]; }));
+  var pj=sj?sj.value:wipProj(), cfg=projCfg(pj), D=projDrws(pj);
   wipEl('wlPlot').textContent=cfg.col1; wipEl('wlZone').textContent=cfg.col2;
-  var plots={}; drws.forEach(function(d){ var p=wn(d.plot); if(p) plots[p]=1; });
+  var plots={}; D.forEach(function(d){ var p=wn(d.plot); if(p) plots[p]=1; });
   wipSetOpts(sp,[['','-- Select --']].concat(wipSortVals(plots).map(function(p){return [p,p];})));
   var p=sp.value, zones={};
-  drws.forEach(function(d){ if(p&&wn(d.plot)===p) zones[wn(d.zone)]=1; });
+  D.forEach(function(d){ if(p&&wn(d.plot)===p) zones[wn(d.zone)]=1; });
   wipSetOpts(sz,[[WIP_ALL,'All']].concat(wipSortVals(zones).map(function(z){return [z,z||'(blank)'];})));
   var z=sz.value, levels={};
-  drws.forEach(function(d){ if(p&&wn(d.plot)===p&&(z===WIP_ALL||wn(d.zone)===z)) levels[wn(d.level)]=1; });
+  D.forEach(function(d){ if(p&&wn(d.plot)===p&&(z===WIP_ALL||wn(d.zone)===z)) levels[wn(d.level)]=1; });
   wipSetOpts(sl,[[WIP_ALL,'All']].concat(wipSortVals(levels).map(function(l){return [l,l||'(blank)'];})));
   sz.disabled=sl.disabled=!p;
 }
@@ -3506,10 +3564,10 @@ async function wipFollow(w){
   return '';
 }
 async function wipAdd(){
-  var p=wipEl('wfPlot').value, z=wipEl('wfZone').value, l=wipEl('wfLevel').value;
-  if(!p){ showToast('اختار '+wipCfg().col1+' الأول',true); return; }
+  var pj=wipEl('wfProj')?wipEl('wfProj').value:wipProj(), p=wipEl('wfPlot').value, z=wipEl('wfZone').value, l=wipEl('wfLevel').value;
+  if(!p){ showToast('اختار '+projCfg(pj).col1+' الأول',true); return; }
   if(wipBusy) return;
-  var err=await wipFollow({plot:p,zone:z===WIP_ALL?null:z,level:l===WIP_ALL?null:l});
+  var err=await wipFollow({proj:pj,plot:p,zone:z===WIP_ALL?null:z,level:l===WIP_ALL?null:l});
   renderWip();
   if(err==='dup') showToast('موجود بالفعل في المتابعة',true);
   else if(err) showToast('خطأ — ماتضافش: '+err,true);
@@ -3533,8 +3591,11 @@ async function wipClearAll(){
   if(wipMode==='db'){
     wipBusy=true; wipWatchEpoch++;
     var res;
-    try{ res=await supabase.from('wip_watch').delete().eq('project_id',wipProj()); }
+    // only the followed lists of the projects (never the page's own "__" settings rows)
+    var ps={}; wipWatch.forEach(function(w){ ps[w.proj]=1; });
+    try{ for(var pk in ps){ res=await supabase.from('wip_watch').delete().eq('project_id',pk); if(res.error) break; } }
     catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+    res=res||{error:null};
     wipBusy=false; wipWatchEpoch++;
     if(res.error){ showToast('خطأ — ماتمسحتش: '+res.error.message,true); return; }
   }
@@ -3791,8 +3852,7 @@ async function wipOffLoad(){
 async function wipTeamLoad(){
   await wipOffLoad();
   try{
-    var res=await supabase.from('drawings').select('*').eq('status','IN PROGRESS');
-    if(!res.error) wipTeamOther=(res.data||[]).filter(function(d){ return wn(d.project_id)&&wn(d.project_id)!==wipProj(); });
+    wipTeamOther=[];      // every project is loaded already
   }catch(e){}
 }
 function wipTeamData(){
@@ -3807,7 +3867,7 @@ function wipTeamData(){
     if(wipStatus(d)!=='IN PROGRESS') return;
     list.forEach(function(n){ (busy[key(n)]=busy[key(n)]||[]).push({d:d,proj:proj}); });
   }
-  drws.forEach(function(d){ take(d,wipProj()); });
+  drws.forEach(function(d){ take(d,projOf(d)); });
   wipTeamOther.forEach(function(d){ take(d,wn(d.project_id)); });
   var cmp=function(a,b){ return a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}); };
   var working=[], free=[], gone=[];
@@ -3852,7 +3912,7 @@ function wipTeamRender(){
         if(wipDates(d).c==='late') late++;
         if(d.target_date&&(!next||wipIso(d.target_date)<wipIso(next.target_date))) next=d;
       });
-      var other=g.proj!==wipProj(), pl=(PROJECT_CONFIG[g.proj]||{}).label||g.proj;
+      var other=projList().length>1, pl=projLabel(g.proj);
       h+='<div class="tm-g"><div class="tm-gh">'+(other?'<i>'+escHtml(pl)+'</i> ':'')+'<b>'+escHtml(g.loc)+'</b> · '+escHtml(g.type)+' <span class="tm-n">'+g.rows.length+'</span>'
         +(late?' <span class="wip-d late">'+late+' late</span>':(next?' '+wipDatesHtml(next):''))+'</div><div class="tm-nos">';
       g.rows.forEach(function(d){
@@ -3954,7 +4014,9 @@ function wipDashData(){
     if(!map[k]){ map[k]={key:k,name:wn(n),total:0,done:0,prog:0,types:[0,0,0,0,0,0,0,0],rateN:0,days:{},nDays:0,rate:null}; list.push(map[k]); }
     return map[k];
   }
+  var dp=wipEl('wipDashProj'), only=dp?dp.value:'';
   drws.forEach(function(d){
+    if(only&&projOf(d)!==only) return;
     var eng=wipEngList(d.by_eng); if(!eng.length) return;
     var shm=engSharesOf(d), g=wipGroup(wipStatus(d)), slot=wipTypeSlot(d.type), fin=g==='recv'||g==='done';
     var a=wipDayNum(wipIso(d.start_date)), b=wipDayNum(wipIso(d.received_date));
@@ -3971,6 +4033,7 @@ function wipDashData(){
 }
 function wipDashRender(){
   var box=wipEl('wipDash'); if(!box||!wipVisible()) return;
+  var dp=wipEl('wipDashProj'); if(dp) wipSetOpts(dp,[['','كل المشاريع']].concat(projList().map(function(p){ return [p,projLabel(p)]; })));
   var D=wipDashData();
   var cmp=function(a,b){ return a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}); };
   var prod=D.list.filter(function(e){ return e.done>0||e.prog>0; }).sort(function(a,b){ return b.done-a.done||b.prog-a.prog||cmp(a,b); });
@@ -4049,9 +4112,21 @@ function wipTaskRow(name,content){
   box.appendChild(r);
   return r;
 }
+// the project of the task decides its column names and the suggestions of the fields
+function wipTaskProj(){
+  var pj=wipEl('ntProj').value, cfg=projCfg(pj), D=projDrws(pj), uniq=function(f){ var o={}; D.forEach(function(d){ var v=wn(d[f]); if(v) o[v]=1; }); return wipSortVals(o); };
+  wipEl('ntlPlot').textContent=cfg.col1; wipEl('ntlZone').textContent=cfg.col2;
+  wipTaskFill('ntPlots',uniq('plot')); wipTaskFill('ntZones',uniq('zone')); wipTaskFill('ntLevels',uniq('level'));
+  var types={}; ['SLAB','BEAMS','COLUMNS','CORES','STAIR','STAIR BEAMS','WALLS','RAMP','FOUNDATION'].concat(uniq('type')).forEach(function(t){ types[t.toUpperCase()]=1; });
+  wipTaskFill('ntTypes',Object.keys(types));
+}
 function wipTaskOpen(pre){
   wipEngClose(true); wipDateClose(true);
-  var cfg=wipCfg(), uniq=function(f){ var o={}; drws.forEach(function(d){ var v=wn(d[f]); if(v) o[v]=1; }); return wipSortVals(o); };
+  var np=wipEl('ntProj'), fpj=wipEl('wfProj')?wipEl('wfProj').value:wipProj();
+  wipSetOpts(np,projList().map(function(p){ return [p,projLabel(p)]; }));
+  np.value=pre&&pre.proj?pre.proj:(PROJECT_CONFIG[fpj]?fpj:projList()[0]);
+  wipTaskProj();
+  var cfg=projCfg(np.value), uniq=function(f){ var o={}; projDrws(np.value).forEach(function(d){ var v=wn(d[f]); if(v) o[v]=1; }); return wipSortVals(o); };
   wipEl('ntlPlot').textContent=cfg.col1; wipEl('ntlZone').textContent=cfg.col2;
   wipTaskFill('ntPlots',uniq('plot')); wipTaskFill('ntZones',uniq('zone')); wipTaskFill('ntLevels',uniq('level'));
   var types={}; ['SLAB','BEAMS','COLUMNS','CORES','STAIR','STAIR BEAMS','WALLS','RAMP','FOUNDATION'].concat(uniq('type')).forEach(function(t){ types[t.toUpperCase()]=1; });
@@ -4127,7 +4202,7 @@ function wipTaskEngAdd(){
 }
 async function wipTaskSave(){
   var val=function(id){ return wn(wipEl(id).value); };
-  var plot=val('ntPlot'), zone=val('ntZone'), level=val('ntLevel'), type=val('ntType').toUpperCase();
+  var proj=wipEl('ntProj').value||wipProj(), plot=val('ntPlot'), zone=val('ntZone'), level=val('ntLevel'), type=val('ntType').toUpperCase();
   var start=val('ntStart'), target=val('ntTarget'), status=wipEl('ntStatus').value||'NOT STARTED';
   if(wn(wipEl('ntEngIn').value)) wipTaskEngAdd();        // a name typed but not added yet still counts
   var rows=[];
@@ -4138,7 +4213,7 @@ async function wipTaskSave(){
   if(!rows.length&&!plot&&!zone&&!level&&!type&&!wipTaskSel.length&&!start&&!target){ showToast('اكتب أي حاجة عن التاسك الأول',true); return; }
   if((start&&!wipDateOk(start))||(target&&!wipDateOk(target))){ showToast('في تاريخ مش مكتوب صح',true); return; }
   if(!rows.length) rows.push({name:'',content:''});
-  var proj=wipProj(), now=new Date().toISOString(), n0=drws.length;
+  var now=new Date().toISOString(), n0=projDrws(proj).length;
   var recs=rows.map(function(r,i){
     var rec={num:n0+1+i,project_id:proj,plot:plot,zone:zone,level:level,type:type,name:r.name,content:r.content,
       status:status,ns:false,by_eng:wipTaskSel.join(','),paid:'unpaid',notes:'',link:'',updated_at:now};
@@ -4155,15 +4230,15 @@ async function wipTaskSave(){
   btn.disabled=false; btn.textContent='Save Task';
   if(res.error){ showToast('خطأ — التاسك ماتسجلتش: '+res.error.message,true); return; }
   (res.data||[]).forEach(function(d){ if(!drws.some(function(x){ return x.id===d.id; })) drws.push(d); });
-  try{ await renum(); }catch(e){}
+  setCtx(proj); try{ await renum(); }catch(e){}
   // engineers typed here for the first time join the tracker's engineers list
   var sel=wipTaskSel.slice();
   for(var i=0;i<sel.length;i++){ if(wipEngKnown(sel[i])===null) await wipEngRegister(sel[i]); }
   // follow its Plot / Zone / Floor and open its card, so the new rows are on screen
   if(wipEl('ntFollow').checked&&plot){
-    var probe={plot:plot,zone:zone,level:level};
-    if(!wipWatch.some(function(w){ return wipMatch(w,probe); })) await wipFollow(probe);
-    wipOpen[plot+'\u0001'+zone+'\u0001'+level]=type;
+    var probe={project_id:proj,plot:plot,zone:zone,level:level};
+    if(!wipWatch.some(function(w){ return wipMatch(w,probe); })) await wipFollow({proj:proj,plot:plot,zone:zone,level:level});
+    wipOpen[proj+'\u0001'+plot+'\u0001'+zone+'\u0001'+level]=type;
   }
   wipTaskClose();
   wipRegister(); wipRenderAll();
@@ -4186,7 +4261,7 @@ function genWipPdf(){
     total+=s.rows.length;
     body+='<div class="sec" style="padding-bottom:0">';
     body+='<div style="background:'+s.color+';color:#fff;font-size:10px;font-weight:700;padding:6px 10px;border-radius:3px;page-break-after:avoid">'
-      +escHtml(wipTitle(s))+'<span style="float:right;font-size:8px;font-weight:600">'+wipCountTxt(s.rows)+' · '+st.pct+'%</span></div>';
+      +(projList().length>1?escHtml(projLabel(s.proj))+' · ':'')+escHtml(wipTitle(s))+'<span style="float:right;font-size:8px;font-weight:600">'+wipCountTxt(s.rows)+' · '+st.pct+'%</span></div>';
     s.tables.forEach(function(t){
       var ts=wipStats(t.rows);
       body+='<div style="font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:'+s.color+';margin:8px 0 3px;page-break-after:avoid">'
@@ -4271,7 +4346,7 @@ function wipInit(){
     x=t.closest('.wip-add1,.zn');
     if(x){
       var sc0=x.closest('.wip-sec'), k0=sc0?sc0.getAttribute('data-k'):null; if(k0===null) return;
-      if(x.classList.contains('zn')){ var s0=wipSecOf(k0); if(s0) wipTaskOpen({plot:s0.plot,zone:s0.zone,level:s0.level}); }
+      if(x.classList.contains('zn')){ var s0=wipSecOf(k0); if(s0) wipTaskOpen({proj:s0.proj,plot:s0.plot,zone:s0.zone,level:s0.level}); }
       else wipAddRow(k0,wipOpen[k0],null);
       return;
     }
@@ -4346,10 +4421,14 @@ window.addEventListener('load',wipInit);
 // limited by a date. The drawings it lists can be marked Paid / 50% / Unpaid in one go; payment is
 // the drawing's own Paid field.
 var ENG_DATES={received_date:'Received',start_date:'Start',target_date:'Target',del:'Delivery'};
-var engR={};              // engineer → {n1,n2}: the range typed for him (his own drawing numbers)
-var engKeys=[];           // the engineers shown in the statement box, by row
-var engPick={};           // engineer → {drawing id: true}: the lines ticked for him (none ticked = the whole range)
-var engLast={};           // engineer → the line ticked last (for shift-click)
+// One row of the statement = one engineer in one project (an engineer working in two projects gets two
+// tables). Ranges, ticks … are kept per row key "engineer\u0001project".
+var engR={};              // row key → {n1,n2}: the range typed for it (his own drawing numbers in that project)
+var engKeys=[];           // the rows shown in the statement box: {eng, proj, key}
+var engPick={};           // row key → {drawing id: true}: the lines ticked (none ticked = the whole range)
+var engLast={};           // row key → the line ticked last (for shift-click)
+function engRowKey(eng,proj){ return eng+'\u0001'+proj; }
+function engProjOk(d){ var f=wipEl('efProj'); return !f||!f.value||projOf(d)===f.value; }
 function engDates(){
   var dt=function(id){ var v=wipEl(id).value; return wipDateOk(v)?v:''; };
   return {d1:dt('efDateFrom'),d2:dt('efDateTo'),by:wipEl('efDateBy').value||'received_date'};
@@ -4369,14 +4448,14 @@ function engHas(d,eng){
 }
 function engBase(d){
   var fp=wipEl('efPlot').value, fz=wipEl('efZone').value, fl=wipEl('efLevel').value, ft=wipEl('efType').value;
-  return (!fp||(d.plot||'')===fp)&&(!fz||(d.zone||'')===fz)&&(!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft);
+  return engProjOk(d)&&(!fp||(d.plot||'')===fp)&&(!fz||(d.zone||'')===fz)&&(!fl||(d.level||'')===fl)&&(!ft||(d.type||'')===ft);
 }
-// all the drawings of one engineer in this project, in tracker order: position + 1 is "his drawing no."
-function engOwn(eng){ return sorted().filter(function(d){ return engHas(d,eng); }); }
-function engNum(eng,k){ var v=parseInt((engR[eng]||{})[k],10); return isNaN(v)?null:v; }
+// all the drawings of one engineer in one project, in tracker order: position + 1 is "his drawing no." there
+function engOwn(eng,proj){ return projDrws(proj).filter(function(d){ return engHas(d,eng); }); }
+function engNum(key,k){ var v=parseInt((engR[key]||{})[k],10); return isNaN(v)?null:v; }
 // one engineer's statement: {list: the drawings, seq: drawing id → his drawing no., total, noDate}
-function engStatement(eng){
-  var all=engOwn(eng), r=engDates(), n1=engNum(eng,'n1'), n2=engNum(eng,'n2'), seq={}, list=[], noDate=0;
+function engStatement(eng,proj){
+  var key=engRowKey(eng,proj), all=engOwn(eng,proj), r=engDates(), n1=engNum(key,'n1'), n2=engNum(key,'n2'), seq={}, list=[], noDate=0;
   all.forEach(function(d,i){
     var n=i+1; seq[d.id]=n;
     if((n1!==null&&n<n1)||(n2!==null&&n>n2)||!engBase(d)) return;
@@ -4386,10 +4465,10 @@ function engStatement(eng){
   // ticked lines narrow the statement to exactly those drawings
   // a drawing whose share for him is 0 is "not counted": listed (so it can be put back) but not in his statement
   var pay=list.filter(function(d){ return engShareOf(d,eng)>0; }), nx=list.length-pay.length;
-  var pk=engPick[eng]||{}, chosen=pay.filter(function(d){ return pk[d.id]; });
-  return {eng:eng,list:list,nx:nx,chosen:chosen.length?chosen:pay,npick:chosen.length,seq:seq,total:all.length,noDate:noDate,n1:n1,n2:n2};
+  var pk=engPick[key]||{}, chosen=pay.filter(function(d){ return pk[d.id]; });
+  return {eng:eng,proj:proj,key:key,list:list,nx:nx,chosen:chosen.length?chosen:pay,npick:chosen.length,seq:seq,total:all.length,noDate:noDate,n1:n1,n2:n2};
 }
-function engSubset(eng){ return engStatement(eng).chosen; }
+function engRowsOf(eng){ var f=wipEl('efProj'), fj=f?f.value:''; return projList().filter(function(p){ return (!fj||p===fj)&&engOwn(eng,p).length; }); }
 function engRangeText(st){
   var r=engDates(), p=[];
   if(st&&st.npick) p.push(st.npick+' selected drawing'+(st.npick!==1?'s':'')+' of '+st.total);
@@ -4409,6 +4488,7 @@ function engShare(sub,eng){
 function engRangeInit(){
   engR={}; engPick={}; engLast={};
   if(wipEl('engQ')) wipEl('engQ').value='';
+  engFillFilters(true); engPricesPaint();
   ['efDateFrom','efDateTo'].forEach(function(id){
     // only "input": a "change" fires when the field loses focus, and rebuilding the cards at that moment would swallow the click on an engineer
     var el=wipEl(id); el.value=''; el.oninput=buildEngCards;
@@ -4424,12 +4504,15 @@ function engRangeInit(){
 // the statement box: one row per selected engineer with his own "from drawing … to …"
 function engSummary(){
   var box=wipEl('engSum'); if(!box) return;
-  engKeys=Object.keys(selEngs);
-  if(!engKeys.length){ box.innerHTML='<p class="es-none">اختار مهندس من فوق، وبعدين حدد مستخلصه من لوحة رقم كام لحد كام.</p>'; return; }
+  var sel=Object.keys(selEngs);
+  engKeys=[];
+  sel.forEach(function(eng){ engRowsOf(eng).forEach(function(p){ engKeys.push({eng:eng,proj:p,key:engRowKey(eng,p)}); }); });
+  if(!sel.length){ box.innerHTML='<p class="es-none">اختار مهندس من فوق، وبعدين حدد مستخلصه من لوحة رقم كام لحد كام.</p>'; return; }
+  if(!engKeys.length){ box.innerHTML='<p class="es-none">مفيش لوحات للمهندس ده في المشروع اللي اخترته.</p>'; return; }
   var h='<div id="engRg" class="es-rg"></div>';
-  engKeys.forEach(function(eng,i){
-    var r=engR[eng]||{};
-    h+='<div class="es-row" data-i="'+i+'"><b>'+escHtml(eng)+'</b>'
+  engKeys.forEach(function(row,i){
+    var r=engR[row.key]||{}, eng=row.eng, pc=projCfg(row.proj);
+    h+='<div class="es-row" data-i="'+i+'"><b>'+escHtml(eng)+'</b><span class="es-pj" style="background:'+pc.color+'">'+escHtml(pc.label)+'</span>'
       +'<label>من لوحة رقم <input type="number" min="1" class="es-in" data-k="n1" value="'+escHtml(r.n1||'')+'" placeholder="1" oninput="engRowIn(this)"/></label>'
       +'<label>لحد <input type="number" min="1" class="es-in" data-k="n2" value="'+escHtml(r.n2||'')+'" oninput="engRowIn(this)"/></label>'
       +'<span class="es-stat"></span></div><div class="es-tb" data-i="'+i+'"></div>';
@@ -4442,9 +4525,9 @@ function engStats(light){
   if(!light) engShareHide();
   var box=wipEl('engSum'); if(!box||!engKeys.length) return;
   var rows=box.querySelectorAll('.es-row'), tbs=box.querySelectorAll('.es-tb'), all={}, noDate=0, r=engDates();
-  engKeys.forEach(function(eng,i){
-    var row=rows[i]; if(!row) return;
-    var st=engStatement(eng), sub=st.chosen, c=engPaidCount(sub), h;
+  engKeys.forEach(function(rk,i){
+    var row=rows[i], eng=rk.eng; if(!row) return;
+    var st=engStatement(eng,rk.proj), sub=st.chosen, c=engPaidCount(sub), mo=engMoney(sub,eng), h;
     sub.forEach(function(d){ all[d.id]=d; }); noDate+=st.noDate;
     row.querySelector('[data-k="n2"]').placeholder=st.total||'';
     h='<span class="es-n">من '+st.total+' لوحة ليه ·</span>';
@@ -4453,10 +4536,12 @@ function engStats(light){
       h+=(st.npick?'<span class="es-n es-pkn">محدد <b>'+st.npick+'</b> من '+st.list.length+' لوحة · نصيبه '+engShare(sub,eng)+'</span><button type="button" class="es-qc" onclick="engPickClear('+i+')">الغي التحديد</button>'
                   :'<span class="es-n">المستخلص <b>'+sub.length+'</b> لوحة · نصيبه '+engShare(sub,eng)+'</span>')
         +(st.nx?'<span class="es-n es-nx">'+st.nx+' مش محسوبة</span>':'')
-        +'<span class="bdg bup">Unpaid '+c.unpaid+'</span><span class="bdg bhf">50% '+c.half+'</span><span class="bdg bpd">Paid '+c.paid+'</span>';
+        +'<span class="bdg bup">Unpaid '+c.unpaid+'</span><span class="bdg bhf">50% '+c.half+'</span><span class="bdg bpd">Paid '+c.paid+'</span>'
+        +(mo.due?'<span class="es-mo">المستحق <b>'+engM(mo.due)+'</b> · اتدفع <b class="g">'+engM(mo.paid)+'</b> · باقي <b class="r">'+engM(mo.due-mo.paid)+'</b></span>':'')
+        +(mo.unpriced&&mo.due?'<span class="es-n es-nx">'+mo.unpriced+' لوحة من غير سعر</span>':'');
     }
     // shortcut: start from his first drawing that is not fully paid
-    var first=0; engOwn(eng).some(function(d,k){ if(d.paid!=='paid'){ first=k+1; return true; } return false; });
+    var first=0; engOwn(eng,rk.proj).some(function(d,k){ if(d.paid!=='paid'){ first=k+1; return true; } return false; });
     if(first>1&&st.n1!==first) h+='<button type="button" class="es-q" onclick="engFrom('+i+','+first+')">ابدأ من أول لوحة لسه متدفعتش <span dir="ltr">('+first+')</span></button>';
     row.querySelector('.es-stat').innerHTML=h;
     if(tbs[i]){ if(!light) tbs[i].innerHTML=engTable(st,r); engPickPaint(tbs[i],st); }
@@ -4464,7 +4549,7 @@ function engStats(light){
   var n=Object.keys(all).length, rt=engRangeText(null), f='';
   wipEl('engRg').textContent=rt; wipEl('engRg').style.display=rt?'':'none';
   if(noDate) f+='<p class="es-warn">'+noDate+' لوحة ملهاش تاريخ '+ENG_DATES[r.by]+'، فمش داخلة في المستخلص. لو عايزها، شيل التاريخ واستخدم رقم اللوحة.</p>';
-  var anyPick=engKeys.some(function(eng){ return engStatement(eng).npick>0; });
+  var anyPick=engKeys.some(function(rk){ return engStatement(rk.eng,rk.proj).npick>0; });
   if(n) f+='<div class="es-act"><span>حالة الدفع للـ '+n+' لوحة '+(anyPick?'المحددة':'دي')+':</span>'
     +'<button type="button" class="btn" style="background:#1E8449;color:#fff" onclick="engMarkPaid(\'paid\')">&#10003; 100% Paid</button>'
     +'<button type="button" class="btn" style="background:#D35400;color:#fff" onclick="engMarkPaid(\'half\')">50% Paid</button>'
@@ -4482,8 +4567,8 @@ function engCardStats(){
     if(!engBase(d)||!engDateOk(d,r)) return;
     var list=(d.by_eng||'Unassigned').split(',').map(function(e){return e.trim();}).filter(Boolean);
     if(!list.length) list=['Unassigned'];
-    var shm=engSharesOf(d), pf=d.paid==='paid'?1:d.paid==='half'?0.5:0;
-    list.forEach(function(e){ var sh=shm[e]||0, o=m[e]=m[e]||{n:0,paid:0}; o.n+=sh; o.paid+=sh*pf; });
+    var shm=engSharesOf(d), pf=d.paid==='paid'?1:d.paid==='half'?0.5:0, pr=engPriceOf(d);
+    list.forEach(function(e){ var sh=shm[e]||0, o=m[e]=m[e]||{n:0,paid:0,due:0,got:0}; o.n+=sh; o.paid+=sh*pf; if(pr!==null){ o.due+=sh*pr; o.got+=sh*pr*pf; } });
   });
   return m;
 }
@@ -4519,7 +4604,8 @@ function engCardsPaint(){
     c.style.setProperty('--p',(o.n?o.paid*100/o.n:0).toFixed(2)+'%');
     var el=c.querySelector('.eng-pay');
     if(!el){ el=document.createElement('div'); el.className='eng-pay'; c.appendChild(el); }
-    el.innerHTML='<b>'+pct+'%</b><span><i class="g">Paid '+engNum2(o.paid)+'</i><i class="r">Unpaid '+engNum2(left)+'</i></span>';
+    el.innerHTML='<b>'+pct+'%</b><span><i class="g">Paid '+engNum2(o.paid)+'</i><i class="r">Unpaid '+engNum2(left)+'</i></span>'
+      +(o.due?'<span class="eng-amt"><i class="g">'+engM(o.got)+'</i> / '+engM(o.due)+'</span>':'');
     c.title=engNum2(o.paid)+' paid of '+engNum2(o.n)+' drawings — '+engNum2(left)+' still unpaid';
   });
 }
@@ -4548,7 +4634,7 @@ function engShared(d){ return (d.by_eng||'').split(',').map(function(e){return e
 function engTable(st,r){
   if(!st.list.length) return '';
   var C=engCols(), dl=ENG_DATES[r.by]||'Received';
-  var h='<table class="es-t"><thead><tr><th class="es-ck"><input type="checkbox" class="es-ca" title="حدد الكل / الغي الكل" onclick="engPickAll(this)"/></th>'+(C.num?'<th class="es-no">#</th>':'')+(C.loc?'<th>Plot / Zone / Floor</th>':'')+(C.type?'<th>Type</th>':'')+(C.no?'<th>DWG No.</th>':'')
+  var h='<table class="es-t"><thead><tr><th class="es-ck"><input type="checkbox" class="es-ca" title="حدد الكل / الغي الكل" onclick="engPickAll(this)"/></th>'+(C.num?'<th class="es-no">#</th>':'')+(C.loc?'<th>'+escHtml(projCfg(st.proj).col1+' / '+projCfg(st.proj).col2+' / Floor')+'</th>':'')+(C.type?'<th>Type</th>':'')+(C.no?'<th>DWG No.</th>':'')
     +(C.name?'<th>Board Name</th>':'')+(C.content?'<th>Content</th>':'')+(C.status?'<th>Status</th>':'')+(C.date?'<th>'+dl+'</th>':'')+(C.paid?'<th class="es-ph">Paid</th>':'')+'</tr></thead><tbody>';
   st.list.forEach(function(d){
     var s=wipStatus(d), c=wipStColor(s), p=engPaidOf(d), n=engShared(d), dv=wipIso(d[r.by]);
@@ -4564,14 +4650,14 @@ function engTable(st,r){
       +(C.content?'<td class="es-ct">'+escHtml(d.content||'-')+'</td>':'')
       +(C.status?'<td><span class="es-st" style="color:'+c.fg+';background:'+c.bg+'">'+escHtml(s)+'</span></td>':'')
       +(C.date?'<td class="es-nw">'+(dv?fd(dv):'-')+'</td>':'')
-      +(C.paid?'<td class="es-pc">'+fx+'<span class="es-pp p-'+p+'" data-id="'+escHtml(d.id)+'">'+btn('unpaid','Unpaid')+btn('half','50%')+btn('paid','Paid')+'</span></td>':'')+'</tr>';
+      +(C.paid?'<td class="es-pc">'+fx+engPriceChip(d,v)+'<span class="es-pp p-'+p+'" data-id="'+escHtml(d.id)+'">'+btn('unpaid','Unpaid')+btn('half','50%')+btn('paid','Paid')+'</span></td>':'')+'</tr>';
   });
   return h+'</tbody></table>';
 }
 // the same table for the PDF (plus the comment rounds, when asked for)
 function engPdfTbl(st){
   var C=engCols(), r=engDates(), dl=ENG_DATES[r.by]||'Received';
-  var th='<tr>'+(C.num?'<th class="gp" style="width:1%">#</th>':'')+(C.loc?'<th class="gp">Plot / Zone / Floor</th>':'')+(C.type?'<th class="gp">Type</th>':'')+(C.no?'<th class="gs">DWG No.</th>':'')
+  var th='<tr>'+(C.num?'<th class="gp" style="width:1%">#</th>':'')+(C.loc?'<th class="gp">'+escHtml(projCfg(st.proj).col1+' / '+projCfg(st.proj).col2+' / Floor')+'</th>':'')+(C.type?'<th class="gp">Type</th>':'')+(C.no?'<th class="gs">DWG No.</th>':'')
     +(C.name?'<th class="gs">Board Name</th>':'')+(C.content?'<th class="gp">Content</th>':'')+(C.status?'<th class="gs">Status</th>':'')+(C.date?'<th class="gp">'+dl+'</th>':'')
     +(C.cm?'<th class="g1">R1 Recv</th><th class="g1">R1 Reply</th><th class="g1">R1 Status</th><th class="g2">R2 Recv</th><th class="g2">R2 Reply</th><th class="g2">R2 Status</th>':'')
     +(C.paid?'<th class="gm" style="width:1%">Paid</th>':'')+'</tr>', rows='';
@@ -4587,7 +4673,7 @@ function engPdfTbl(st){
       +(C.status?'<td style="font-size:7px;font-weight:700">'+escHtml(wipStatus(d))+'</td>':'')
       +(C.date?'<td style="white-space:nowrap">'+(dv?fd(dv):'-')+'</td>':'')
       +(C.cm?'<td>'+fd(d.r1r)+'</td><td>'+fd(d.r1p)+'</td><td>'+mkBdg(rs(d.r1r,d.r1p,d.r1nc))+'</td><td>'+fd(d.r2r)+'</td><td>'+fd(d.r2p)+'</td><td>'+mkBdg(rs(d.r2r,d.r2p,d.r2nc))+'</td>':'')
-      +(C.paid?'<td style="white-space:nowrap;text-align:center"><span style="display:inline-block;min-width:26px;font-weight:700;color:'+(v!==1?'#B7791F':'#7F8C8D')+'">×'+engFx(v)+'</span> '+mkPb(d.paid)+'</td>':'')+'</tr>';
+      +(C.paid?'<td style="white-space:nowrap;text-align:center"><span style="display:inline-block;min-width:26px;font-weight:700;color:'+(v!==1?'#B7791F':'#7F8C8D')+'">×'+engFx(v)+'</span> '+(engPriceOf(d)!==null?'<span style="font-weight:700;color:#1A5276">'+engM(engPriceOf(d)*v)+'</span> ':'')+mkPb(d.paid)+'</td>':'')+'</tr>';
   });
   return '<table><thead>'+th+'</thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="30" class="tot">TOTAL: '+st.chosen.length+' DRAWINGS | SUSTRA</td></tr></tfoot></table>';
 }
@@ -4619,7 +4705,7 @@ function engShareHide(){
 function engShareShow(btn){
   if(engShareBox&&engShareBox.btn===btn){ engShareHide(); return; }
   engShareHide();
-  var tr=btn.closest('tr'), id=tr?tr.getAttribute('data-id'):null, me=engPickEng(btn), d=null;
+  var tr=btn.closest('tr'), id=tr?tr.getAttribute('data-id'):null, rk=engPickEng(btn), me=rk?rk.eng:undefined, d=null;
   drws.some(function(x){ if(String(x.id)===id){ d=x; return true; } return false; });
   if(!d) return;
   var names=wipEngList(d.by_eng), cur=engSharesOf(d), can=wipSharesCol===true, eq=engFx(1/Math.max(1,names.length));
@@ -4682,7 +4768,7 @@ document.addEventListener('mousedown',function(e){ if(engShareBox&&!engShareBox.
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&engShareBox) engShareHide(); });
 // ── ticking lines: exactly which drawings go into the statement ──
 function engPickPaint(tb,st){
-  var pk=engPick[st.eng]||{}, n=0;
+  var pk=engPick[st.key]||{}, n=0;
   Array.prototype.forEach.call(tb.querySelectorAll('tbody tr'),function(tr){
     var on=!!pk[tr.getAttribute('data-id')], c=tr.querySelector('.es-c');
     if(on) n++; tr.classList.toggle('pk',on); if(c) c.checked=on;
@@ -4691,8 +4777,8 @@ function engPickPaint(tb,st){
 }
 function engPickEng(el){ var tb=el.closest('.es-tb'); return tb?engKeys[+tb.getAttribute('data-i')]:undefined; }
 function engPickOne(el,ev){
-  var eng=engPickEng(el); if(eng===undefined) return;
-  var pk=engPick[eng]=engPick[eng]||{}, tr=el.closest('tr'), id=tr.getAttribute('data-id'), on=el.checked;
+  var rk=engPickEng(el); if(rk===undefined) return;
+  var eng=rk.key, pk=engPick[eng]=engPick[eng]||{}, tr=el.closest('tr'), id=tr.getAttribute('data-id'), on=el.checked;
   var trs=Array.prototype.slice.call(tr.parentNode.children), i=trs.indexOf(tr), from=i;
   // shift-click: everything between the line ticked last and this one
   if(ev&&ev.shiftKey&&engLast[eng]){ trs.some(function(x,k){ if(x.getAttribute('data-id')===engLast[eng]){ from=k; return true; } return false; }); }
@@ -4701,27 +4787,27 @@ function engPickOne(el,ev){
   engStats(true);
 }
 function engPickAll(el){
-  var eng=engPickEng(el); if(eng===undefined) return;
-  var pk=engPick[eng]={};                      // un-ticking all also drops ticks left outside the current range
-  if(el.checked) engStatement(eng).list.forEach(function(d){ pk[d.id]=true; });
+  var rk=engPickEng(el); if(rk===undefined) return;
+  var pk=engPick[rk.key]={};                   // un-ticking all also drops ticks left outside the current range
+  if(el.checked) engStatement(rk.eng,rk.proj).list.forEach(function(d){ pk[d.id]=true; });
   engStats(true);
 }
-function engPickClear(i){ var eng=engKeys[i]; if(eng===undefined) return; engPick[eng]={}; delete engLast[eng]; engStats(true); }
+function engPickClear(i){ var rk=engKeys[i]; if(rk===undefined) return; engPick[rk.key]={}; delete engLast[rk.key]; engStats(true); }
 function engRowIn(el){
-  var eng=engKeys[+el.closest('.es-row').getAttribute('data-i')]; if(eng===undefined) return;
-  (engR[eng]=engR[eng]||{})[el.getAttribute('data-k')]=el.value;
+  var rk=engKeys[+el.closest('.es-row').getAttribute('data-i')]; if(rk===undefined) return;
+  (engR[rk.key]=engR[rk.key]||{})[el.getAttribute('data-k')]=el.value;
   engStats();
 }
 function engFrom(i,n){
-  var eng=engKeys[i]; if(eng===undefined) return;
-  (engR[eng]=engR[eng]||{}).n1=String(n);
+  var rk=engKeys[i]; if(rk===undefined) return;
+  (engR[rk.key]=engR[rk.key]||{}).n1=String(n);
   engSummary();
 }
 // a change that arrives from the tracker while the report is open (someone else marked a drawing paid)
 var engSig='';
 function engSigNow(){
   var r=engDates();
-  return engKeys.map(function(eng){ var st=engStatement(eng); return eng+'#'+st.total+'#'+st.list.map(function(d){ return d.id+'|'+(d.paid||'')+'|'+(d.status||'')+'|'+(d[r.by]||'')+'|'+(d.content||'')+'|'+(d.name||''); }).join(','); }).join(';');
+  return engKeys.map(function(rk){ var st=engStatement(rk.eng,rk.proj); return rk.key+'#'+st.total+'#'+st.list.map(function(d){ return d.id+'|'+(d.paid||'')+'|'+(d.status||'')+'|'+(d[r.by]||'')+'|'+(d.content||'')+'|'+(d.name||'')+'|'+(d.price===undefined?'':d.price)+'|'+(d.shares||''); }).join(','); }).join(';');
 }
 function engOnData(){
   var v=wipEl('vEng');
@@ -4732,7 +4818,7 @@ var engMarking=false;
 async function engMarkPaid(val){
   if(engMarking) return;
   var keys=Object.keys(selEngs), all={}, shared=0;
-  keys.forEach(function(eng){ engSubset(eng).forEach(function(d){ all[d.id]=d; }); });
+  engKeys.forEach(function(rk){ engStatement(rk.eng,rk.proj).chosen.forEach(function(d){ all[d.id]=d; }); });
   var list=Object.keys(all).map(function(k){ return all[k]; }).filter(function(d){ return (d.paid||'unpaid')!==val; });
   var label='⁦'+pv(val).l+'⁩', total=Object.keys(all).length;
   if(!total){ showToast('مفيش لوحات في المستخلص ده',true); return; }
@@ -4758,6 +4844,109 @@ async function engMarkPaid(val){
   engStats();
   if(failed) showToast('خطأ — '+failed+' لوحة ماتغيرتش، جرّب تاني',true);
   else showToast('✓ '+list.length+' لوحة بقت '+label);
+}
+
+// ══════════════════════════════════════════
+//  PROJECTS AND PRICES in the payments screen
+// ══════════════════════════════════════════
+// A drawing is worth its own price (drawings.price) or, when it has none, its project's price.
+function engPriceOf(d){
+  if(d.price!==null&&d.price!==undefined&&d.price!==''&&!isNaN(+d.price)) return +d.price;
+  var p=projCfg(projOf(d)).price; return typeof p==='number'?p:null;
+}
+function engM(v){ return (+v).toLocaleString('en-US',{maximumFractionDigits:2}); }
+function engMoney(sub,eng){
+  var o={due:0,paid:0,unpriced:0};
+  sub.forEach(function(d){ var pr=engPriceOf(d), sh=engShareOf(d,eng), pf=d.paid==='paid'?1:d.paid==='half'?0.5:0; if(pr===null){ o.unpriced++; return; } o.due+=sh*pr; o.paid+=sh*pr*pf; });
+  return o;
+}
+function engPriceChip(d,v){
+  var pr=engPriceOf(d), own=d.price!==null&&d.price!==undefined&&d.price!=='';
+  return '<button type="button" class="es-pr'+(own?' own':'')+(pr===null?' none':'')+'" onclick="engPriceShow(this)" title="'+(pr===null?'مفيش سعر — اضغط تحدده':'قيمة نصيبه: '+engM(pr*v)+' (سعر اللوحة '+engM(pr)+(own?' — سعر خاص باللوحة دي':' — سعر المشروع')+')')+'">'+(pr===null?'سعر؟':engM(pr*v))+'</button>';
+}
+// the projects filter and the other filters follow the chosen project
+function engFillFilters(reset){
+  var fj=wipEl('efProj'); if(!fj) return;
+  if(reset) fj.value='';
+  wipSetOpts(fj,[['','كل المشاريع']].concat(projList().map(function(p){ return [p,projLabel(p)]; })));
+  var D=fj.value?projDrws(fj.value):drws, sets={plot:{},zone:{},level:{},type:{}};
+  D.forEach(function(d){ for(var k in sets){ if(d[k]) sets[k][d[k]]=1; } });
+  [['efPlot','plot'],['efZone','zone'],['efLevel','level'],['efType','type']].forEach(function(x){
+    wipSetOpts(wipEl(x[0]),[['','All']].concat(Object.keys(sets[x[1]]).sort().map(function(v){ return [v,v]; })));
+  });
+  var c=fj.value?projCfg(fj.value):{col1:'Plot',col2:'Zone'};
+  var lp=wipEl('eflPlot'), lz=wipEl('eflZone'); if(lp) lp.textContent=c.col1; if(lz) lz.textContent=c.col2;
+  fj.onchange=function(){ engFillFilters(); buildEngCards(); };
+}
+function engPricesPaint(){
+  var box=wipEl('engPrices'); if(!box) return;
+  box.innerHTML=projList().map(function(p){
+    var c=projCfg(p);
+    return '<label class="ep-p"><i style="background:'+c.color+'"></i><b dir="ltr">'+escHtml(c.label)+'</b><input type="number" min="0" step="any" data-p="'+escHtml(p)+'" value="'+(typeof c.price==='number'?c.price:'')+'" placeholder="سعر اللوحة"'+(projDb===true?'':' disabled title="محتاج جدول المتابعة (wip_watch)"')+'/></label>';
+  }).join('')+'<small>سعر اللوحة الافتراضي لكل مشروع — وتقدر تغيّر سعر لوحة معينة من خانة الـ Paid</small>';
+  Array.prototype.forEach.call(box.querySelectorAll('input[data-p]'),function(inp){
+    inp.onchange=async function(){
+      var p=inp.getAttribute('data-p'), v=inp.value===''?null:+inp.value;
+      if(v!==null&&(isNaN(v)||v<0)){ showToast('السعر لازم يكون رقم',true); return; }
+      var cur=projCfg(p).price; if((typeof cur==='number'?cur:null)===v) return;
+      var err=await projSave(p,{price:v});
+      if(err){ showToast('خطأ — السعر ماتحفظش: '+err,true); return; }
+      showToast('✓ سعر لوحة '+projLabel(p)+' بقى '+(v===null?'من غير سعر':engM(v)));
+      engStats(); engCardsPaint();
+    };
+  });
+}
+// a price for one drawing (instead of its project's price)
+function engPriceShow(btn){
+  if(engShareBox&&engShareBox.btn===btn){ engShareHide(); return; }
+  engShareHide();
+  var tr=btn.closest('tr'), id=tr?tr.getAttribute('data-id'):null, d=drws.find(function(x){ return String(x.id)===id; }); if(!d) return;
+  var pp=projCfg(projOf(d)).price, own=d.price!==null&&d.price!==undefined&&d.price!=='', can=wipPriceCol===true;
+  var el=document.createElement('div'); el.id='engShare'; el.setAttribute('dir','rtl');
+  el.innerHTML='<div class="sh-h">سعر اللوحة <b dir="ltr">'+escHtml(drwNo(d.name))+'</b> — '+escHtml(projLabel(projOf(d)))+'</div>'
+    +'<div class="sh-r"><b>سعر اللوحة دي</b><input type="number" min="0" step="any" id="engPrIn" value="'+(own?+d.price:'')+'" placeholder="'+(typeof pp==='number'?engM(pp):'')+'"'+(can?'':' disabled')+'/></div>'
+    +'<div class="sh-n">سعر المشروع: <b dir="ltr">'+(typeof pp==='number'?engM(pp):'مش متحدد')+'</b> — لو سبتها فاضية بياخد سعر المشروع.</div>'
+    +(can?'<div class="sh-btns"><button type="button" class="btn bt" data-a="save">حفظ</button>'+(own?'<button type="button" class="btn bo" data-a="reset">رجّعها لسعر المشروع</button>':'')+'</div>'
+      :'<div class="sh-n">عشان يتحفظ سعر لوحة معينة محتاج خطوة SQL واحدة (بتظهر فوق في Work in Progress).</div>');
+  document.body.appendChild(el); wipPlace(el,btn); btn.classList.add('on');
+  engShareBox={el:el,btn:btn};
+  var inp=wipEl('engPrIn');
+  el.addEventListener('click',function(e){
+    var x=e.target.closest?e.target.closest('button[data-a]'):null; if(!x) return;
+    if(x.getAttribute('data-a')==='reset'){ engPriceSave(d,null); return; }
+    var v=inp.value===''?null:+inp.value;
+    if(v!==null&&(isNaN(v)||v<0)){ showToast('السعر لازم يكون رقم',true); return; }
+    engPriceSave(d,v);
+  });
+  el.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); var sv=el.querySelector('button[data-a="save"]'); if(sv) sv.click(); } });
+  if(can) setTimeout(function(){ inp.focus(); inp.select(); },30);
+}
+async function engPriceSave(d,v){
+  engShareHide();
+  var old=d.price===undefined?null:d.price;
+  if((old===null||old==='')&&v===null) return;
+  if(old!==null&&old!==''&&v!==null&&+old===v) return;
+  d.price=v; dataEpoch++; wipPending++;
+  setSyncStatus('loading'); engStats();
+  var res; try{ res=await supabase.from('drawings').update({price:v,updated_at:new Date().toISOString()}).eq('id',d.id); }catch(e){ res={error:e}; }
+  var bad=!res||res.error||!res.data||!res.data.length;
+  if(bad) d.price=old;
+  wipPending--; dataEpoch++;
+  if(!wipPending) setSyncStatus(bad?'off':'on');
+  render(); engStats();
+  showToast(bad?'خطأ — السعر ماتحفظش':'✓ سعر اللوحة اتحفظ',bad);
+}
+// the PDF: one section per engineer per project
+function engPdfBody(eng){
+  var out='';
+  engRowsOf(eng).forEach(function(p){
+    var st=engStatement(eng,p), sub=st.chosen; if(!sub.length) return;
+    var pc=engPaidCount(sub), rg=engRangeText(st), mo=engMoney(sub,eng);
+    out+='<div class="sec"><div class="sec-title">'+escHtml(eng)+' — '+escHtml(projLabel(p))+'<span class="sec-badge">'+engShare(sub,eng)+' / '+sub.length+' drawings</span>'
+      +'<span style="float:right;font-size:8px;font-weight:600;color:#52514E">'+(rg?escHtml(rg)+' &nbsp;|&nbsp; ':'')+'Unpaid '+pc.unpaid+' · 50% '+pc.half+' · Paid '+pc.paid
+      +(mo.due?' &nbsp;|&nbsp; Due '+engM(mo.due)+' · Paid '+engM(mo.paid)+' · Left '+engM(mo.due-mo.paid):'')+'</span></div>'+engPdfTbl(st)+'</div>';
+  });
+  return out;
 }
 
 // ══════════════════════════════════════════
@@ -4789,7 +4978,7 @@ function wipNextName(rows){
 function wipExpandNo(d,v){
   if(!/^\d{3,}$/.test(v)) return v;
   var same=function(f){ return function(x){ return wn(x[f])===wn(d[f]); }; }, all=sorted().filter(function(x){ return x.id!==d.id; });
-  var pools=[['plot','zone','level','type'],['plot','zone','level'],['plot','zone'],['plot']];
+  var pools=[['project_id','plot','zone','level','type'],['project_id','plot','zone','level'],['project_id','plot','zone'],['project_id','plot']];
   for(var i=0;i<pools.length;i++){
     var rows=all.filter(function(x){ return pools[i].every(function(f){ return same(f)(x); }); });
     for(var k=rows.length-1;k>=0;k--){ var p=wipNoParts(rows[k].name); if(p) return p.pre+v+p.post; }
@@ -4802,7 +4991,7 @@ async function wipAddRow(key,tk,srcId){
   var s=wipSecOf(key), t=null; if(!s) return;
   s.tables.forEach(function(x){ if(x.tk===tk) t=x; }); if(!t) return;
   var src=srcId?drws.find(function(x){ return x.id===srcId; }):null;
-  var rec={num:drws.length+1,project_id:wipProj(),plot:s.plot,zone:s.zone,level:s.level,type:t.type,name:'',content:'',
+  var rec={num:projDrws(s.proj).length+1,project_id:s.proj,plot:s.plot,zone:s.zone,level:s.level,type:t.type,name:'',content:'',
     status:'NOT STARTED',ns:false,by_eng:'',paid:'unpaid',notes:'',link:'',updated_at:new Date().toISOString()};
   if(wipTargetCol===true) rec.target_date=null;
   if(wipDatesCol===true){ rec.start_date=null; rec.received_date=null; }
@@ -4826,7 +5015,7 @@ async function wipAddRow(key,tk,srcId){
   if(res.error||!res.data||!res.data.length){ showToast('خطأ — السطر ماتضافش: '+((res.error&&res.error.message)||''),true); return; }
   var d=res.data[0];
   if(!drws.some(function(x){ return x.id===d.id; })) drws.push(d);
-  try{ await renum(); }catch(e){}
+  setCtx(s.proj); try{ await renum(); }catch(e){}
   wipOpen[key]=tk;
   wipRegister(); wipEngClose(true); wipDateClose(true); wipMenuClose();
   var a=document.activeElement; if(a&&a.blur&&wipEl('wipBody').contains(a)) a.blur();
@@ -4851,7 +5040,7 @@ async function wipDelete(id){
   if(!wipPending) setSyncStatus(res.error?'off':'on');
   if(res.error){ showToast('خطأ في المسح: '+res.error.message,true); return; }
   drws=drws.filter(function(x){ return x.id!==id; });
-  try{ await renum(); }catch(e){}
+  setCtx(projOf(d)); try{ await renum(); }catch(e){}
   wipRegister(); wipMenuClose(); renderWip(); wipTeamRender(); wipDashRender();
   showToast('🗑 اتمسحت من التراكر');
 }
@@ -4899,25 +5088,28 @@ var wipHide={};            // "plot\u0001zone\u0001level\u0001TYPE" → row id (
 var wipHideDb=null;        // true: in the tracker · false: this browser only
 var wipHideBusy=0;
 function wipHideProj(p){ return '__TYPE_OFF__|'+(p||wipProj()); }
+// key of a hidden type: project · plot · zone · level · TYPE
 function wipHideHas(key,tk){ return Object.prototype.hasOwnProperty.call(wipHide,key+'\u0001'+tk); }
-function wipHideLsKey(){ return 'sustra_wip_typeoff::'+wipProj(); }
-function wipHideLocal(){ try{ var a=JSON.parse(localStorage.getItem(wipHideLsKey())||'[]'); return Array.isArray(a)?a.filter(function(x){ return typeof x==='string'&&x.split('\u0001').length===4; }):[]; }catch(e){ return []; } }
+function wipHideLsKey(){ return 'sustra_wip_typeoff::all'; }
+function wipHideLocal(){ try{ var a=JSON.parse(localStorage.getItem(wipHideLsKey())||'[]'); return Array.isArray(a)?a.filter(function(x){ return typeof x==='string'&&x.split('\u0001').length===5; }):[]; }catch(e){ return []; } }
 function wipHideStore(){ if(wipHideDb!==true){ try{ localStorage.setItem(wipHideLsKey(),JSON.stringify(Object.keys(wipHide))); }catch(e){} } }
-function wipHideRow(k){ var p=k.split('\u0001'); return {project_id:wipHideProj(),plot:p[0],zone:p[1],level:p[2]+'||'+p[3],created_by:wipMe()}; }
+function wipHideRow(k){ var p=k.split('\u0001'); return {project_id:wipHideProj(p[0]),plot:p[1],zone:p[2],level:p[3]+'||'+p[4],created_by:wipMe()}; }
 async function wipHideLoad(){
-  var proj=wipProj(), res;
-  try{ res=await supabase.from('wip_watch').select('*').eq('project_id',wipHideProj(proj)).order('created_at',{ascending:true}); }
-  catch(e){ return; }                                   // offline: keep what we have
-  if(proj!==wipProj()||wipHideBusy) return;             // a hide / show is being saved — the next poll will do
-  if(res.error){
-    if(/wip_watch|schema cache|does not exist|42P01|PGRST205/i.test(res.error.message||'')){ wipHideDb=false; wipHide={}; wipHideLocal().forEach(function(k){ wipHide[k]=null; }); }
-    return;
+  var res, m={}, ps=projList();
+  for(var pi=0;pi<ps.length;pi++){
+    try{ res=await supabase.from('wip_watch').select('*').eq('project_id',wipHideProj(ps[pi])).order('created_at',{ascending:true}); }
+    catch(e){ return; }                                 // offline: keep what we have
+    if(wipHideBusy) return;                             // a hide / show is being saved — the next poll will do
+    if(res.error){
+      if(/wip_watch|schema cache|does not exist|42P01|PGRST205/i.test(res.error.message||'')){ wipHideDb=false; wipHide={}; wipHideLocal().forEach(function(k){ wipHide[k]=null; }); }
+      return;
+    }
+    (res.data||[]).forEach(function(r){
+      var lv=wn(r.level), i=lv.lastIndexOf('||'); if(i<0||!wn(r.plot)) return;
+      m[[ps[pi],wn(r.plot),wn(r.zone),lv.slice(0,i),lv.slice(i+2)].join('\u0001')]=r.id;
+    });
   }
-  var m={};
-  (res.data||[]).forEach(function(r){
-    var lv=wn(r.level), i=lv.lastIndexOf('||'); if(i<0||!wn(r.plot)) return;
-    m[[wn(r.plot),wn(r.zone),lv.slice(0,i),lv.slice(i+2)].join('\u0001')]=r.id;
-  });
+  var proj=wipProj();
   wipHideDb=true; wipHide=m;
   // types hidden in this browser before the table existed move into the tracker once
   var loc=wipHideLocal().filter(function(k){ return !Object.prototype.hasOwnProperty.call(m,k); });
@@ -5042,7 +5234,7 @@ async function wipReorder(key,ids,keepId){
   wipOrdering=true;
   var nums=t.rows.map(function(d){ return d.num; }), uniq={};
   // every line needs its own tracker number to trade places with
-  if(nums.some(function(n){ var bad=!n||uniq[n]; uniq[n]=1; return bad; })){ try{ await renum(); }catch(e){} nums=t.rows.map(function(d){ return d.num; }); }
+  if(nums.some(function(n){ var bad=!n||uniq[n]; uniq[n]=1; return bad; })){ setCtx(s.proj); try{ await renum(); }catch(e){} nums=t.rows.map(function(d){ return d.num; }); }
   nums.sort(function(a,b){ return a-b; });
   var ch=[];
   ids.forEach(function(x,i){ var d=by[x]; if(d.num!==nums[i]) ch.push({d:d,from:d.num,to:nums[i]}); });
@@ -5074,8 +5266,9 @@ async function wipReorder(key,ids,keepId){
 //  INSERT A DRAWING AT A PLACE in the Drawing Register (any project)
 // ══════════════════════════════════════════
 var insAfter=null;         // tracker number the new drawing goes right after (0 = at the top); null = a normal "Add Drawing"
-function goAddAfter(id){
+function goAddAfter(id,proj){
   var d=id?drws.find(function(x){ return String(x.id)===String(id); }):null;
+  setCtx(d?projOf(d):(proj||currentProject));
   goAdd();
   insAfter=d?(d.num||0):0;
   if(d){
@@ -5090,7 +5283,7 @@ function goAddAfter(id){
 }
 // every drawing from number n on moves one place down, so the new one can take number n
 async function regShiftFrom(n){
-  var list=drws.filter(function(d){ return (d.num||0)>=n; }), failed=0, now=new Date().toISOString();
+  var list=sorted().filter(function(d){ return (d.num||0)>=n; }), failed=0, now=new Date().toISOString();     // this project only
   dataEpoch++; wipPending++;
   for(var i=0;i<list.length;i+=10){
     await Promise.all(list.slice(i,i+10).map(function(d){
@@ -5151,7 +5344,7 @@ function wipSumInit(){
 // from a list to the drawing in its own type table
 function wipJumpTo(id){
   var d=drws.find(function(x){ return String(x.id)===String(id); }); if(!d) return;
-  var key=wn(d.plot)+'\u0001'+wn(d.zone)+'\u0001'+wn(d.level), s=wipSecOf(key);
+  var key=projOf(d)+'\u0001'+wn(d.plot)+'\u0001'+wn(d.zone)+'\u0001'+wn(d.level), s=wipSecOf(key);
   if(!s){ showToast('الـ Plot / Zone / Floor بتاعها مش في المتابعة — ضيفه من فوق الأول',true); return; }
   if(wipHideHas(key,wn(d.type).toUpperCase())){ showToast('النوع بتاعها مخفي — اظهره الأول',true); return; }
   wipOpen[key]=wn(d.type).toUpperCase(); renderWip();
@@ -5284,21 +5477,21 @@ function regDragEnd(){
   if(regStale) renderRegister();
 }
 function regDragInit(){
-  var b=wipEl('tb'); if(!b||b._rg) return; b._rg=1;
+  var b=wipEl('regBlocks'); if(!b||b._rg) return; b._rg=1;      // all the project registers
   b.addEventListener('dragstart',function(e){
     var h=e.target&&e.target.closest?e.target.closest('.rg-grip'):null, tr=h?h.closest('tr[data-rid]'):null;
     if(!tr||regSaving){ if(tr) e.preventDefault(); return; }
-    regDrag={id:tr.getAttribute('data-rid'),tr:tr,body:b,over:null,after:false};
+    regDrag={id:tr.getAttribute('data-rid'),tr:tr,body:tr.parentNode,over:null,after:false};
     tr.classList.add('dragging');
     try{ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',regDrag.id); if(e.dataTransfer.setDragImage) e.dataTransfer.setDragImage(tr,14,14); }catch(x){}
   });
   b.addEventListener('dragover',function(e){
     if(!regDrag) return;
-    var tr=e.target&&e.target.closest?e.target.closest('tr[data-rid]'):null; if(!tr) return;
+    var tr=e.target&&e.target.closest?e.target.closest('tr[data-rid]'):null; if(!tr||tr.parentNode!==regDrag.body) return;     // inside its own project
     e.preventDefault(); try{ e.dataTransfer.dropEffect='move'; }catch(x){}
     var rc=tr.getBoundingClientRect(), after=e.clientY>rc.top+rc.height/2;
     if(regDrag.over!==tr||regDrag.after!==after){
-      Array.prototype.forEach.call(b.querySelectorAll('tr.drop-a,tr.drop-b'),function(x){ x.classList.remove('drop-a','drop-b'); });
+      Array.prototype.forEach.call(regDrag.body.querySelectorAll('tr.drop-a,tr.drop-b'),function(x){ x.classList.remove('drop-a','drop-b'); });
       regDrag.over=tr; regDrag.after=after;
       if(tr!==regDrag.tr) tr.classList.add(after?'drop-b':'drop-a');
     }
@@ -5314,6 +5507,7 @@ function regDragInit(){
 }
 // put drawing `id` right before / after drawing `to`, then number everything 1, 2, 3 … in that order
 async function regMove(id,to,after){
+  var it0=drws.find(function(d){ return String(d.id)===String(id); }); if(it0) setCtx(projOf(it0));
   var list=sorted(), item=list.find(function(d){ return String(d.id)===String(id); }); if(!item) return;
   list=list.filter(function(d){ return d!==item; });
   var at=list.findIndex(function(d){ return String(d.id)===String(to); }); if(at<0) return;
@@ -5335,7 +5529,7 @@ async function regMove(id,to,after){
   if(failed){ try{ await fetchDrawings(); await renum(); }catch(e){} showToast('خطأ — الترتيب الجديد ماتحفظش كله، جرّب تاني',true); }
   else { setSyncStatus('on'); showToast('✓ اتنقلت لـ # '+item.num+' — الترقيم اتظبط'); }
   render();
-  var tr=wipEl('tb').querySelector('tr[data-rid="'+String(item.id).replace(/"/g,'\\"')+'"]');
+  var tr=wipEl('regBlocks').querySelector('tr[data-rid="'+String(item.id).replace(/"/g,'\\"')+'"]');
   if(tr){ tr.classList.add('flash'); setTimeout(function(){ tr.classList.remove('flash'); },1600); }
 }
 window.addEventListener('load',regDragInit);
@@ -5347,14 +5541,14 @@ window.addEventListener('load',regDragInit);
 // invoice number is still "No INV". The number is set with the tracker's own saveInvoice().
 var invOpen=false, invFilter='all', invSig='';
 var INV_GROUPS=[['done','Delivered'],['recv','Received'],['prog','In progress'],['hold','Hold'],['none','Not started']];
-function invOn(){ return (currentProject||'WADI_YAMM')==='WADI_YAMM'; }
-function invMissing(){ return invOn()?sorted().filter(function(d){ return !(parseInt(d.invoice,10)>0); }):[]; }
+function invOn(){ return !!PROJECT_CONFIG.WADI_YAMM; }     // Orascom invoices: WADI YAMM only
+function invMissing(){ return invOn()?projDrws('WADI_YAMM').filter(function(d){ return !(parseInt(d.invoice,10)>0); }):[]; }
 function invSigNow(){ return (invOn()?'1':'0')+invMissing().map(function(d){ return d.id+'|'+wn(d.status)+'|'+wn(d.name)+'|'+wn(d.content)+'|'+wn(d.by_eng); }).join(','); }
 function invNotice(){
   var box=wipEl('invNote'); if(!box) return;
   var miss=invMissing(), n={}, btn=wipEl('invoiceBtn');
   invSig=invSigNow();
-  if(btn) btn.innerHTML='&#128203; Invoice'+(miss.length?' <span class="inv-bdg" title="لوح من غير رقم Invoice">'+miss.length+'</span>':'');
+  if(btn) btn.innerHTML='&#128203; Orascom Invoice'+(miss.length?' <span class="inv-bdg" title="لوح من غير رقم Invoice">'+miss.length+'</span>':'');
   if(!miss.length){ box.style.display='none'; box.innerHTML=''; return; }
   INV_GROUPS.forEach(function(g){ n[g[0]]=0; });
   miss.forEach(function(d){ n[wipGroup(wipStatus(d))]++; });
@@ -5381,7 +5575,7 @@ function invNotice(){
 function invToggle(){ invOpen=!invOpen; invNotice(); }
 function invSetFilter(f){ invFilter=f; invNotice(); }
 // the existing "Not in Invoice" report (its own screen, with PDF)
-function invReport(){ goInvoice(); wipEl('invNum').value=0; loadInvoiceRows(); }
+function invReport(){ setCtx('WADI_YAMM'); goInvoice(); wipEl('invNum').value=0; loadInvoiceRows(); }
 // fresh tracker data: redraw only when the list really changed, and never under an open pick list
 function invOnData(){
   var box=wipEl('invNote'), a=document.activeElement; if(!box) return;
@@ -5555,6 +5749,191 @@ function engSgInit(){
     onNew:function(t){ wipEl('wipTeamNew').value=t; wipTeamAdd(); }
   });
 }
+
+// ══════════════════════════════════════════
+//  ONE OFFICE, SEVERAL PROJECTS — everything on one page
+// ══════════════════════════════════════════
+// All projects' drawings are loaded together (drws). Screens that work on one project (the form, Excel,
+// Update, Drawings List, PDF, Re-Number, Invoice …) run in a "context" project: currentProject, set with
+// setCtx(); sorted() gives the drawings of that project. Projects are the built-in ones plus those added
+// from the page (kept in wip_watch, project_id "__PROJECTS__", their settings as JSON in "level").
+var PROJ_KEY='__PROJECTS__';
+var projRows={};           // project → id of its settings row
+var projDb=null;           // true: settings kept in the tracker · false: wip_watch table missing
+var PROJ_COLORS=['#7D3C98','#B9770E','#2E86C1','#A93226','#117A65','#5D6D7E'];
+function projList(){ return Object.keys(PROJECT_CONFIG).filter(function(k){ return !PROJECT_CONFIG[k].removed; }); }
+function projCfg(p){ return PROJECT_CONFIG[p]||{label:p||'',col1:'Plot',col2:'Zone',color:'#5D6D7E'}; }
+function projLabel(p){ return projCfg(p).label||p; }
+function projOf(d){ return (d&&d.project_id)||'WADI_YAMM'; }
+function sortedAll(){
+  var ps=projList();
+  return drws.slice().sort(function(a,b){ return ps.indexOf(projOf(a))-ps.indexOf(projOf(b))||(a.num||9999)-(b.num||9999); });
+}
+function projDrws(p){ return drws.filter(function(d){ return projOf(d)===p; }).sort(function(a,b){ return (a.num||9999)-(b.num||9999); }); }
+// the project a screen works on: form labels, client logo for the print-outs
+function setCtx(p){
+  if(!PROJECT_CONFIG[p]) return;
+  currentProject=p;
+  var cfg=projCfg(p);
+  var lPlot=wipEl('lPlot'); if(lPlot) lPlot.innerHTML=escHtml(cfg.col1)+' <span class="req">*</span>';
+  var lZone=wipEl('lZone'); if(lZone) lZone.textContent=cfg.col2;
+  var fPlot=wipEl('fPlot'); if(fPlot) fPlot.placeholder=cfg.col1==='Plot'?'PLOT1029':cfg.col1;
+  var fZone=wipEl('fZone'); if(fZone) fZone.placeholder=cfg.col2==='Zone'?'ZONE.02':cfg.col2;
+  var oLogo=wipEl('oLogo'); if(oLogo){ oLogo.src=cfg.clientLogo||''; }
+}
+async function projLoad(){
+  var res;
+  try{ res=await supabase.from('wip_watch').select('*').eq('project_id',PROJ_KEY).order('created_at',{ascending:true}); }
+  catch(e){ return; }
+  if(res.error){ if(/wip_watch|schema cache|does not exist|42P01|PGRST205/i.test(res.error.message||'')) projDb=false; return; }
+  projDb=true;
+  (res.data||[]).forEach(function(r,i){
+    var k=wn(r.plot), c=null; if(!k) return;
+    try{ c=JSON.parse(r.level); }catch(e){ c=null; }
+    if(!c||typeof c!=='object') return;
+    projRows[k]=r.id;
+    var base=PROJECT_CONFIG[k]||{filterField:'project_id',filterVal:k,color:PROJ_COLORS[i%PROJ_COLORS.length]};
+    PROJECT_CONFIG[k]=Object.assign({},base,{label:c.label||base.label||k,col1:c.col1||base.col1||'Plot',col2:c.col2||base.col2||'Zone',color:c.color||base.color,price:typeof c.price==='number'?c.price:(base.price===undefined?null:base.price)});
+  });
+}
+// save a project's settings (label, column names, colour, price of a drawing)
+async function projSave(k,patch){
+  var cfg=Object.assign({},PROJECT_CONFIG[k]||{filterField:'project_id',filterVal:k},patch);
+  var data=JSON.stringify({label:cfg.label,col1:cfg.col1,col2:cfg.col2,color:cfg.color,price:typeof cfg.price==='number'?cfg.price:null});
+  if(projDb!==true) return 'جدول المتابعة (wip_watch) مش موجود — اعمل خطوة الـ SQL الأول';
+  var res;
+  try{
+    if(projRows[k]) res=await supabase.from('wip_watch').update({level:data}).eq('id',projRows[k]);
+    else res=await supabase.from('wip_watch').insertMany([{project_id:PROJ_KEY,plot:k,zone:'*',level:data,created_by:wipMe()}]);
+  }catch(e){ res={error:{message:(e&&e.message)||String(e)}}; }
+  if(res.error) return res.error.message||'error';
+  if(!projRows[k]&&res.data&&res.data[0]) projRows[k]=res.data[0].id;
+  PROJECT_CONFIG[k]=cfg;
+  return '';
+}
+function projKeyFor(label){
+  var k=wn(label).toUpperCase().replace(/[^A-Z0-9؀-ۿ]+/g,'_').replace(/^_+|_+$/g,'')||'PROJECT';
+  var base=k, i=2; while(PROJECT_CONFIG[k]) k=base+'_'+(i++);
+  return k;
+}
+async function enterOffice(first){
+  if(realtimeSub) clearInterval(realtimeSub);
+  wipEngClose(true); wipDateClose(true); wipTaskClose();
+  await projLoad();
+  var ps=projList(); setCtx(first&&PROJECT_CONFIG[first]?first:ps[0]);
+  projBadgePaint();
+  var invBtn=wipEl('invoiceBtn'); if(invBtn) invBtn.style.display=PROJECT_CONFIG.WADI_YAMM?'':'none';
+  wipEl('vProject').style.display='none';
+  wipEl('appShell').style.display='block';
+  var ov=wipEl('loadOverlay'); ov.classList.remove('hidden'); ov.querySelector('.load-txt').textContent='Loading projects...';
+  await fetchDrawings();
+  await fetchEngineers();
+  setupRealtime();
+  ov.classList.add('hidden');
+  wipWatch=[]; wipOpen={}; wipTeamOther=[]; wipHide={}; wipHideDb=null;
+  show('vList'); render(); wipEnter(true);
+}
+// the old "choose a project" entry points now open the office page
+function selectProject(p){ return enterOffice(p); }
+function projBadgePaint(){ var t=wipEl('projBadgeTxt'); if(t) t.textContent='🏢 Projects ('+projList().length+')'; var b=wipEl('projBadge'); if(b) b.style.borderColor='rgba(255,255,255,.35)'; }
+
+// ── "which project?" before a per-project screen ──
+var projPop=null;
+function projPopClose(){ if(!projPop) return; if(projPop.el.parentNode) projPop.el.parentNode.removeChild(projPop.el); projPop=null; }
+document.addEventListener('mousedown',function(e){ if(projPop&&!projPop.el.contains(e.target)&&!(projPop.btn&&projPop.btn.contains(e.target))) projPopClose(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&projPop) projPopClose(); });
+function projAsk(btn,title,cb){
+  var ps=projList();
+  if(ps.length===1){ setCtx(ps[0]); cb(); return; }
+  if(projPop&&projPop.btn===btn){ projPopClose(); return; }
+  projPopClose();
+  var el=document.createElement('div'); el.id='projPop'; el.setAttribute('dir','rtl');
+  el.innerHTML='<div class="pp-h">'+escHtml(title)+'</div>'+ps.map(function(p){
+    var c=projCfg(p);
+    return '<button type="button" data-p="'+escHtml(p)+'"><i style="background:'+c.color+'"></i><b dir="ltr">'+escHtml(c.label)+'</b><small>'+projDrws(p).length+' لوحة</small></button>';
+  }).join('');
+  document.body.appendChild(el); wipPlace(el,btn);
+  projPop={el:el,btn:btn};
+  el.addEventListener('click',function(e){
+    var b=e.target.closest?e.target.closest('button[data-p]'):null; if(!b) return;
+    var p=b.getAttribute('data-p'); projPopClose(); setCtx(p); cb();
+  });
+}
+// ── the projects menu in the header: list, edit names, + new project ──
+function projMenu(btn,editKey){
+  projPopClose();
+  var el=document.createElement('div'); el.id='projPop'; el.className='pm'; el.setAttribute('dir','rtl');
+  var h='<div class="pp-h">المشاريع اللي معانا في المكتب</div>';
+  projList().forEach(function(p){
+    var c=projCfg(p);
+    h+='<div class="pm-r"><i style="background:'+c.color+'"></i><b dir="ltr">'+escHtml(c.label)+'</b><small dir="ltr">'+escHtml(c.col1)+' / '+escHtml(c.col2)+' · '+projDrws(p).length+' drawings</small>'
+      +'<button type="button" class="pm-e" data-e="'+escHtml(p)+'" title="عدّل الاسم والأعمدة">&#9998;</button></div>';
+  });
+  var ed=editKey?projCfg(editKey):null;
+  h+='<div class="pm-f"><div class="pm-ft">'+(ed?'تعديل '+escHtml(ed.label):'+ مشروع جديد')+'</div>'
+    +'<label>اسم المشروع<input id="pmName" dir="auto" value="'+escHtml(ed?ed.label:'')+'" placeholder="مثلاً KAEC"/></label>'
+    +'<div class="pm-2"><label>العمود الأول<input id="pmC1" dir="auto" value="'+escHtml(ed?ed.col1:'Plot')+'"/></label><label>العمود التاني<input id="pmC2" dir="auto" value="'+escHtml(ed?ed.col2:'Zone')+'"/></label></div>'
+    +'<div class="pm-b"><button type="button" class="btn bt" id="pmSave">'+(ed?'حفظ':'+ ضيف المشروع')+'</button>'+(ed?'<button type="button" class="btn bo" id="pmNew">مشروع جديد بدل كده</button>':'')+'</div>'
+    +(projDb===false?'<p class="pm-n">عشان تضيف مشروع محتاج خطوة الـ SQL اللي فوق في Work in Progress.</p>':'')+'</div>';
+  el.innerHTML=h;
+  document.body.appendChild(el); wipPlace(el,btn);
+  projPop={el:el,btn:btn};
+  el.addEventListener('click',async function(e){
+    var x=e.target.closest?e.target.closest('.pm-e,#pmSave,#pmNew'):null; if(!x) return;
+    if(x.classList.contains('pm-e')){ projMenu(btn,x.getAttribute('data-e')); return; }
+    if(x.id==='pmNew'){ projMenu(btn); return; }
+    var name=normalize(wipEl('pmName').value), c1=normalize(wipEl('pmC1').value)||'Plot', c2=normalize(wipEl('pmC2').value)||'Zone';
+    if(!name){ wipEl('pmName').focus(); return; }
+    x.disabled=true;
+    var k=editKey||projKeyFor(name);
+    var patch={label:name,col1:c1,col2:c2};
+    if(!editKey){ patch.color=PROJ_COLORS[(projList().length)%PROJ_COLORS.length]; patch.filterField='project_id'; patch.filterVal=k; }
+    var err=await projSave(k,patch);
+    x.disabled=false;
+    if(err){ showToast('خطأ — المشروع ماتحفظش: '+err,true); return; }
+    projPopClose(); projBadgePaint();
+    render(); wipRenderAll();
+    showToast(editKey?'✓ اتحفظ':'✓ المشروع '+name+' اتضاف — جدوله تحت في Drawing Register');
+  });
+  setTimeout(function(){ var n=wipEl('pmName'); if(n&&!editKey) n.focus(); },30);
+}
+
+// ── the Drawing Register: one block per project, each with its own column names ──
+(function(){
+  var one=renderRegister;
+  renderRegister=function(){
+    var host=wipEl('regBlocks'), tpl=wipEl('regTpl');
+    if(!host||!tpl) return one.apply(this,arguments);
+    var keep=currentProject, ps=projList(), self=this, args=arguments;
+    Array.prototype.forEach.call(host.querySelectorAll('.reg-b'),function(b){ if(ps.indexOf(b.getAttribute('data-p'))<0) host.removeChild(b); });
+    ps.forEach(function(p,i){
+      var b=host.querySelector('.reg-b[data-p="'+p+'"]');
+      if(!b){ b=document.createElement('div'); b.className='reg-b'; b.setAttribute('data-p',p); b.innerHTML=tpl.innerHTML; }
+      if(host.children[i]!==b) host.insertBefore(b,host.children[i]||null);
+    });
+    var strip=function(){ Array.prototype.forEach.call(host.querySelectorAll('[data-r][id]'),function(e){ e.removeAttribute('id'); }); };
+    ps.forEach(function(p){
+      var b=host.querySelector('.reg-b[data-p="'+p+'"]'), cfg=projCfg(p);
+      var h2=b.querySelector('.chdr h2'); if(h2) h2.innerHTML='Drawing Register — <span class="reg-pl" style="background:'+cfg.color+'">'+escHtml(cfg.label)+'</span> <small>'+projDrws(p).length+' drawings</small>';
+      var r2=b.querySelectorAll('thead tr')[1]; if(r2&&r2.children.length>1){ r2.children[0].textContent=cfg.col1; r2.children[1].textContent=cfg.col2; }
+      strip();
+      Array.prototype.forEach.call(b.querySelectorAll('[data-r]'),function(e){ e.id=e.getAttribute('data-r'); });
+      currentProject=p;
+      try{ one.apply(self,args); }catch(e){ console.error(e); }
+    });
+    // the first project keeps the ids, so code that looks for "the" register still finds one
+    strip();
+    var f=host.querySelector('.reg-b');
+    if(f) Array.prototype.forEach.call(f.querySelectorAll('[data-r]'),function(e){ e.id=e.getAttribute('data-r'); });
+    currentProject=keep;
+  };
+})();
+// editing / deleting a drawing works in its own project
+(function(){
+  var ge=goEdit, dd=delD;
+  goEdit=function(id){ var d=drws.find(function(x){ return String(x.id)===String(id); }); if(d) setCtx(projOf(d)); return ge.apply(this,arguments); };
+  delD=function(id){ var d=drws.find(function(x){ return String(x.id)===String(id); }); if(d) setCtx(projOf(d)); return dd.apply(this,arguments); };
+})();
 
 // ══════════════════════════════════════════
 //  START
