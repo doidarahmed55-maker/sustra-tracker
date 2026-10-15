@@ -3428,6 +3428,7 @@ function wipSections(){
   wipWatch.forEach(function(w){
     all.forEach(function(d){
       if(!wipMatch(w,d)) return;
+      if(typeof cmOpen==='function'&&cmOpen(d)&&wipGroup(wipStatus(d))!=='done') return;   // back with comments → only in the Comments list at the top
       var pj=projOf(d), p=wn(d.plot), z=wn(d.zone), l=wn(d.level), k=pj+'\u0001'+p+'\u0001'+z+'\u0001'+l, zk=pj+'\u0001'+p+'\u0001'+z, s=byKey[k];
       if(!s){
         if(zoneOrd[zk]===undefined) zoneOrd[zk]=zn++;
