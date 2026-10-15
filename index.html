@@ -3419,7 +3419,11 @@ function wipSections(){
     });
   });
   // floors of the same zone stay together; each zone gets its own colour
-  secs.sort(function(a,b){ return a.zi-b.zi||a.ord-b.ord; });
+  // logical order: project → plot → zone (02 before 03) → floor (basement, ground, 1st, 2nd … roof)
+  var ps=projList(), nat=function(x,y){ return x.localeCompare(y,undefined,{numeric:true,sensitivity:'base'}); };
+  secs.sort(function(a,b){ return ps.indexOf(a.proj)-ps.indexOf(b.proj)||nat(a.plot,b.plot)||nat(a.zone,b.zone)||wipLevelRank(a.level)-wipLevelRank(b.level)||nat(a.level,b.level); });
+  var zc={}, zn2=0;
+  secs.forEach(function(s){ var zk=s.proj+'\u0001'+s.plot+'\u0001'+s.zone; if(zc[zk]===undefined) zc[zk]=zn2++; s.zi=zc[zk]; });
   secs.forEach(function(s){
     s.color=WIP_COLORS[s.zi%WIP_COLORS.length];
     var g={}, list=[];
@@ -3644,7 +3648,21 @@ function wipEnter(force){
 function wipJump(id){ var el=wipEl(id); if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'start'}); }
 
 // ── filter bar ──
-function wipSortVals(o){ return Object.keys(o).sort(function(a,b){ return a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}); }); }
+function wipSortVals(o){ return Object.keys(o).sort(function(a,b){ var r=wipLevelRank(a)-wipLevelRank(b); return (wipLevelRank(a)!==50||wipLevelRank(b)!==50)&&r?r:a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}); }); }
+// where a floor sits in the building: basement < ground < 1st < 2nd … < roof < tank; anything else = 50 (by name)
+var WIP_LVN={FIRST:1,SECOND:2,THIRD:3,FOURTH:4,FIFTH:5,SIXTH:6,SEVENTH:7,EIGHTH:8,NINTH:9,TENTH:10,ELEVENTH:11,TWELFTH:12};
+function wipLevelRank(v){
+  var u=wn(v).toUpperCase(); if(!u) return 50;
+  var m=u.match(/\b(BASEMENT|B)\s*-?\s*(\d+)\b/)||u.match(/^B(\d+)$/); if(m) return -(+(m[2]||m[1])||1);
+  if(/BASEMENT|UNDERGROUND/.test(u)) return -1;
+  if(/GROUND|^GF\b|^G$/.test(u)) return 0;
+  if(/MEZZ/.test(u)) return 0.5;
+  if(/ROOF/.test(u)) return 100;
+  if(/TANK|UPPER ROOF/.test(u)) return 101;
+  var w=u.split(/[\s\-_]+/);
+  for(var i=0;i<w.length;i++){ if(WIP_LVN[w[i]]) return WIP_LVN[w[i]]; var d=w[i].match(/^L?(\d+)(ST|ND|RD|TH)?$/); if(d) return +d[1]; }
+  return 50;
+}
 function wipSetOpts(sel,list){
   var keep=sel.options.length?sel.value:null;
   sel.innerHTML='';
@@ -7566,6 +7584,38 @@ function cmMarkTeam(){
   if(typeof wipTeamRender==='function'){ var c=wipTeamRender; wipTeamRender=function(){ var x=c.apply(this,arguments); try{ cmMarkTeam(); }catch(e){} return x; }; }
   if(typeof render==='function'){ var r=render; render=function(){ var x=r.apply(this,arguments); try{ cmMarkWip(); cmMarkTeam(); }catch(e){} return x; }; }
 })();
+// ══════════════════════════════════════════
+//  LEVEL NAMES — a floor written as just "FIFTH" becomes "FIFTH LEVEL" (also FIRST … TENTH, GROUND, ROOF):
+//  fixed once in the tracker (drawings + followed floors), and on every new save.
+// ══════════════════════════════════════════
+var LV_WORDS=['GROUND','FIRST','SECOND','THIRD','FOURTH','FIFTH','SIXTH','SEVENTH','EIGHTH','NINTH','TENTH','ELEVENTH','TWELFTH','ROOF'];
+function lvFix(v){ var u=wn(v).toUpperCase(); return LV_WORDS.indexOf(u)>=0?u+' LEVEL':null; }
+var lvDone=false;
+async function lvFixAll(){
+  if(lvDone||typeof drws==='undefined'||!drws.length) return; lvDone=true;
+  var list=drws.filter(function(d){ return lvFix(d.level); }); if(!list.length&&!wipWatch.some(function(w){ return w.level&&lvFix(w.level); })) return;
+  var bad=0, now=new Date().toISOString();
+  dataEpoch++; wipPending++;
+  for(var i=0;i<list.length;i+=8){
+    await Promise.all(list.slice(i,i+8).map(function(d){
+      var lv=lvFix(d.level);
+      return supabase.from('drawings').update({level:lv,updated_at:now}).eq('id',d.id).then(function(r){ if(r.error||!r.data||!r.data.length){ bad++; return; } d.level=lv; },function(){ bad++; });
+    }));
+  }
+  for(var j=0;j<wipWatch.length;j++){
+    var w=wipWatch[j], lv=w.level&&lvFix(w.level); if(!lv) continue;
+    if(w.id){ try{ var r=await supabase.from('wip_watch').update({level:lv}).eq('id',w.id); if(!r.error) w.level=lv; }catch(e){} } else w.level=lv;
+  }
+  wipPending--; dataEpoch++;
+  if(list.length){ render(); if(typeof renderWip==='function') renderWip(); showToast(bad?'خطأ — '+bad+' لوحة اسم الدور بتاعها ماتعدلش':'✓ اسم الدور اتظبط في '+list.length+' لوحة (FIFTH → FIFTH LEVEL)',!!bad); }
+}
+(function(){
+  if(typeof wipSave==='function'){ var s0=wipSave; wipSave=function(id,patch){ if(patch&&patch.level&&lvFix(patch.level)) patch.level=lvFix(patch.level); return s0.apply(this,arguments); }; }
+  if(typeof saveDrw==='function'){ var f0=saveDrw; saveDrw=function(){ var el=wipEl('fLevel'); if(el&&lvFix(el.value)) el.value=lvFix(el.value); return f0.apply(this,arguments); }; }
+  if(typeof wipTaskSave==='function'){ var t0=wipTaskSave; wipTaskSave=function(){ var el=wipEl('ntLevel'); if(el&&lvFix(el.value)) el.value=lvFix(el.value); return t0.apply(this,arguments); }; }
+  if(typeof render==='function'){ var r0=render; render=function(){ var x=r0.apply(this,arguments); if(!lvDone&&wipVisible&&wipVisible()) setTimeout(lvFixAll,1500); return x; }; }
+})();
+
 // ══════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════
