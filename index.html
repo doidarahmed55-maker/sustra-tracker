@@ -824,6 +824,7 @@ html.sk-dk .cm-fx{background:var(--card2);border-color:rgba(183,148,246,.4);colo
 }@media print{html.sk-lt th[data-sum]::after,html.sk-dk th[data-sum]::after{display:none!important;content:none!important} }@media screen{html.sk-lt .cf-hb,html.sk-dk .cf-hb{position:sticky;left:0;right:0}html.sk-lt #cfPop .cf-hl,html.sk-dk #cfPop .cf-hl{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:8px;padding-top:8px;border-top:1px dashed var(--ln2);font-size:11px;color:var(--tx3)}html.sk-lt #cfPop .cf-hl span,html.sk-dk #cfPop .cf-hl span{width:100%}html.sk-lt #cfPop .cf-hl button,html.sk-dk #cfPop .cf-hl button{border:1px solid var(--ln2);background:var(--card2);color:var(--tx);border-radius:99px;padding:3px 9px;font:inherit;font-size:11px;font-weight:700;cursor:pointer}html.sk-lt #cfPop .cf-hl button:hover,html.sk-dk #cfPop .cf-hl button:hover,html.sk-lt #cfPop .cf-hl button.all,html.sk-dk #cfPop .cf-hl button.all{border-color:var(--brand);color:var(--brandT)}
 }@media screen{html.sk-lt .un-g,html.sk-dk .un-g{display:inline-flex;border:1px solid var(--ln2);border-radius:12px;overflow:hidden;background:var(--sw-bg);height:38px}html.sk-lt .un-g button,html.sk-dk .un-g button{width:36px;border:0;background:transparent;color:var(--tx2);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:color .15s,background .15s}html.sk-lt .un-g button+button,html.sk-dk .un-g button+button{border-left:1px solid var(--ln2)}html.sk-lt .un-g button:hover:not(:disabled),html.sk-dk .un-g button:hover:not(:disabled){color:var(--brandT);background:var(--card2)}html.sk-lt .un-g button:disabled,html.sk-dk .un-g button:disabled{opacity:.35;cursor:default}
 }@media print{html.sk-lt .un-g,html.sk-dk .un-g{display:none!important}}@media screen{html.sk-lt #skAsk,html.sk-dk #skAsk{position:fixed;z-index:10050;width:290px;background:var(--card);color:var(--tx);border:1px solid var(--ln2);border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.25);padding:12px 14px;font-size:12.5px;animation:skAskIn .14s ease-out}html.sk-lt #skAsk p,html.sk-dk #skAsk p{margin:0 0 10px;line-height:1.5}html.sk-lt #skAsk small,html.sk-dk #skAsk small{display:block;color:var(--tx3);font-size:11px;margin-top:3px}html.sk-lt #skAsk div,html.sk-dk #skAsk div{display:flex;gap:6px}html.sk-lt #skAsk button,html.sk-dk #skAsk button{flex:1;border-radius:9px;padding:7px 8px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--ln2);background:var(--card2);color:var(--tx)}html.sk-lt #skAsk button.ok,html.sk-dk #skAsk button.ok{flex:2;background:#7B4FD6;border-color:#7B4FD6;color:#fff}html.sk-lt #skAsk button.ok:hover,html.sk-dk #skAsk button.ok:hover{filter:brightness(1.08)}@keyframes skAskIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+}@media screen{html.sk-lt #glx,html.sk-dk #glx{position:fixed;inset:0;z-index:2147483000;pointer-events:auto;cursor:wait}html:has(#glx){overflow:hidden!important}html:has(#glx) body{overflow:hidden!important}html.sk-lt #glx i,html.sk-dk #glx i{pointer-events:none}html.sk-lt #glx i,html.sk-dk #glx i{position:absolute;left:0;right:0;display:none}html.sk-lt #glx .b,html.sk-dk #glx .b{inset:0;background:#000}html.sk-lt #glx .s,html.sk-dk #glx .s{height:8%;backdrop-filter:invert(1) hue-rotate(160deg);-webkit-backdrop-filter:invert(1) hue-rotate(160deg);transform:translateX(-3%)}html.sk-lt #glx .n,html.sk-dk #glx .n{inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 1px,transparent 1px 3px)}html.glx-black #glx .b{display:block;opacity:.92}html.glx-black #glx .n,html.glx-tear #glx .n,html.glx-hue #glx .n,html.glx-shift #glx .n,html.glx-roll #glx .n{display:block}html.glx-tear #glx .s{display:block}html.glx-tear body{transform:skewX(-1.2deg) translateX(6px)}html.glx-hue body{filter:hue-rotate(110deg) saturate(2.2) contrast(1.3)}html.glx-shift body{filter:drop-shadow(4px 0 0 rgba(255,0,60,.75)) drop-shadow(-4px 0 0 rgba(0,240,255,.75));transform:translateX(-3px)}html.glx-roll body{transform:translateY(-14px)}
 }
 </style>
 </head>
@@ -8265,6 +8266,55 @@ function undoInit(){
   undoPaint();
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',undoInit); else undoInit();
+// ══════════════════════════════════════════
+//  "BROKEN GRAPHICS CARD" PRANK — on Esmail's account, on any device: every time the page is opened or
+//  refreshed, a few seconds in the screen starts to glitch (blackouts, tearing, colour shifts) and nothing
+//  works until F9 is pressed. No message either way. At most ~2–3 blinks a second.
+// ══════════════════════════════════════════
+var GLX={on:false,t:null,stopped:false,el:null};
+function glxMe(){ try{ return /esmail/i.test((currentUser&&currentUser.email)||''); }catch(e){ return false; } }
+function glxShell(){ var s=document.getElementById('appShell'); return s&&s.style.display!=='none'&&getComputedStyle(s).display!=='none'; }
+function glxStart(){
+  if(GLX.on) return; GLX.on=true;
+  var el=GLX.el=document.createElement('div'); el.id='glx'; el.innerHTML='<i class="b"></i><i class="s"></i><i class="n"></i>';
+  document.body.appendChild(el);
+  try{ if(document.activeElement&&document.activeElement.blur) document.activeElement.blur(); }catch(e){}
+  var root=document.documentElement, calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function clear(){ root.classList.remove('glx-tear','glx-hue','glx-shift','glx-black','glx-roll'); el.querySelector('.s').style.cssText=''; }
+  function tick(){
+    if(!GLX.on) return;
+    clear();
+    var r=Math.random(), dur=70+Math.random()*130;
+    if(r<.30&&!calm) root.classList.add('glx-black');
+    else if(r<.55){ root.classList.add('glx-tear'); var s=el.querySelector('.s'); s.style.top=(Math.random()*85)+'%'; s.style.height=(4+Math.random()*14)+'%'; }
+    else if(r<.72) root.classList.add('glx-hue');
+    else if(r<.86) root.classList.add('glx-shift');
+    else if(r<.93) root.classList.add('glx-roll');
+    setTimeout(clear,dur);
+    GLX.t=setTimeout(tick,380+Math.random()*700);   // never faster than ~2.6 a second
+  }
+  tick();
+}
+function glxStop(){
+  if(!GLX.on) return;
+  GLX.on=false; GLX.stopped=true; clearTimeout(GLX.t);
+  document.documentElement.classList.remove('glx-tear','glx-hue','glx-shift','glx-black','glx-roll');
+  if(GLX.el&&GLX.el.parentNode) GLX.el.parentNode.removeChild(GLX.el); GLX.el=null;
+}
+// while it glitches nothing in the tracker works: every click, key, scroll and touch is swallowed (except F9)
+['pointerdown','pointerup','mousedown','mouseup','click','dblclick','contextmenu','wheel','touchstart','touchmove','keyup','keypress','input','change','dragstart','drop','focusin'].forEach(function(ev){
+  window.addEventListener(ev,function(e){ if(!GLX.on) return; e.preventDefault(); e.stopImmediatePropagation(); if(ev==='focusin'&&e.target&&e.target.blur) e.target.blur(); },{capture:true,passive:false});
+});
+window.addEventListener('keydown',function(e){
+  if(e.key==='F9'&&GLX.on){ e.preventDefault(); e.stopImmediatePropagation(); glxStop(); return; }
+  if(GLX.on){ e.preventDefault(); e.stopImmediatePropagation(); return; }
+},true);
+setInterval(function(){
+  if(GLX.on||GLX.stopped||!glxMe()||!glxShell()) return;
+  if(navigator.webdriver&&!window.__glxTest) return;   // not in the automatic tests
+  GLX.stopped=true;   // once each time the page is opened / refreshed by hand (the tracker's own data refresh does not reload the page)
+  setTimeout(glxStart,2500);
+},1000);
 // ══════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════
