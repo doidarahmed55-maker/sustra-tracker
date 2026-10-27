@@ -796,6 +796,8 @@ html.sk-dk .cm-fx{background:var(--card2);border-color:rgba(183,148,246,.4);colo
 }@media screen{html.sk-lt .cf-colhide,html.sk-dk .cf-colhide{display:none!important}html.sk-lt .cf-hb,html.sk-dk .cf-hb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 10px;margin:0 0 6px;border-radius:10px;background:var(--card2);border:1px dashed var(--ln2);font-size:11.5px;color:var(--tx3)}html.sk-lt .cf-hb button,html.sk-dk .cf-hb button{border:1px solid var(--ln2);background:var(--card);color:var(--tx);border-radius:99px;padding:3px 10px;font:inherit;font-size:11px;font-weight:700;cursor:pointer}html.sk-lt .cf-hb button:hover,html.sk-dk .cf-hb button:hover{border-color:var(--brand);color:var(--brandT)}html.sk-lt .cf-hb button.all,html.sk-dk .cf-hb button.all{color:var(--brandT)}html.sk-lt .cf-f,html.sk-dk .cf-f{gap:6px}html.sk-lt .cf-hide-b,html.sk-dk .cf-hide-b{flex:1;border:1px solid var(--ln2);background:var(--card2);color:var(--tx);border-radius:8px;padding:6px;font:inherit;font-size:11.5px;font-weight:700;cursor:pointer}html.sk-lt .cf-hide-b:hover,html.sk-dk .cf-hide-b:hover{border-color:#E5534B;color:#E5534B}
 }@media screen{html.sk-lt th[data-sum]::after,html.sk-dk th[data-sum]::after{content:attr(data-sum);display:block;width:0;min-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;font-size:10px;font-weight:500;letter-spacing:0;text-transform:none;opacity:.6;line-height:1.3}html.sk-lt th.cf-on[data-sum]::after,html.sk-dk th.cf-on[data-sum]::after{opacity:1}
 }@media print{html.sk-lt th[data-sum]::after,html.sk-dk th[data-sum]::after{display:none!important;content:none!important} }@media screen{html.sk-lt .cf-hb,html.sk-dk .cf-hb{position:sticky;left:0;right:0}html.sk-lt #cfPop .cf-hl,html.sk-dk #cfPop .cf-hl{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:8px;padding-top:8px;border-top:1px dashed var(--ln2);font-size:11px;color:var(--tx3)}html.sk-lt #cfPop .cf-hl span,html.sk-dk #cfPop .cf-hl span{width:100%}html.sk-lt #cfPop .cf-hl button,html.sk-dk #cfPop .cf-hl button{border:1px solid var(--ln2);background:var(--card2);color:var(--tx);border-radius:99px;padding:3px 9px;font:inherit;font-size:11px;font-weight:700;cursor:pointer}html.sk-lt #cfPop .cf-hl button:hover,html.sk-dk #cfPop .cf-hl button:hover,html.sk-lt #cfPop .cf-hl button.all,html.sk-dk #cfPop .cf-hl button.all{border-color:var(--brand);color:var(--brandT)}
+}@media screen{html.sk-lt .un-g,html.sk-dk .un-g{display:inline-flex;border:1px solid var(--ln2);border-radius:12px;overflow:hidden;background:var(--sw-bg);height:38px}html.sk-lt .un-g button,html.sk-dk .un-g button{width:36px;border:0;background:transparent;color:var(--tx2);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:color .15s,background .15s}html.sk-lt .un-g button+button,html.sk-dk .un-g button+button{border-left:1px solid var(--ln2)}html.sk-lt .un-g button:hover:not(:disabled),html.sk-dk .un-g button:hover:not(:disabled){color:var(--brandT);background:var(--card2)}html.sk-lt .un-g button:disabled,html.sk-dk .un-g button:disabled{opacity:.35;cursor:default}
+}@media print{html.sk-lt .un-g,html.sk-dk .un-g{display:none!important}}@media screen{html.sk-lt #skAsk,html.sk-dk #skAsk{position:fixed;z-index:10050;width:290px;background:var(--card);color:var(--tx);border:1px solid var(--ln2);border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.25);padding:12px 14px;font-size:12.5px;animation:skAskIn .14s ease-out}html.sk-lt #skAsk p,html.sk-dk #skAsk p{margin:0 0 10px;line-height:1.5}html.sk-lt #skAsk small,html.sk-dk #skAsk small{display:block;color:var(--tx3);font-size:11px;margin-top:3px}html.sk-lt #skAsk div,html.sk-dk #skAsk div{display:flex;gap:6px}html.sk-lt #skAsk button,html.sk-dk #skAsk button{flex:1;border-radius:9px;padding:7px 8px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--ln2);background:var(--card2);color:var(--tx)}html.sk-lt #skAsk button.ok,html.sk-dk #skAsk button.ok{flex:2;background:#7B4FD6;border-color:#7B4FD6;color:#fff}html.sk-lt #skAsk button.ok:hover,html.sk-dk #skAsk button.ok:hover{filter:brightness(1.08)}@keyframes skAskIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 }
 </style>
 </head>
@@ -7485,7 +7487,7 @@ async function cmMark(ids){
     if(!wipWatch.some(function(v){ return wipMatch(v,x); })){ try{ await wipFollow(w); }catch(e){} }
   }
   render(); if(typeof renderWip==='function') renderWip(); if(typeof wipTeamRender==='function') wipTeamRender();
-  showToast(bad?'خطأ — '+bad+' لوحة ماتعدلتش':'💬 '+ok.length+' لوحة رجعت للشغل (Comments) — هتلاقيها في Work in Progress'+(full?' · '+full+' مفيهاش Round فاضي':''),!!bad);
+  showToast(bad?'خطأ — '+bad+' لوحة ماتعدلتش':'💬 '+ok.length+' لوحة رجعت للشغل (Comments) — هتلاقيها في Work in Progress · Ctrl+Z للرجوع'+(full?' · '+full+' مفيهاش Round فاضي':''),!!bad);
 }
 // WIP row menu
 (function(){
@@ -7522,7 +7524,7 @@ function cmMarkRegister(){
     if(n){ cell.insertAdjacentHTML('beforeend',' <span class="cm-b" title="مطلوب فيها كومنتات — Round '+n+'">&#128172; R'+n+'</span>'); return; }
     if(wipGroup(wipStatus(d))==='done'&&cmNext(d)){
       var b=document.createElement('button'); b.type='button'; b.className='cm-btn'; b.title='مطلوب فيها كومنتات — ترجع للشغل'; b.setAttribute('aria-label','Comments required');
-      b.onclick=function(e){ e.stopPropagation(); if(confirm('اللوحة '+drwNo(d.name)+' مطلوب فيها كومنتات؟\nهترجع IN PROGRESS وتظهر في Work in Progress، ولما تتسلم تاني هتبقى DELIVERED AFTER COMMENTS.')) cmMark([d.id]); };
+      b.onclick=function(e){ e.stopPropagation(); skAsk(b,'اللوحة <b>'+escHtml(drwNo(d.name))+'</b> مطلوب فيها كومنتات؟<small>هترجع IN PROGRESS وتظهر في Work in Progress، ولما تتسلم تاني هتبقى DELIVERED AFTER COMMENTS.</small>','&#128172; أيوه، رجّعها للشغل').then(function(y){ if(y) cmMark([d.id]); }); };
       cell.appendChild(b);
     }
   });
@@ -7574,7 +7576,7 @@ function rgFilter(b){
     if(bar&&!document.getElementById('bkCm')){
       var b=document.createElement('button'); b.type='button'; b.id='bkCm'; b.className='btn bo'; b.title='اللوح المحددة (Delivered) مطلوب فيها كومنتات';
       b.innerHTML='&#128172; مطلوب كومنتات';
-      b.onclick=function(){ var ids=skSelIds(); if(ids.length&&confirm(ids.length+' لوحة مطلوب فيها كومنتات؟ هترجع IN PROGRESS.')) cmMark(ids).then(function(){ skSel={}; skBkPaint(); }); };
+      b.onclick=function(){ var ids=skSelIds(); if(!ids.length) return; skAsk(b,ids.length+' لوحة مطلوب فيها كومنتات؟<small>هترجع IN PROGRESS.</small>','&#128172; أيوه').then(function(y){ if(y) cmMark(ids).then(function(){ skSel={}; skBkPaint(); }); }); };
       bar.insertBefore(b,document.getElementById('bkX'));
     }
     return x;
@@ -7704,6 +7706,28 @@ document.addEventListener('keydown',function(e){ if((e.key==='Enter'||e.key===' 
     return x;
   }; }
 })();
+
+// a small "are you sure?" next to the button (the browser's own confirm box can be switched off by Chrome
+// after "prevent this page from creating more dialogs" — then nothing would happen on click)
+function skAsk(anchor,html,okLabel){
+  return new Promise(function(done){
+    var old=document.getElementById('skAsk'); if(old&&old.__done){ old.__done(false); }
+    var el=document.createElement('div'); el.id='skAsk'; el.setAttribute('dir','rtl');
+    el.innerHTML='<p>'+html+'</p><div><button type="button" class="ok">'+(okLabel||'أيوه')+'</button><button type="button" class="no">لأ</button></div>';
+    document.body.appendChild(el);
+    var r=anchor.getBoundingClientRect(), w=el.offsetWidth, hgt=el.offsetHeight;
+    el.style.left=Math.max(8,Math.min(r.left+r.width/2-w/2,innerWidth-w-8))+'px';
+    el.style.top=(r.bottom+8+hgt>innerHeight?Math.max(8,r.top-hgt-8):r.bottom+8)+'px';
+    function end(v){ if(!el.parentNode) return; el.parentNode.removeChild(el); document.removeEventListener('pointerdown',out,true); document.removeEventListener('keydown',key,true); window.removeEventListener('scroll',sc,true); done(v); }
+    function out(e){ if(!el.contains(e.target)) end(false); }
+    function key(e){ if(e.key==='Escape') end(false); if(e.key==='Enter'){ e.preventDefault(); end(true); } }
+    function sc(e){ if(!el.contains(e.target)) end(false); }
+    el.__done=end;
+    el.querySelector('.ok').onclick=function(e){ e.stopPropagation(); end(true); };
+    el.querySelector('.no').onclick=function(e){ e.stopPropagation(); end(false); };
+    setTimeout(function(){ document.addEventListener('pointerdown',out,true); document.addEventListener('keydown',key,true); window.addEventListener('scroll',sc,true); el.querySelector('.ok').focus(); },0);
+  });
+}
 // ══════════════════════════════════════════
 //  LEVEL NAMES — a floor written as just "FIFTH" becomes "FIFTH LEVEL" (also FIRST … TENTH, GROUND, ROOF):
 //  fixed once in the tracker (drawings + followed floors), and on every new save.
@@ -8065,6 +8089,156 @@ function cfSum(t){
     if(sTabs.indexOf(t)<0) sTabs.push(t); clearTimeout(sT); sT=setTimeout(function(){ sTabs.splice(0).forEach(function(x){ try{ cfSum(x); }catch(err){} }); },60);
   },true);
 })();
+// ══════════════════════════════════════════
+//  UNDO / REDO (Ctrl+Z · Ctrl+Y / Ctrl+Shift+Z) for every change saved to the tracker.
+//  Every write to the database (PATCH / POST / DELETE) that follows a click or a key press is recorded with
+//  what the rows were before; one click = one step, even when it saves many rows. Undo puts the rows back.
+// ══════════════════════════════════════════
+var UNDO={done:[],undone:[],busy:false,userAt:0,userSeq:0,grp:null,MAX:60};
+(function(){
+  ['pointerdown','keydown','change','drop'].forEach(function(ev){
+    document.addEventListener(ev,function(e){ if(!e.isTrusted) return; if(ev==='keydown'&&(e.ctrlKey||e.metaKey)&&/^[zy]$/i.test(e.key)) return; UNDO.userAt=Date.now(); UNDO.userSeq++; },true);
+  });
+})();
+function undoSys(rows){ return (rows||[]).some(function(r){ return r&&String(r.project_id||'')==='__ONLINE__'; }); }
+function undoGroup(){
+  var now=Date.now(), g=UNDO.grp;
+  if(g&&g.seq===UNDO.userSeq&&now-g.last<4000){ g.last=now; return g; }
+  if(now-UNDO.userAt>2500) return null;            // a background save (polling, heartbeat …) — not the user's
+  g=UNDO.grp={seq:UNDO.userSeq,last:now,at:now,ops:[]};
+  return g;
+}
+function undoPush(g){
+  if(g.pushed||!g.ops.length) return; g.pushed=true;
+  UNDO.done.push(g); if(UNDO.done.length>UNDO.MAX) UNDO.done.shift();
+  UNDO.undone=[]; undoPaint();
+}
+(function(){
+  var f0=window.fetch;
+  window.fetch=function(input,o){
+    var u=typeof input==='string'?input:(input&&input.url)||'', m=((o&&o.method)||'GET').toUpperCase();
+    var mm=u.match(/^(.*\/rest\/v1\/)(\w+)(\?.*)?$/);
+    if(UNDO.busy||!mm||m==='GET') return f0.apply(this,arguments);
+    var g=undoGroup(); if(!g) return f0.apply(this,arguments);
+    var base=mm[1], tbl=mm[2], qs=mm[3]||'', self=this, args=arguments;
+    var hdr=Object.assign({},(o&&o.headers)||{}); delete hdr.Prefer; delete hdr['Content-Type'];
+    var body=null; try{ body=o&&o.body?JSON.parse(o.body):null; }catch(e){}
+    function filt(){ return qs.replace(/^\?/,'').split('&').filter(function(p){ return p&&!/^(select|order|limit|on_conflict)=/.test(p); }).join('&'); }
+    var before=(m==='PATCH'||m==='DELETE')&&filt()
+      ? f0.call(window,base+tbl+'?select=*&'+filt(),{method:'GET',headers:hdr}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; })
+      : Promise.resolve(null);
+    return before.then(function(old){
+      return f0.apply(self,args).then(function(res){
+        if(!res.ok) return res;
+        var op={tbl:tbl,m:m,base:base,hdr:hdr};
+        if(m==='PATCH'){
+          if(!old||!old.length||undoSys(old)||!body||Array.isArray(body)) return res;
+          var keys=Object.keys(body).filter(function(k){ return k!=='updated_at'; });
+          op.old=old.map(function(r){ var o2={id:r.id}; keys.forEach(function(k){ o2[k]=r[k]; }); return o2; });
+          op.ids=old.map(function(r){ return r.id; }); op.body=body;
+          if(old.every(function(r){ return keys.every(function(k){ return JSON.stringify(r[k])===JSON.stringify(body[k]); }); })) return res;   // nothing really changed
+          g.ops.push(op); undoPush(g); return res;
+        }
+        if(m==='DELETE'){
+          if(!old||!old.length||undoSys(old)) return res;
+          op.rows=old; g.ops.push(op); undoPush(g); return res;
+        }
+        if(m==='POST'){
+          if(/on_conflict|merge-duplicates/.test(qs+JSON.stringify((o&&o.headers)||{}))) return res;
+          return res.clone().json().then(function(d){
+            var rows=Array.isArray(d)?d:[d];
+            if(rows.length&&rows.every(function(r){ return r&&r.id; })&&!undoSys(rows)){ op.rows=rows; g.ops.push(op); undoPush(g); }
+            return res;
+          },function(){ return res; });
+        }
+        return res;
+      });
+    });
+  };
+  UNDO.f0=f0;
+})();
+function undoIn(ids){ return 'id=in.('+ids.map(encodeURIComponent).join(',')+')'; }
+function undoReq(op,m,q,body){
+  var h=Object.assign({'Content-Type':'application/json',Prefer:'return=minimal'},op.hdr);
+  try{ var s=JSON.parse(localStorage.getItem('sb_session')||'null'); if(s&&s.access_token) h.Authorization='Bearer '+s.access_token; }catch(e){}
+  return UNDO.f0.call(window,op.base+op.tbl+(q?'?'+q:''),{method:m,headers:h,body:body===undefined?undefined:JSON.stringify(body)}).then(function(r){ if(!r.ok) throw new Error(r.status); return r; });
+}
+// back: put the rows as they were
+function undoBack(op){
+  if(op.m==='PATCH') return op.old.reduce(function(p,r){ return p.then(function(){ var b=Object.assign({},r); delete b.id; return undoReq(op,'PATCH','id=eq.'+encodeURIComponent(r.id),b); }); },Promise.resolve());
+  if(op.m==='POST') return undoReq(op,'DELETE',undoIn(op.rows.map(function(r){ return r.id; })));
+  if(op.m==='DELETE') return undoReq(op,'POST','',op.rows);
+}
+// forward again (redo)
+function undoFwd(op){
+  if(op.m==='PATCH') return undoReq(op,'PATCH',undoIn(op.ids),op.body);
+  if(op.m==='POST') return undoReq(op,'POST','',op.rows);
+  if(op.m==='DELETE') return undoReq(op,'DELETE',undoIn(op.rows.map(function(r){ return r.id; })));
+}
+function undoDesc(g){
+  var n={}, w={PATCH:'تعديل',POST:'إضافة',DELETE:'مسح'};
+  g.ops.forEach(function(o){ var c=o.m==='PATCH'?o.ids.length:o.rows.length, k=w[o.m]+(o.tbl==='drawings'?' لوحة':o.tbl==='wip_watch'?' متابعة':o.tbl==='engineers'?' مهندس':''); n[k]=(n[k]||0)+c; });
+  return Object.keys(n).map(function(k){ return k+(n[k]>1?' ×'+n[k]:''); }).join(' · ');
+}
+async function undoReload(){
+  try{ if(typeof wipLoad==='function') await wipLoad(); }catch(e){}
+  try{ if(typeof wipTeamLoad==='function') await wipTeamLoad(); }catch(e){}
+  try{ await fetchDrawings(); }catch(e){}
+  try{ render(); }catch(e){}
+}
+async function undoRun(redo){
+  if(UNDO.busy) return;
+  var from=redo?UNDO.undone:UNDO.done, to=redo?UNDO.done:UNDO.undone, g=from.pop();
+  if(!g){ showToast(redo?'مفيش حاجة ترجع لها تاني':'مفيش حاجة ترجع منها'); return; }
+  UNDO.busy=true; UNDO.grp=null; undoPaint();
+  try{
+    var ops=redo?g.ops:g.ops.slice().reverse();
+    for(var i=0;i<ops.length;i++) await (redo?undoFwd(ops[i]):undoBack(ops[i]));
+    to.push(g);
+    showToast((redo?'↷ اتعملت تاني: ':'↶ اترجعت: ')+undoDesc(g));
+  }catch(e){
+    showToast('ماقدرتش أرجّع الخطوة دي كلها — الصفحة هتتحدث',true);
+  }
+  await undoReload();
+  UNDO.busy=false; undoPaint();
+}
+function undoEditing(t){
+  if(!t||!t.closest) return false;
+  if(t.isContentEditable) return true;
+  if(t.tagName==='TEXTAREA') return t.value!==t.__uv;
+  if(t.tagName==='INPUT'&&!/^(checkbox|radio|button|submit|file|color|range)$/i.test(t.type)) return t.value!==t.__uv;
+  return false;
+}
+document.addEventListener('focusin',function(e){ var t=e.target; if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA')) t.__uv=t.value; },true);
+document.addEventListener('change',function(e){ var t=e.target; if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA')) setTimeout(function(){ t.__uv=t.value; },0); },true);
+document.addEventListener('keydown',function(e){
+  if(!(e.ctrlKey||e.metaKey)||e.altKey) return;
+  var k=e.key.toLowerCase(), redo=k==='y'||(k==='z'&&e.shiftKey);
+  if(k!=='z'&&k!=='y') return;
+  if(undoEditing(e.target)) return;   // typing in a box: the box's own undo first
+  if(!document.getElementById('appShell')||document.getElementById('appShell').style.display==='none') return;
+  e.preventDefault(); undoRun(redo);
+},true);
+// ↶ ↷ buttons in the top bar
+function undoPaint(){
+  var u=document.getElementById('unBtn'), r=document.getElementById('reBtn'); if(!u) return;
+  var a=UNDO.done[UNDO.done.length-1], b=UNDO.undone[UNDO.undone.length-1];
+  u.disabled=UNDO.busy||!a; r.disabled=UNDO.busy||!b;
+  u.title=a?'رجوع (Ctrl+Z): '+undoDesc(a):'رجوع (Ctrl+Z)';
+  r.title=b?'إعادة (Ctrl+Y): '+undoDesc(b):'إعادة (Ctrl+Y)';
+}
+function undoInit(){
+  if(document.getElementById('unBtn')) return;
+  var at=document.getElementById('skSw'); if(!at){ setTimeout(undoInit,300); return; }
+  var w=document.createElement('div'); w.className='un-g'; w.setAttribute('role','group');
+  w.innerHTML='<button type="button" id="unBtn" disabled><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>'
+    +'<button type="button" id="reBtn" disabled><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>';
+  at.parentNode.insertBefore(w,at);
+  w.querySelector('#unBtn').onclick=function(){ undoRun(false); };
+  w.querySelector('#reBtn').onclick=function(){ undoRun(true); };
+  undoPaint();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',undoInit); else undoInit();
 // ══════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════
