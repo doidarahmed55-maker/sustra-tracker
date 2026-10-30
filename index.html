@@ -8282,7 +8282,8 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 // ══════════════════════════════════════════
 var TM_KEY='__TEAMMEM__';
 var wipTm={}, wipTmName={}, wipTmRows={}, wipTmDb=false;
-function wipIsTeam(n){ return /(^|\s)team\s*$/i.test(wn(n)); }
+// ends with the word "team", even wrapped in quotes/brackets: «team», "team", (team) …
+function wipIsTeam(n){ return /(^|[\s"'“”«(\[\-_])team["'“”»)\]\s]*$/i.test(wn(n)); }
 function wipTmKey(n){ return normalize(n).toLowerCase(); }
 function wipTmJoin(a){ return a.map(wn).filter(Boolean).join(','); }
 function wipTmSplit(v){ return wn(v).split(',').map(function(s){ return s.trim(); }).filter(Boolean); }
