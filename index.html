@@ -4088,8 +4088,10 @@ function wipTeamData(){
     list.forEach(reg);
     if(wipStatus(d)!=='IN PROGRESS') return;
     list.forEach(function(n){ (busy[key(n)]=busy[key(n)]||[]).push({d:d,proj:proj}); });
-    // the real engineers inside a "…team" on this task count as busy too
-    if(typeof wipTmOf==='function') wipTmOf(d.id).forEach(function(n){ n=wn(n); if(!n) return; var k=key(n); (busy[k]=busy[k]||[]).push({d:d,proj:proj}); if(!all[k]) memName[k]=n; });
+    // the engineers inside any "…team" on this task count as busy too (same members on all the team's work)
+    if(typeof wipTmOf==='function') list.filter(wipIsTeam).forEach(function(tn){
+      wipTmOf(tn).forEach(function(n){ n=wn(n); if(!n) return; var k=key(n); (busy[k]=busy[k]||[]).push({d:d,proj:proj}); if(!all[k]) memName[k]=n; });
+    });
   }
   drws.forEach(function(d){ take(d,projOf(d)); });
   wipTeamOther.forEach(function(d){ take(d,wn(d.project_id)); });
@@ -8271,60 +8273,62 @@ function undoInit(){
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',undoInit); else undoInit();
 // ══════════════════════════════════════════
-//  TEAM MEMBERS — an engineer whose name ends in "team" (e.g. "Eng. Ahmed Elsayed team") can have, per
-//  drawing, the real engineers working inside that team on this one task. They are NOT fixed: each drawing
-//  keeps its own list, changed freely. While that drawing is IN PROGRESS its members count as busy, so they
-//  are not shown as "free". Members can be names the tracker does not know, and adding one here does NOT add
-//  it to the engineers list. Stored in wip_watch (project_id "__TEAMMEM__", plot = drawing id, level = names).
+//  TEAM MEMBERS — an engineer whose name ends in "team" (e.g. "Eng. Ahmed Elsayed team") stands for a group.
+//  Its members are the real engineers inside that team. The list belongs to the TEAM, not to one drawing:
+//  the same members apply to every drawing the team holds. While the team has ANY drawing IN PROGRESS, all
+//  its members count as busy — so they are never shown as "free" while the team is working. A member can be a
+//  name the tracker does not know, and adding one here does NOT add it to the engineers list.
+//  Stored in wip_watch: project_id "__TEAMMEM__", plot = the team engineer's name, level = the members.
 // ══════════════════════════════════════════
 var TM_KEY='__TEAMMEM__';
-var wipTm={}, wipTmRows={}, wipTmDb=false;
+var wipTm={}, wipTmName={}, wipTmRows={}, wipTmDb=false;
 function wipIsTeam(n){ return /(^|\s)team\s*$/i.test(wn(n)); }
+function wipTmKey(n){ return normalize(n).toLowerCase(); }
 function wipTmJoin(a){ return a.map(wn).filter(Boolean).join(','); }
 function wipTmSplit(v){ return wn(v).split(',').map(function(s){ return s.trim(); }).filter(Boolean); }
 function wipTmLocal(){ try{ var o=JSON.parse(localStorage.getItem('sustra_wip_teammem')||'{}'); return o&&typeof o==='object'?o:{}; }catch(e){ return {}; } }
-function wipTmLocalWrite(){ if(!wipTmDb){ try{ localStorage.setItem('sustra_wip_teammem',JSON.stringify(wipTm)); }catch(e){} } }
-function wipTmOf(id){ return (wipTm[id]||[]).slice(); }
-// only the members that still make sense: the drawing has a team engineer on it
-function wipHasTeam(d){ return wipEngList(d.by_eng).some(wipIsTeam); }
+function wipTmLocalWrite(){ if(!wipTmDb){ try{ var o={}; Object.keys(wipTm).forEach(function(k){ o[wipTmName[k]||k]=wipTm[k]; }); localStorage.setItem('sustra_wip_teammem',JSON.stringify(o)); }catch(e){} } }
+function wipTmOf(teamName){ return (wipTm[wipTmKey(teamName)]||[]).slice(); }
 async function wipTmLoad(){
   var res;
   try{ res=await supabase.from('wip_watch').select('*').eq('project_id',TM_KEY); }
   catch(e){ return; }                                         // offline: keep what we have
   if(res.error){
-    if(/wip_watch|schema cache|does not exist|42P01|PGRST205/i.test(res.error.message||'')){ wipTmDb=false; wipTm=wipTmLocal(); }
+    if(/wip_watch|schema cache|does not exist|42P01|PGRST205/i.test(res.error.message||'')){
+      wipTmDb=false; wipTm={}; wipTmName={};
+      var l=wipTmLocal(); Object.keys(l).forEach(function(nm){ var k=wipTmKey(nm), m=Array.isArray(l[nm])?l[nm]:[]; if(k&&m.length){ wipTm[k]=m; wipTmName[k]=nm; } });
+    }
     return;
   }
-  wipTmDb=true; wipTm={}; wipTmRows={};
-  (res.data||[]).forEach(function(r){ var id=wn(r.plot), m=wipTmSplit(r.level); if(id&&m.length){ wipTm[id]=m; wipTmRows[id]=r.id; } });
+  wipTmDb=true; wipTm={}; wipTmName={}; wipTmRows={};
+  (res.data||[]).forEach(function(r){ var nm=wn(r.plot), k=wipTmKey(nm), m=wipTmSplit(r.level); if(k&&m.length){ wipTm[k]=m; wipTmName[k]=nm; wipTmRows[k]=r.id; } });
   // a list made in this browser before the table existed moves into the tracker once
-  var loc=wipTmLocal(), pend=Object.keys(loc).filter(function(id){ return !wipTm[id]&&Array.isArray(loc[id])&&loc[id].length; });
+  var loc=wipTmLocal(), pend=Object.keys(loc).filter(function(nm){ var k=wipTmKey(nm); return !wipTm[k]&&Array.isArray(loc[nm])&&loc[nm].length; });
   if(pend.length){
     try{
-      var ins=await supabase.from('wip_watch').insertMany(pend.map(function(id){ return {project_id:TM_KEY,plot:id,level:wipTmJoin(loc[id]),created_by:wipMe()}; }));
-      if(!ins.error) ins.data.forEach(function(r){ var id=wn(r.plot); wipTm[id]=wipTmSplit(r.level); wipTmRows[id]=r.id; });
+      var ins=await supabase.from('wip_watch').insertMany(pend.map(function(nm){ return {project_id:TM_KEY,plot:nm,level:wipTmJoin(loc[nm]),created_by:wipMe()}; }));
+      if(!ins.error) ins.data.forEach(function(r){ var nm=wn(r.plot), k=wipTmKey(nm); wipTm[k]=wipTmSplit(r.level); wipTmName[k]=nm; wipTmRows[k]=r.id; });
     }catch(e){}
   }
   try{ localStorage.removeItem('sustra_wip_teammem'); }catch(e){}
 }
-// save this drawing's members (empty = none)
-async function wipTmSet(id,names){
-  var clean=[], seen={};
-  names.map(wn).forEach(function(n){ var k=n.toLowerCase(); if(n&&!seen[k]){ seen[k]=1; clean.push(n); } });
-  if(clean.length) wipTm[id]=clean; else delete wipTm[id];
+// save a team's members (empty = none)
+async function wipTmSet(teamName,names){
+  var k=wipTmKey(teamName), clean=[], seen={};
+  names.map(wn).forEach(function(n){ var kk=n.toLowerCase(); if(n&&!seen[kk]){ seen[kk]=1; clean.push(n); } });
+  if(clean.length){ wipTm[k]=clean; wipTmName[k]=wn(teamName); } else { delete wipTm[k]; }
   dataEpoch++;
-  // only the "who is working / free" view depends on members (not the WIP tables), and it also refreshes
-  // Today's free list — so no renderWip here, which would close the open picker
+  // only the "who is working / free" view depends on members — it also refreshes Today's free list
   if(typeof wipTeamRender==='function') wipTeamRender();
   if(!wipTmDb){ wipTmLocalWrite(); return; }
   try{
     if(!clean.length){
-      if(wipTmRows[id]){ await supabase.from('wip_watch').delete().eq('id',wipTmRows[id]); delete wipTmRows[id]; }
-    } else if(wipTmRows[id]){
-      await supabase.from('wip_watch').update({level:wipTmJoin(clean)}).eq('id',wipTmRows[id]);
+      if(wipTmRows[k]){ await supabase.from('wip_watch').delete().eq('id',wipTmRows[k]); delete wipTmRows[k]; }
+    } else if(wipTmRows[k]){
+      await supabase.from('wip_watch').update({level:wipTmJoin(clean)}).eq('id',wipTmRows[k]);
     } else {
-      var ins=await supabase.from('wip_watch').insert({project_id:TM_KEY,plot:id,level:wipTmJoin(clean),created_by:wipMe()}).select().single();
-      if(!ins.error&&ins.data) wipTmRows[id]=ins.data.id;
+      var ins=await supabase.from('wip_watch').insert({project_id:TM_KEY,plot:wn(teamName),level:wipTmJoin(clean),created_by:wipMe()}).select().single();
+      if(!ins.error&&ins.data) wipTmRows[k]=ins.data.id;
     }
   }catch(e){ showToast('خطأ — أعضاء التيم ماتحفظوش',true); }
 }
@@ -8335,7 +8339,7 @@ async function wipTmSet(id,names){
   wipTeamLoad=function(){ return l0.apply(this,arguments).then(function(r){ return wipTmLoad().then(function(){ return r; },function(){ return r; }); }); };
 })();
 
-// ── the picker (#wipPop): under a team engineer, add / remove this task's members ──
+// ── the picker (#wipPop): manage the members of each "…team" on this drawing (same list on all its work) ──
 (function(){
   if(typeof wipEngOpen!=='function') return;
   var o0=wipEngOpen;
@@ -8345,36 +8349,38 @@ function wipTmInject(id){
   var pop=document.getElementById('wipPop'); if(!pop) return;
   var d=drws.find(function(x){ return x.id===id; }); if(!d) return;
   var teams=wipEngList(d.by_eng).filter(wipIsTeam); if(!teams.length) return;
-  var box=document.createElement('div'); box.className='tm-mem';
   var foot=pop.querySelector('.pop-foot');
-  if(foot) pop.insertBefore(box,foot); else pop.appendChild(box);
-  function paint(focus){
-    var mem=wipTmOf(id);
-    box.innerHTML='<div class="tm-mem-h">&#128101; مين جوه '+(teams.length>1?'التيمات':'«'+escHtml(teams[0])+'»')+' في اللوحة دي؟<small>اللي تضيفهم هنا يبانوا «شغالين» مش «فاضيين» طول ما اللوحة IN PROGRESS. بيتغيروا من لوحة للتانية، ومش بيتسجلوا في قايمة المهندسين.</small></div>'
-      +'<div class="tm-mem-c">'+(mem.length?mem.map(function(n){ return '<span class="ep-chip"><b>'+escHtml(n)+'</b><button type="button" data-mrm="'+escHtml(n)+'" title="شيله من التيم في اللوحة دي">&#10005;</button></span>'; }).join('')
-        :'<p>مفيش حد متحدد لسه — اختياري</p>')+'</div>'
+  teams.forEach(function(team){
+    var box=document.createElement('div'); box.className='tm-mem';
+    if(foot) pop.insertBefore(box,foot); else pop.appendChild(box);
+    paint(box,team,false);
+  });
+  function paint(box,team,focus){
+    var mem=wipTmOf(team);
+    box.innerHTML='<div class="tm-mem-h">&#128101; أعضاء «'+escHtml(team)+'»<small>دول بيتحسبوا «شغالين» طول ما التيم ماسك أي لوحة IN PROGRESS. نفس القايمة على كل لوح التيم، ومش بيتسجلوا في قايمة المهندسين.</small></div>'
+      +'<div class="tm-mem-c">'+(mem.length?mem.map(function(n){ return '<span class="ep-chip"><b>'+escHtml(n)+'</b><button type="button" data-mrm="'+escHtml(n)+'" title="شيله من التيم">&#10005;</button></span>'; }).join('')
+        :'<p>مفيش أعضاء متحددين لسه — اختياري</p>')+'</div>'
       +'<div class="pop-new"><input type="text" placeholder="&#128269; اسم العضو…" autocomplete="off" maxlength="80"/><button type="button" class="btn bo" style="padding:4px 9px;font-size:11px">+ ضيف</button></div>';
     var ni=box.querySelector('.pop-new input');
     function add(){
       var v=normalize(ni.value); if(!v){ ni.focus(); return; }
       if(v.indexOf(',')>=0){ showToast('الاسم مينفعش يكون فيه فاصلة ( , )',true); return; }
       v=typeof engResolve==='function'?engResolve(v):v;
-      if(wipTmOf(id).some(function(n){ return n.toLowerCase()===v.toLowerCase(); })){ ni.value=''; ni.focus(); return; }
-      wipTmSet(id,wipTmOf(id).concat([v])); paint(true);
+      if(wipTmOf(team).some(function(n){ return n.toLowerCase()===v.toLowerCase(); })){ ni.value=''; ni.focus(); return; }
+      wipTmSet(team,wipTmOf(team).concat([v])); paint(box,team,true);
     }
     box.querySelector('.pop-new button').onclick=add;
     ni.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); add(); } });
-    box.querySelectorAll('button[data-mrm]').forEach(function(b){
-      b.onclick=function(){ var nm=b.getAttribute('data-mrm'); wipTmSet(id,wipTmOf(id).filter(function(n){ return n!==nm; })); paint(false); };
+    Array.prototype.forEach.call(box.querySelectorAll('button[data-mrm]'),function(b){
+      b.onclick=function(){ var nm=b.getAttribute('data-mrm'); wipTmSet(team,wipTmOf(team).filter(function(n){ return n!==nm; })); paint(box,team,false); };
     });
     if(typeof engSgAttach==='function') engSgAttach(ni,{
       onPick:function(n){ ni.value=n; add(); },
       onNew:function(t){ ni.value=t; add(); },
-      taken:function(){ return wipEngList(d.by_eng).concat(wipTmOf(id)); }
+      taken:function(){ return wipEngList(d.by_eng).concat(wipTmOf(team)); }
     });
     if(focus) setTimeout(function(){ if(ni.isConnected) ni.focus(); },0);
   }
-  paint(false);
 }
 // ══════════════════════════════════════════
 //  START
