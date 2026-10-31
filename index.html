@@ -825,7 +825,9 @@ html.sk-dk .cm-fx{background:var(--card2);border-color:rgba(183,148,246,.4);colo
 }@media screen{html.sk-lt .un-g,html.sk-dk .un-g{display:inline-flex;border:1px solid var(--ln2);border-radius:12px;overflow:hidden;background:var(--sw-bg);height:38px}html.sk-lt .un-g button,html.sk-dk .un-g button{width:36px;border:0;background:transparent;color:var(--tx2);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:color .15s,background .15s}html.sk-lt .un-g button+button,html.sk-dk .un-g button+button{border-left:1px solid var(--ln2)}html.sk-lt .un-g button:hover:not(:disabled),html.sk-dk .un-g button:hover:not(:disabled){color:var(--brandT);background:var(--card2)}html.sk-lt .un-g button:disabled,html.sk-dk .un-g button:disabled{opacity:.35;cursor:default}
 }@media print{html.sk-lt .un-g,html.sk-dk .un-g{display:none!important}}@media screen{html.sk-lt #skAsk,html.sk-dk #skAsk{position:fixed;z-index:10050;width:290px;background:var(--card);color:var(--tx);border:1px solid var(--ln2);border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.25);padding:12px 14px;font-size:12.5px;animation:skAskIn .14s ease-out}html.sk-lt #skAsk p,html.sk-dk #skAsk p{margin:0 0 10px;line-height:1.5}html.sk-lt #skAsk small,html.sk-dk #skAsk small{display:block;color:var(--tx3);font-size:11px;margin-top:3px}html.sk-lt #skAsk div,html.sk-dk #skAsk div{display:flex;gap:6px}html.sk-lt #skAsk button,html.sk-dk #skAsk button{flex:1;border-radius:9px;padding:7px 8px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--ln2);background:var(--card2);color:var(--tx)}html.sk-lt #skAsk button.ok,html.sk-dk #skAsk button.ok{flex:2;background:#7B4FD6;border-color:#7B4FD6;color:#fff}html.sk-lt #skAsk button.ok:hover,html.sk-dk #skAsk button.ok:hover{filter:brightness(1.08)}@keyframes skAskIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 }@media screen{html.sk-lt .tm-mem,html.sk-dk .tm-mem{margin-top:8px;padding-top:9px;border-top:1px dashed var(--ln2)}html.sk-lt .tm-mem-h,html.sk-dk .tm-mem-h{font-size:11.5px;font-weight:800;color:var(--tx)}html.sk-lt .tm-mem-h small,html.sk-dk .tm-mem-h small{display:block;font-weight:500;color:var(--tx3);font-size:10px;margin-top:3px;line-height:1.5}html.sk-lt .tm-mem-c,html.sk-dk .tm-mem-c{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}html.sk-lt .tm-mem-c p,html.sk-dk .tm-mem-c p{margin:0;color:var(--tx3);font-size:11px}
-}
+}@media screen{html.sk-lt .reg-kind,html.sk-dk .reg-kind{display:inline-block;background:var(--card2);border:1px solid var(--ln2);color:var(--tx);border-radius:7px;padding:2px 10px;font-size:12px;font-weight:800;vertical-align:middle;margin-right:4px}
+}@media screen{html.sk-lt .rg-addbar,html.sk-dk .rg-addbar{padding:10px 2px 2px}html.sk-lt .rg-addbtn,html.sk-dk .rg-addbtn{border:1.5px dashed var(--ln2);background:var(--card2);color:var(--brandT,#167E75);border-radius:9px;padding:8px 16px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}html.sk-lt .rg-addbtn:hover,html.sk-dk .rg-addbtn:hover{border-color:var(--brand,#167E75);background:var(--card)}
+}@media print{html.sk-lt .rg-addbar,html.sk-dk .rg-addbar{display:none!important}}
 </style>
 </head>
 <body>
@@ -6131,23 +6133,32 @@ function projMenu(btn,editKey){
   renderRegister=function(){
     var host=wipEl('regBlocks'), tpl=wipEl('regTpl');
     if(!host||!tpl) return one.apply(this,arguments);
-    var keep=currentProject, ps=projList(), self=this, args=arguments;
-    Array.prototype.forEach.call(host.querySelectorAll('.reg-b'),function(b){ if(ps.indexOf(b.getAttribute('data-p'))<0) host.removeChild(b); });
-    ps.forEach(function(p,i){
-      var b=host.querySelector('.reg-b[data-p="'+p+'"]');
-      if(!b){ b=document.createElement('div'); b.className='reg-b'; b.setAttribute('data-p',p); b.innerHTML=tpl.innerHTML; }
+    var keep=currentProject, keepKind=(typeof regKind!=='undefined'?regKind:''), ps=projList(), self=this, args=arguments;
+    // one unit per table: a plain project, or (project × kind) when the project is split
+    var units=[]; ps.forEach(function(p){ var ks=(typeof projKinds==='function')?projKinds(p):[]; if(ks.length) ks.forEach(function(k){ units.push({p:p,kind:k,key:p+'\u0001'+k}); }); else units.push({p:p,kind:'',key:p}); });
+    var unitKey=function(b){ return b.getAttribute('data-p')+(b.getAttribute('data-kind')?'\u0001'+b.getAttribute('data-kind'):''); };
+    var keys={}; units.forEach(function(u){ keys[u.key]=1; });
+    Array.prototype.forEach.call(host.querySelectorAll('.reg-b'),function(b){ if(!keys[unitKey(b)]) host.removeChild(b); });
+    units.forEach(function(u,i){
+      var b=host.querySelector('.reg-b[data-p="'+u.p+'"]'+(u.kind?'[data-kind="'+u.kind.replace(/"/g,'\\"')+'"]':':not([data-kind])'));
+      if(!b){ b=document.createElement('div'); b.className='reg-b'; b.setAttribute('data-p',u.p); if(u.kind) b.setAttribute('data-kind',u.kind); b.innerHTML=tpl.innerHTML; }
       if(host.children[i]!==b) host.insertBefore(b,host.children[i]||null);
     });
     var strip=function(){ Array.prototype.forEach.call(host.querySelectorAll('[data-r][id]'),function(e){ e.removeAttribute('id'); }); };
-    ps.forEach(function(p){
-      var b=host.querySelector('.reg-b[data-p="'+p+'"]'), cfg=projCfg(p);
-      var h2=b.querySelector('.chdr h2'); if(h2) h2.innerHTML='Drawing Register — <span class="reg-pl" style="background:'+cfg.color+'">'+escHtml(cfg.label)+'</span> <small>'+projDrws(p).length+' drawings</small>';
+    units.forEach(function(u){
+      var p=u.p, b=host.querySelector('.reg-b[data-p="'+p+'"]'+(u.kind?'[data-kind="'+u.kind.replace(/"/g,'\\"')+'"]':':not([data-kind])')), cfg=projCfg(p);
+      var h2=b.querySelector('.chdr h2');
+      if(h2) h2.innerHTML='Drawing Register — <span class="reg-pl" style="background:'+cfg.color+'">'+escHtml(cfg.label)+'</span>'+(u.kind?' <span class="reg-kind">'+escHtml(u.kind)+'</span>':'')+' <small>'+(u.kind?(typeof wipBKOf==='function'?drws.filter(function(d){ return projOf(d)===p&&kindOf(d)===u.kind; }).length:0):projDrws(p).length)+' drawings</small>';
       var r2=b.querySelectorAll('thead tr')[1]; if(r2&&r2.children.length>1){ r2.children[0].textContent=cfg.col1; r2.children[1].textContent=cfg.col2; }
       strip();
       Array.prototype.forEach.call(b.querySelectorAll('[data-r]'),function(e){ e.id=e.getAttribute('data-r'); });
-      currentProject=p;
+      currentProject=p; regKind=u.kind||'';
       try{ one.apply(self,args); }catch(e){ console.error(e); }
+      if(u.kind){   // each split table numbers itself 1, 2, 3 …
+        var ix=0; Array.prototype.forEach.call(b.querySelectorAll('tbody tr[data-rid]'),function(tr){ ix++; var c=tr.querySelector('td.rg-n'); if(!c) return; var g=c.querySelector('.rg-grip'), n=g?g.nextSibling:c.firstChild; if(n&&n.nodeType===3) n.nodeValue=String(ix); });
+      }
     });
+    regKind=keepKind;
     // the first project keeps the ids, so code that looks for "the" register still finds one
     strip();
     var f=host.querySelector('.reg-b');
@@ -8383,6 +8394,160 @@ function wipTmInject(id){
     if(focus) setTimeout(function(){ if(ni.isConnected) ni.focus(); },0);
   }
 }
+// ══════════════════════════════════════════
+//  SPLIT TABLES — a project can show its Drawing Register as several stacked tables ("kinds"), each a full
+//  register with its own 1,2,3 numbering and its own "+ Add drawing". Each drawing carries which kind it is
+//  in. Set up for any project (projKinds), and seeded for ALKHUZAM = [CONCRETE DIMS, SHOP DRAWINGS].
+//  Storage (no new drawings column needed): wip_watch rows
+//    __PROJKINDS__  plot = project key, level = kind names        (which projects are split, into what)
+//    __BOARDKIND__  plot = drawing id,  level = the kind          (which table each drawing is in)
+// ══════════════════════════════════════════
+var regKind='';                                   // set while the register renders one kind's table
+var PK_KEY='__PROJKINDS__', BK_KEY='__BOARDKIND__';
+var wipPK={}, wipPKRows={}, wipBK={}, wipBKRows={}, splitDb=false;
+var PK_DEFAULT={ 'ALKHUZAM':['CONCRETE DIMS','SHOP DRAWINGS'] };
+function splitSplit(v){ return wn(v).split(',').map(function(s){ return s.trim(); }).filter(Boolean); }
+function projKinds(p){ var k=wipPK[p]; if(k&&k.length) return k.slice(); return (PK_DEFAULT[p]||[]).slice(); }
+function wipBKOf(id){ return wipBK[id]||''; }
+// which kind a drawing is treated as (untagged → the project's first kind)
+function kindOf(d){ var ks=projKinds(projOf(d)); if(!ks.length) return ''; var k=wipBKOf(d.id); return ks.indexOf(k)>=0?k:ks[0]; }
+
+async function splitLoad(){
+  var pk, bk;
+  try{ pk=await supabase.from('wip_watch').select('*').eq('project_id',PK_KEY); bk=await supabase.from('wip_watch').select('*').eq('project_id',BK_KEY); }
+  catch(e){ return; }
+  if((pk.error||bk.error)){ var m=(pk.error||bk.error).message||''; if(/wip_watch|schema cache|does not exist|42P01|PGRST205/i.test(m)) splitDb=false; return; }
+  splitDb=true; wipPK={}; wipPKRows={}; wipBK={}; wipBKRows={};
+  (pk.data||[]).forEach(function(r){ var p=wn(r.plot), ks=splitSplit(r.level); if(p&&ks.length){ wipPK[p]=ks; wipPKRows[p]=r.id; } });
+  (bk.data||[]).forEach(function(r){ var id=wn(r.plot), k=wn(r.level); if(id&&k){ wipBK[id]=k; wipBKRows[id]=r.id; } });
+  // seed defaults into the tracker the first time (so the team sees them too)
+  Object.keys(PK_DEFAULT).forEach(function(p){
+    if(!wipPK[p]&&PROJECT_CONFIG[p]){ try{ supabase.from('wip_watch').insert({project_id:PK_KEY,plot:p,level:PK_DEFAULT[p].join(','),created_by:wipMe()}).select().single().then(function(r){ if(r&&!r.error&&r.data){ wipPK[p]=PK_DEFAULT[p].slice(); wipPKRows[p]=r.data.id; } }); }catch(e){} }
+  });
+}
+async function wipBKSet(id,kind){
+  kind=wn(kind);
+  if(kind) wipBK[id]=kind; else delete wipBK[id];
+  dataEpoch++;
+  if(!splitDb){ return; }
+  try{
+    if(!kind){ if(wipBKRows[id]){ await supabase.from('wip_watch').delete().eq('id',wipBKRows[id]); delete wipBKRows[id]; } }
+    else if(wipBKRows[id]){ await supabase.from('wip_watch').update({level:kind}).eq('id',wipBKRows[id]); }
+    else { var ins=await supabase.from('wip_watch').insert({project_id:BK_KEY,plot:String(id),level:kind,created_by:wipMe()}).select().single(); if(!ins.error&&ins.data) wipBKRows[id]=ins.data.id; }
+  }catch(e){}
+}
+// change a project's split (list of kind names; empty = not split)
+async function projKindsSet(p,kinds){
+  var ks=[], seen={}; kinds.map(wn).forEach(function(k){ var kk=k.toLowerCase(); if(k&&!seen[kk]){ seen[kk]=1; ks.push(k); } });
+  if(ks.length) wipPK[p]=ks; else delete wipPK[p];
+  if(splitDb){
+    try{
+      if(!ks.length){ if(wipPKRows[p]){ await supabase.from('wip_watch').delete().eq('id',wipPKRows[p]); delete wipPKRows[p]; } }
+      else if(wipPKRows[p]){ await supabase.from('wip_watch').update({level:ks.join(',')}).eq('id',wipPKRows[p]); }
+      else { var ins=await supabase.from('wip_watch').insert({project_id:PK_KEY,plot:p,level:ks.join(','),created_by:wipMe()}).select().single(); if(!ins.error&&ins.data) wipPKRows[p]=ins.data.id; }
+    }catch(e){}
+  }
+  render();
+}
+
+// seed the ALKHUZAM project and load the split maps as the office opens
+(function(){
+  if(typeof enterOffice!=='function') return;
+  var e0=enterOffice;
+  enterOffice=function(){
+    var self=this, args=arguments;
+    return Promise.resolve(e0.apply(self,args)).then(async function(){
+      // add ALKHUZAM if it isn't there yet (skipped inside the automated tests unless they opt in)
+      if(!PROJECT_CONFIG.ALKHUZAM&&(!navigator.webdriver||window.__seedAlkhuzam)){
+        PROJECT_CONFIG.ALKHUZAM={label:'ALKHUZAM',col1:'MODULE',col2:'PART / BUILDING',color:'#B9770E',filterField:'project_id',filterVal:'ALKHUZAM',price:null};
+        try{ if(typeof projSave==='function'&&projDb===true) await projSave('ALKHUZAM',PROJECT_CONFIG.ALKHUZAM); }catch(e){}
+        if(typeof projBadgePaint==='function') projBadgePaint();
+      }
+      try{ await splitLoad(); }catch(e){}
+      try{ render(); }catch(e){}
+    });
+  };
+})();
+
+// every register block (each split table too, even when empty) gets its own "+ Add drawing"
+(function(){
+  if(typeof renderRegister!=='function') return;
+  var r0=renderRegister;
+  renderRegister=function(){
+    var x=r0.apply(this,arguments);
+    try{
+      var host=document.getElementById('regBlocks'); if(!host) return x;
+      Array.prototype.forEach.call(host.querySelectorAll('.reg-b'),function(b){
+        var p=b.getAttribute('data-p'), kind=b.getAttribute('data-kind')||'';
+        var bar=b.querySelector(':scope > .rg-addbar');
+        if(!bar){ bar=document.createElement('div'); bar.className='rg-addbar'; b.appendChild(bar); }
+        bar.innerHTML='<button type="button" class="rg-addbtn">+ ضيف لوحة'+(kind?' في '+escHtml(kind):'')+'</button>';
+        bar.querySelector('button').onclick=function(){ regKindAdd=kind; if(typeof setCtx==='function') setCtx(p); goAddAfter('',p); };
+      });
+    }catch(e){}
+    return x;
+  };
+})();
+
+// the register only shows the drawings of the kind being drawn
+(function(){
+  if(typeof sorted!=='function') return;
+  var s0=sorted;
+  sorted=function(){
+    var r=s0.apply(this,arguments);
+    if(!regKind) return r;
+    return r.filter(function(d){ return kindOf(d)===regKind; });
+  };
+})();
+
+// ── the add / edit form: pick which table (kind) the drawing is in ──
+function splitFormSync(){
+  var form=document.getElementById('vForm'); if(!form) return;
+  var ed=editId?drws.find(function(x){ return x.id===editId; }):null;
+  var pid=ed?projOf(ed):(currentProject||'WADI_YAMM'), ks=projKinds(pid);
+  var box=document.getElementById('fKindBox');
+  if(!ks.length){ if(box) box.style.display='none'; return; }
+  if(!box){
+    box=document.createElement('div'); box.id='fKindBox'; box.className='f'; box.style.cssText='margin:0 0 10px';
+    box.innerHTML='<label style="font-weight:700;font-size:12px">الجدول<select id="fKind" style="width:100%;margin-top:4px;padding:8px;border:1.5px solid var(--ln2,#D5E5E2);border-radius:8px;font:inherit"></select></label>';
+    var anchor=document.getElementById('fPlot'); var at=anchor&&anchor.closest?anchor.closest('.f,label,.fg,div'):null;
+    if(at&&at.parentNode) at.parentNode.insertBefore(box,at); else form.querySelector('.box-bd,form,.card,div').appendChild(box);
+  }
+  box.style.display='';
+  var sel=document.getElementById('fKind');
+  sel.innerHTML=ks.map(function(k){ return '<option value="'+escHtml(k)+'">'+escHtml(k)+'</option>'; }).join('');
+  var cur=editId?kindOf(drws.find(function(x){ return x.id===editId; })||{id:editId}):(regKindAdd||ks[0]);
+  sel.value=ks.indexOf(cur)>=0?cur:ks[0];
+}
+var regKindAdd='';
+(function(){
+  ['goAdd','goEdit','goAddAfter'].forEach(function(fn){
+    if(typeof window[fn]!=='function') return;
+    var o=window[fn];
+    window[fn]=function(){ var x=o.apply(this,arguments); try{ splitFormSync(); }catch(e){} return x; };
+  });
+  // which table's "+ Add" was clicked → preselect it in the form
+  document.addEventListener('pointerdown',function(e){
+    var b=e.target.closest?e.target.closest('.ins-b, .rg-addbtn'):null; if(!b) return;
+    var blk=b.closest?b.closest('.reg-b[data-kind]'):null; regKindAdd=blk?blk.getAttribute('data-kind'):'';
+  },true);
+  // after a drawing is saved, record which table it belongs to
+  if(typeof saveDrw==='function'){
+    var s0=saveDrw;
+    saveDrw=async function(){
+      var wasEdit=editId, ed=wasEdit?drws.find(function(x){ return x.id===wasEdit; }):null;
+      var pid=ed?projOf(ed):(currentProject||'WADI_YAMM'), ks=projKinds(pid);
+      var chosen=ks.length?((document.getElementById('fKind')||{}).value||''):'';
+      var before={}; drws.forEach(function(d){ before[d.id]=1; });
+      await s0.apply(this,arguments);
+      if(!ks.length) return;
+      var target=wasEdit;
+      if(!target){ var nw=drws.filter(function(d){ return !before[d.id]&&projOf(d)===pid; }); target=nw.length?nw[nw.length-1].id:null; }
+      if(target){ await wipBKSet(target,chosen); if(typeof renderRegister==='function') renderRegister(); }
+      regKindAdd='';
+    };
+  }
+})();
 // ══════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════
