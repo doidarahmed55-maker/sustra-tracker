@@ -7031,16 +7031,15 @@ function skBkPaint(){
   if(!bar){
     bar=document.createElement('div'); bar.id='bkBar'; bar.setAttribute('dir','rtl');
     var st=(typeof WIP_STATUSES!=='undefined'?WIP_STATUSES:['NOT STARTED','IN PROGRESS','RECEIVED','DELIVERED','DELIVERED AFTER COMMENTS','HOLD']);
+    // Edit fields (Status / engineer / dates + "طبّق على الكل") were removed:
+    // editing is now done inline — select rows, change one cell, it applies to all.
+    // The bar keeps only the real bulk ACTIONS that inline edit can't do.
     bar.innerHTML='<div class="bk-n"><b id="bkN">0</b> لوحة متحددة</div>'
-      +'<label>Status<select id="bkSt"><option value="">— زي ما هي —</option>'+st.map(function(s){ return '<option>'+escHtml(s)+'</option>'; }).join('')+'</select></label>'
-      +'<label>المهندس<span class="bk-e"><input id="bkEng" list="bkEngs" placeholder="— زي ما هو —" autocomplete="off"/><datalist id="bkEngs"></datalist><select id="bkEm" title="بدل اللي موجود ولا يتضاف معاه"><option value="set">بدل</option><option value="add">ضيف</option></select></span></label>'
-      +'<label>Start<input type="date" id="bkS"/></label><label>Target<input type="date" id="bkT"/></label>'
-      +'<button type="button" class="btn bt" id="bkGo">طبّق على الكل</button>'
+      +'<span class="bk-hint">عدّل أي خلية في صف منهم تتسمّع على الكل</span>'
       +'<button type="button" class="btn bo bk-wa" id="bkWa" title="ابعت اللوح دي للمهندس على واتساب">'+SK_WA_IC+'واتساب</button>'
       +'<button type="button" class="bk-x" id="bkX" title="الغي التحديد">&#10005;</button>';
     document.body.appendChild(bar);
     wipEl('bkX').onclick=function(){ skSel={}; skBkPaint(); };
-    wipEl('bkGo').onclick=skBkApply;
     wipEl('bkWa').onclick=function(){
       var L=skSelIds().map(function(id){ return drws.find(function(d){ return String(d.id)===id; }); }), g=skByEng(L).filter(function(x){ return x.eng; });
       if(!g.length){ showToast('اللوح دي مش عليها مهندس',true); return; }
@@ -7048,7 +7047,7 @@ function skBkPaint(){
       skWaPick(g);
     };
   }
-  wipEl('bkEngs').innerHTML=(engNames||[]).map(function(n){ return '<option value="'+escHtml(n)+'">'; }).join('');
+  var bkEngs=wipEl('bkEngs'); if(bkEngs) bkEngs.innerHTML=(engNames||[]).map(function(n){ return '<option value="'+escHtml(n)+'">'; }).join('');
   wipEl('bkN').textContent=ids.length;
   bar.classList.add('on');
 }
@@ -8998,6 +8997,79 @@ document.addEventListener('dblclick',function(e){
   ed.addEventListener('keydown',function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); commit(); } else if(ev.key==='Escape'){ ev.preventDefault(); done=true; regEd=null; if(typeof renderRegister==='function') renderRegister(); } });
   if(spec.sel) ed.addEventListener('change',commit);
 },true);
+// ══════════════════════════════════════════
+//  BULK propagation for the Work-In-Progress grid.
+//  Select several rows (checkbox), then edit ONE cell — the same change
+//  is applied to every selected row, silently. No bulk panel needed.
+//  NAME/number never propagates (each board number is unique).
+// ══════════════════════════════════════════
+function wipSelTargets(id){
+  id=String(id);
+  if(typeof skSel==='undefined'||!skSel||!skSel[id]) return [id];
+  if(typeof skSelIds!=='function') return [id];
+  var ids=skSelIds().map(String);
+  return ids.length>1?ids:[id];
+}
+function wipBulkEcho(srcId,field,val,read){
+  var ids=wipSelTargets(srcId); if(ids.length<2) return 0;
+  var n=0;
+  ids.forEach(function(tid){
+    if(String(tid)===String(srcId)) return;
+    var d=drws.find(function(x){ return String(x.id)===String(tid); }); if(!d) return;
+    if(read(d)!==val){ var p={}; p[field]=val; wipSave(tid,p); n++; }
+  });
+  if(n&&typeof showToast==='function') showToast('اتسمّع على '+(n+1)+' لوحة');
+  return n;
+}
+(function(){
+  // status / content typed straight into the grid
+  if(typeof wipCommit==='function'){
+    var _wc=wipCommit;
+    wipCommit=function(el){
+      var r=(typeof wipRow==='function')?wipRow(el):null;
+      var f=el&&el.getAttribute?el.getAttribute('data-f'):null;
+      var pre=r?(f==='status'?wipStatus(r.d):wn(r.d[f])):null;
+      _wc(el);
+      if(!r||(f!=='status'&&f!=='content')) return;
+      var now=(f==='status')?wipStatus(r.d):wn(r.d[f]);
+      if(now===pre) return;                       // the source row didn't actually change → don't echo
+      wipBulkEcho(r.d.id,f,now,function(d){ return f==='status'?wipStatus(d):wn(d[f]); });
+    };
+  }
+  // start / target / received dates from the pop-over
+  if(typeof wipDateCommit==='function'){
+    var _dc=wipDateCommit;
+    wipDateCommit=function(id,el,leaving){
+      var f=el&&el.getAttribute?el.getAttribute('data-f'):null;
+      var d0=drws.find(function(x){ return String(x.id)===String(id); });
+      var pre=(d0&&f)?wipIso(d0[f]):null;
+      _dc(id,el,leaving);
+      if(!f) return;
+      var d=drws.find(function(x){ return String(x.id)===String(id); }); if(!d) return;
+      var now=wipIso(d[f]);
+      if(now===pre) return;
+      wipBulkEcho(id,f,now||null,function(x){ return wipIso(x[f]); });
+    };
+  }
+  // an engineer ticked in the pop-over → add him to every selected row too
+  if(typeof wipEngAdd==='function'){
+    var _ea=wipEngAdd;
+    wipEngAdd=function(btn,id,name){
+      var ret=_ea(btn,id,name);
+      try{
+        var ids=wipSelTargets(id); if(ids.length>1){
+          var nm=engResolve(name), k=wipEngKnown(nm); if(k!==null) nm=k;
+          ids.forEach(function(tid){
+            if(String(tid)===String(id)) return;
+            var d=drws.find(function(x){ return String(x.id)===String(tid); }); if(!d) return;
+            var cur=wipEngList(d.by_eng); if(cur.indexOf(nm)<0){ cur.push(nm); wipSave(tid,{by_eng:cur.join(',')}); }
+          });
+        }
+      }catch(e){}
+      return ret;
+    };
+  }
+})();
 // ══════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════
