@@ -3061,14 +3061,22 @@ function goInvoice(){
   document.getElementById('invNum').value='1';
 }
 
+// a drawing that must stay OUT of the printed statement until it is actually handed over:
+// still HOLD, still IN PROGRESS, or carrying open comments — but DELIVERED (incl. after comments) goes in
+function invHeldBad(d){
+  var s=wipStatus(d);
+  if(s==='HOLD'||s==='IN PROGRESS') return true;
+  if(typeof cmOpen==='function'&&cmOpen(d)&&s.indexOf('DELIVERED')!==0) return true;   // فيها كومنتات مفتوحة
+  return false;
+}
 function loadInvoiceRows(){
   var num = parseInt(document.getElementById('invNum').value);
   if(isNaN(num)) num=1;
   var inNum = sorted().filter(function(d){ return (d.invoice||0)===num; });
-  var held = num>0 ? inNum.filter(function(d){ return wipStatus(d)==='HOLD'; }) : [];   // HOLD بيتشال من المستخلص المرقّم بس
-  var subset = num>0 ? inNum.filter(function(d){ return wipStatus(d)!=='HOLD'; }) : inNum;
+  var held = num>0 ? inNum.filter(invHeldBad) : [];   // HOLD أو IN PROGRESS بيتشالوا من المستخلص المرقّم
+  var subset = num>0 ? inNum.filter(function(d){ return !invHeldBad(d); }) : inNum;
   var label = num===0?'Not in any Invoice':'Invoice '+num;
-  document.getElementById('invCount').textContent = subset.length + ' drawing'+(subset.length!==1?'s':'')+(held.length?' · '+held.length+' على HOLD مستبعدة':'');
+  document.getElementById('invCount').textContent = subset.length + ' drawing'+(subset.length!==1?'s':'')+(held.length?' · '+held.length+' مستبعدة (HOLD/IN PROGRESS/كومنتات)':'');
   window.__invHeld = held;
   
   if(!subset.length){
@@ -3090,7 +3098,7 @@ function loadInvoiceRows(){
     rh+='<span style="font-weight:600;flex:1">'+(d.name||'-')+'</span>';
     rh+='</div>';
   }
-  if(held.length) rh='<div style="background:#FDEBD0;border:1px solid #E67E22;border-radius:8px;padding:8px 12px;margin:0 0 8px;font-size:11px;color:#A04000;font-weight:700">&#9888;&#65039; '+held.length+' لوحة على HOLD مش داخلة المستخلص لحد ما يترفع عنها الـ HOLD: '+held.map(function(d){ return '<span dir="ltr">'+escHtml(drwNo(d.name))+'</span>'; }).join('، ')+'</div>'+rh;
+  if(held.length) rh='<div style="background:#FDEBD0;border:1px solid #E67E22;border-radius:8px;padding:8px 12px;margin:0 0 8px;font-size:11px;color:#A04000;font-weight:700">&#9888;&#65039; '+held.length+' لوحة مش داخلة المستخلص (لسه HOLD أو IN PROGRESS): '+held.map(function(d){ return '<span dir="ltr">'+escHtml(drwNo(d.name))+'</span> <small>('+escHtml(wipStatus(d))+')</small>'; }).join('، ')+'</div>'+rh;
   document.getElementById('invRowList').innerHTML=rh;
 
   // Build summary
@@ -3113,7 +3121,7 @@ function loadInvoiceRows(){
 
 function genInvoicePdf(){
   var num = parseInt(document.getElementById('invNum').value)||1;
-  var subset = sorted().filter(function(d){ return (d.invoice||0)===num&&wipStatus(d)!=='HOLD'; });
+  var subset = sorted().filter(function(d){ return (d.invoice||0)===num&&!invHeldBad(d); });
   if(!subset.length){alert('No drawings in this invoice');return;}
 
   var showPlot=document.getElementById('icPlot').checked;
@@ -8974,7 +8982,15 @@ document.addEventListener('dblclick',function(e){
   function commit(){
     if(done) return; done=true;
     var v=ed.value; if(spec.k==='type') v=wn(v).toUpperCase(); else if(spec.k==='by_eng') v=normalize(v); else v=wn(v);
-    if(v!==cur&&typeof wipSave==='function'){ wipSave(id,makePatch(spec.k,v)); }
+    if(v!==cur&&typeof wipSave==='function'){
+      // Bulk edit: if several rows are selected (checkbox) and this row is one of them,
+      // apply the same change to ALL selected rows — silently, no prompt.
+      // NAME/number stays per-row (unique), so it never propagates.
+      var ids=[id];
+      if(spec.k!=='name' && typeof skSel!=='undefined' && skSel[id] && typeof skSelIds==='function' && skSelIds().length>1){ ids=skSelIds(); }
+      ids.forEach(function(x){ wipSave(x,makePatch(spec.k,v)); });
+      if(ids.length>1 && typeof toast==='function'){ toast('اتعدّل في '+ids.length+' صف'); }
+    }
     regEd=null; if(typeof renderRegister==='function') renderRegister();
   }
   function makePatch(k,v){ var p={}; p[k]=v; return p; }
