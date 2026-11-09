@@ -7932,7 +7932,26 @@ function cfCols(t){
     });
   });
   var n=grid[0]?grid[0].length:0;
-  return out.filter(function(o){ return o.th.closest('tr').rowIndex+(o.th.rowSpan||1)===t.tHead.rows.length; }).map(function(o){ o.n=n; var top=grid[0]&&grid[0][o.i]; o.group=(top&&top!==o.th&&(top.colSpan||1)>1)?cfLabel(top):''; return o; });
+  var leaves=out.filter(function(o){ return o.th.closest('tr').rowIndex+(o.th.rowSpan||1)===t.tHead.rows.length; }).map(function(o){ o.n=n; var top=grid[0]&&grid[0][o.i]; o.group=(top&&top!==o.th&&(top.colSpan||1)>1)?cfLabel(top):''; return o; });
+  // Reconcile with the body: some tables keep a header-only column that is display:none and renders NO body
+  // cell (e.g. the Invoice column, shown for one project only). It would push every filter read off by one and
+  // make cfRows match nothing. Drop such hidden, body-less leaves and compact the indices to the body grid.
+  var bw=cfBodyWidth(t);
+  if(bw&&bw<n){
+    var need=n-bw, drop=[];
+    leaves.slice().sort(function(a,b){ return b.i-a.i; }).forEach(function(o){ if(drop.length>=need) return; var hid=false; try{ hid=getComputedStyle(o.th).display==='none'; }catch(e){} if(hid) drop.push(o.i); });
+    if(drop.length===need){
+      leaves=leaves.filter(function(o){ return drop.indexOf(o.i)<0; });
+      leaves.forEach(function(o){ o.i-=drop.filter(function(d){ return d<o.i; }).length; o.n=bw; });
+    }
+  }
+  return leaves;
+}
+// the width (in columns, counting colspans) of the table's real data rows — the value most body rows share
+function cfBodyWidth(t){
+  var tb=t.tBodies[0]; if(!tb) return 0; var cnt={}, best=0, bw=0;
+  Array.prototype.forEach.call(tb.rows,function(r){ if(r.classList&&r.classList.contains('cf-bar')) return; var x=0; Array.prototype.forEach.call(r.cells,function(c){ x+=c.colSpan||1; }); if(x){ cnt[x]=(cnt[x]||0)+1; if(cnt[x]>best){ best=cnt[x]; bw=x; } } });
+  return bw;
 }
 // a label that is unique even when several columns share a name (e.g. Round 1 › Status vs Round 2 › Status)
 function cfDisp(cols,col){ var lab=cfLabel(col.th); var dup=cols.filter(function(o){ return cfLabel(o.th)===lab; }).length>1; return (dup&&col.group)?col.group+' › '+lab:lab; }
